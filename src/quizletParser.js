@@ -14,7 +14,7 @@ export const parseQuizletData = (quizletData) => {
         currentFlashcard = { question, answer };
       } else {
         // this line is a continuation of the previous answer
-        currentFlashcard.answer = (currentFlashcard.answer ? currentFlashcard.answer + '\n' : '') + line.trim();
+        currentFlashcard.answer = (currentFlashcard.answer ? currentFlashcard.answer + '<br>' : '') + line.trim();
       }
     });
   

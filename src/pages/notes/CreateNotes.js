@@ -5,7 +5,7 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css'; // Add quill styles
 import { useNavigate } from 'react-router-dom';
 import Select from 'react-select';
-import { module } from '../../config/quill';
+import { noteModule } from '../../config/quill';
 const CreateNotes = ({ isAuth }) => {
   const navigate = useNavigate();
   
@@ -91,7 +91,7 @@ const CreateNotes = ({ isAuth }) => {
           onChange={setNoteContent}
           placeholder="Write here!"
           required
-          modules={module}
+          modules={noteModule}
         />
         <button type="submit">Save Note</button>
       </form>

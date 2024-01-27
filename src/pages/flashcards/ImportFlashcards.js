@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { db, auth } from "../../config/firebase";
-import { collection, addDoc, query, where, getDocs } from "firebase/firestore";
+import { collection, addDoc, query, where, getDocs, serverTimestamp } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import Select from "react-select";
 import { parseQuizletData } from "../../quizletParser"
@@ -58,6 +58,9 @@ const ImportFlashcards = ({ isAuth }) => {
 
     const selectedTagIds = selectedTags.map((tag) => tag.value);
 
+    const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+
     try {
       // add a new document with a generated ID to the flashcard sets
       const setDocRef = await addDoc(flashcardSetsRef, {
@@ -66,6 +69,8 @@ const ImportFlashcards = ({ isAuth }) => {
         owners: [auth.currentUser.uid],
         tags: selectedTagIds,
         viewed: new Date(),
+        interleaving: false,
+        revised: yesterday, // this is for interleaving - stops them from revising twice in a day. initialised to yesterday so they can revise today.
       });
 
       // now we need to add the flashcards themselves
@@ -85,6 +90,7 @@ const ImportFlashcards = ({ isAuth }) => {
           return addDoc(flashcardsRef, {
             question: flashcard.question,
             answer: flashcard.answer,
+            created: serverTimestamp(), // this keeps track of when each one was edited so that we can order them as such
           });
         }
 
@@ -122,12 +128,12 @@ const ImportFlashcards = ({ isAuth }) => {
         <div>
           <label>Select Tags:</label>
           <Select
-            options={tagsOptions} // Set options for react-select
+            options={tagsOptions} // set options for react-select
             isMulti
-            onChange={setSelectedTags} // Update state when the user selects or unselects a tag
-            value={selectedTags} // Control the current value
-            getOptionLabel={(option) => option.label} // Defines how to display the option label
-            getOptionValue={(option) => option.value} // Defines how to get the option value
+            onChange={setSelectedTags} // update state when the user selects or unselects a tag
+            value={selectedTags} // control the current value
+            getOptionLabel={(option) => option.label} // defines how to display the option label
+            getOptionValue={(option) => option.value} // defines how to get the option value
           />
         </div>
 

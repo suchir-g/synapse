@@ -24,6 +24,11 @@ import AddTag from './pages/tags/AddTag';
 import ShowAllTags from "./pages/tags/ShowAllTags"
 import EditTag from './pages/tags/EditTag';
 
+import SimpleDisplay from './pages/revision/flashcards/SimpleDisplay';
+import Quiz from './pages/revision/flashcards/Quiz';
+
+import StudyFlashcards from './pages/revision/study/StudyFlashcards';
+
 import { useState } from 'react';
 
 
@@ -61,6 +66,7 @@ function App() {
 
         <Route path="/post" element={<Post isAuth={isAuth}/>} />
 
+        {/* CRUD for sets, notes and tags */}
         {/* This /set/:setID means that anything after /set will be put through, and this setID argument will be given to the function */}
         <Route path="/sets/post" element={<CreateFlashcards isAuth={isAuth}/>} />
         <Route path='/sets/import' element={<ImportFlashcards isAuth={isAuth}/>} />
@@ -75,6 +81,13 @@ function App() {
         <Route path="/tags/:tagID/edit" element={<EditTag isAuth={isAuth} />} />
         <Route path="/tags/post" element={<AddTag isAuth={isAuth}/>} />
         <Route path="/tags" element={<ShowAllTags isAuth={isAuth} />} />
+        
+        {/* all the revision methods */}
+
+        <Route path='/:setID/flashcards' element={<SimpleDisplay />} />
+        <Route path='/:setID/quiz' element={<Quiz />} />
+
+        <Route path='/:setID/study' element={<StudyFlashcards />} />
         
       </Routes>
 

@@ -1,4 +1,4 @@
-var toolbarOptions = [
+var noteToolbarOptions = [
   ["bold", "italic", "underline", "strike"], // toggled buttons
   ["blockquote", "code-block"],
 
@@ -17,6 +17,26 @@ var toolbarOptions = [
 
   ["clean"], // remove formatting button
 ];
-export const module = {
-  toolbar: toolbarOptions,
+
+var flashcardToolbarOptions = [
+  ["bold", "italic", "underline", "strike"], // toggled buttons
+  ["blockquote", "code-block"],
+
+  [{ header: 1 }, { header: 2 }], // custom button values
+  [{ list: "ordered" }, { list: "bullet" }],
+  [{ script: "sub" }, { script: "super" }], // superscript/subscript
+  [{ indent: "-1" }, { indent: "+1" }], // outdent/indent
+
+  [{ color: [] }, { background: [] }], // dropdown with defaults from theme
+  [{ align: [] }],
+
+  ["clean"], // remove formatting button
+
+];
+
+export const noteModule = {
+  toolbar: noteToolbarOptions,
+};
+export const flashcardModule = {
+  toolbar: flashcardToolbarOptions,
 };

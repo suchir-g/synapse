@@ -22,6 +22,11 @@ import { useNavigate } from "react-router-dom";
 
 import Select from "react-select";
 
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.bubble.css";
+
+import { flashcardModule } from "../../config/quill";
+
 const EditFlashcards = ({ isAuth }) => {
   const { id } = useParams();
 
@@ -193,8 +198,7 @@ const EditFlashcards = ({ isAuth }) => {
     const deletePromises = flashcards
       .filter((flashcard) => flashcard.deleted)
       .map((flashcard) => {
-
-        // notice how we have to give 3 ids since we have a nested collection 
+        // notice how we have to give 3 ids since we have a nested collection
         const flashcardRef = doc(
           db,
           "flashcardSets",
@@ -288,28 +292,26 @@ const EditFlashcards = ({ isAuth }) => {
           <div key={flashcard.id || index} className="flashcard-edit-group">
             <div className="form-group">
               <label htmlFor={`question-${index}`}>Question</label>
-              <input
-                type="text"
-                id={`question-${index}`}
+              <ReactQuill
                 value={flashcard.question}
-                onChange={(e) =>
-                  handleFlashcardChange(index, "question", e.target.value)
+                onChange={(content) =>
+                  handleFlashcardChange(index, "question", content)
                 }
                 placeholder="Question"
-                required
+                theme="bubble"
+                modules={flashcardModule}
               />
             </div>
             <div className="form-group">
               <label htmlFor={`answer-${index}`}>Answer</label>
-              <input
-                type="text"
-                id={`answer-${index}`}
+              <ReactQuill
                 value={flashcard.answer}
-                onChange={(e) =>
-                  handleFlashcardChange(index, "answer", e.target.value)
+                onChange={(content) =>
+                  handleFlashcardChange(index, "answer", content)
                 }
                 placeholder="Answer"
-                required
+                theme="bubble"
+                modules={flashcardModule}
               />
             </div>
             <button type="button" onClick={() => removeFlashcard(index)}>
