@@ -35,11 +35,10 @@ export const DynamicDisplay = ({
     const trimmedInput = userInput.trim();
     const options = {
       includeScore: true,
-      threshold: 0.3,
     };
     const fuse = new Fuse([flashcard.answer], options);
     const result = fuse.search(trimmedInput);
-    const isAnswerCorrect = result.length > 0 && result[0].score < 0.3;
+    const isAnswerCorrect = result.length > 0 && result[0].score < 0.6;
 
     setIsCorrect(isAnswerCorrect);
     setAnswerSubmitted(true);

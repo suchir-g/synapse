@@ -188,6 +188,8 @@ const FlashcardSet = ({ isAuth }) => {
         <Link to={`/${params.setID}/flashcards`}>Flashcards</Link>
         <br />
         <Link to={`/${params.setID}/quiz`}>Take a Quiz</Link>
+        <br />
+        <Link to={`/${params.setID}/study`}>Memorise</Link>
       </div>
 
       <a href={`/sets/${params.setID}/edit`}>Edit this set</a>

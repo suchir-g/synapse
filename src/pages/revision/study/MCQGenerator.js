@@ -13,7 +13,7 @@ export const getMCQOptions = (currentFlashcard, otherFlashcards, numberOfOptions
       }
     }
   
-    // convert the Set to an array and shuffle it
+    // convert the Set to an array - we will shuffle it in the other component
     return Array.from(options);
   };
   

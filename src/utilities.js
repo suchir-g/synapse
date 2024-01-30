@@ -59,7 +59,7 @@ export const usernameFromUserID = async (usersRef, userID) => {
 export const flashcardsFromSet = async (setRef) => {
   // reference to the flashcards subcollection
   const flashcardsRef = collection(setRef, "flashcards");
-  const q = query(flashcardsRef, orderBy("created", "asc")); // Sort by 'created' field
+  const q = query(flashcardsRef, orderBy("created", "asc")); // sort by 'created' field
   // get the flashcards documents
   const querySnapshot = await getDocs(q);
   const flashcards = querySnapshot.docs.map((doc) => ({
@@ -68,6 +68,26 @@ export const flashcardsFromSet = async (setRef) => {
     ...doc.data(),
   }));
   return flashcards;
+};
+export const flashcardsFromSetID = async (setId) => {
+  const flashcardsCollectionRef = collection(db, 'flashcards');
+  const q = query(flashcardsCollectionRef, where('setId', '==', setId));
+  const querySnapshot = await getDocs(q);
+  return querySnapshot.docs.map(doc => ({
+    id: doc.id,
+    ...doc.data()
+  }));
+};
+
+
+export const setDataFromID = async (setId) => {
+  const setRef = doc(db, "flashcardSets", setId);
+  const setSnapshot = await getDoc(setRef);
+  if (setSnapshot.exists()) {
+    return setSnapshot.data();
+  } else {
+    throw new Error("Flashcard set not found");
+  }
 };
 
 export const sanitizeAndTruncateHtml = (htmlContent, maxLength = 30) => {

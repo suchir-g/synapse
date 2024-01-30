@@ -26,8 +26,8 @@ import EditTag from './pages/tags/EditTag';
 
 import SimpleDisplay from './pages/revision/flashcards/SimpleDisplay';
 import Quiz from './pages/revision/flashcards/Quiz';
-
 import StudyFlashcards from './pages/revision/study/StudyFlashcards';
+import MeteorQuiz from './pages/revision/meteors/MeteorQuiz';
 
 import { useState } from 'react';
 
@@ -86,9 +86,9 @@ function App() {
 
         <Route path='/:setID/flashcards' element={<SimpleDisplay />} />
         <Route path='/:setID/quiz' element={<Quiz />} />
-
         <Route path='/:setID/study' element={<StudyFlashcards />} />
-        
+        <Route path='/:setID/meteors' element={<MeteorQuiz />} />
+
       </Routes>
 
     </Router>

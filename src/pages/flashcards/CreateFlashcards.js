@@ -93,6 +93,8 @@ const CreateFlashcards = ({ isAuth }) => {
     const yesterday = new Date();
     yesterday.setDate(yesterday.getDate() - 1);
 
+    const yesterdayString = yesterday.toISOString().split("T")[0];
+
     try {
       // add a new document with a generated ID to the flashcard sets
       const setDocRef = await addDoc(flashcardSetsRef, {
@@ -102,7 +104,7 @@ const CreateFlashcards = ({ isAuth }) => {
         tags: selectedTagIds,
         viewed: new Date(),
         interleaving: false,
-        revised: yesterday, // this is for interleaving - stops them from revising twice in a day. initialised to yesterday so they can revise today.
+        revised: yesterdayString, // this is for interleaving - stops them from revising twice in a day. initialised to yesterday so they can revise today.
       });
 
       // now we need to add the flashcards themselves

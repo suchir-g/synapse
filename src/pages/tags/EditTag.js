@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { db, auth } from "../../config/firebase";
+import { db } from "../../config/firebase";
 import { collection, doc, getDoc, updateDoc, getDocs, query, where } from "firebase/firestore";
 import Select from 'react-select';
 
@@ -10,6 +10,7 @@ const EditTag = () => {
 
   const flashcardsRef = collection(db, "flashcardSets");
   const notesRef = collection(db, "notes");
+  const tagsRef = collection(db, "tags");
 
   const [tagName, setTagName] = useState('');
   const [tagDescription, setTagDescription] = useState('');
@@ -20,77 +21,85 @@ const EditTag = () => {
   const [selectedFlashcards, setSelectedFlashcards] = useState([]);
   const [selectedNotes, setSelectedNotes] = useState([]);
 
-
-
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // fetch tag details
-        const tagDocRef = doc(db, "tags", tagID);
+        // Fetch tag details
+        const tagDocRef = doc(tagsRef, tagID);
         const tagDocSnap = await getDoc(tagDocRef);
-  
-        if (!tagDocSnap.exists() || tagDocSnap.data().owner !== auth.currentUser.uid) {
+
+        if (!tagDocSnap.exists()) {
+          console.error("Tag not found");
           navigate("/");
           return;
         }
-  
+
         const tagData = tagDocSnap.data();
-        setTagName(tagData.tagName);
+        setTagName(tagData.tagName); // assuming title is the field name
         setTagDescription(tagData.description);
-  
-        // query flashcards and notes that have this tag
+
+        // Query flashcards and notes that have this tag
         const flashcardsQuery = query(flashcardsRef, where("tags", "array-contains", tagID));
         const notesQuery = query(notesRef, where("tags", "array-contains", tagID));
-  
-        const [flashcardsSnapshot, notesSnapshot] = await Promise.all([
+
+        const [flashcardsSnapshot, notesSnapshot, allFlashcardsSnapshot, allNotesSnapshot] = await Promise.all([
           getDocs(flashcardsQuery),
-          getDocs(notesQuery)
+          getDocs(notesQuery),
+          getDocs(flashcardsRef),
+          getDocs(notesRef)
         ]);
-  
+
         const formatOption = (doc) => ({ value: doc.id, label: doc.data().title });
-  
+
         const selectedFlashcards = flashcardsSnapshot.docs.map(formatOption);
         const selectedNotes = notesSnapshot.docs.map(formatOption);
-  
-        setSelectedFlashcards(selectedFlashcards);
-        setSelectedNotes(selectedNotes);
-  
-        // fetch all flashcards and notes options for the Select components
-        const allFlashcardsSnapshot = await getDocs(flashcardsRef);
-        const allNotesSnapshot = await getDocs(notesRef);
-  
+
         const allFlashcardsOptions = allFlashcardsSnapshot.docs.map(formatOption);
         const allNotesOptions = allNotesSnapshot.docs.map(formatOption);
-  
+
+        setSelectedFlashcards(selectedFlashcards);
+        setSelectedNotes(selectedNotes);
         setAvailableFlashcards(allFlashcardsOptions);
         setAvailableNotes(allNotesOptions);
-  
+
       } catch (error) {
         console.error("Error fetching data: ", error);
         navigate("/error");
       }
     };
-  
+
     fetchData();
   }, [tagID, navigate]);
-  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // update tag document
-      const tagDoc = doc(db, "tags", tagID);
-      await updateDoc(tagDoc, {
-        tagName,
-        flashcardSets: selectedFlashcards.map(fc => fc.value),
-        notes: selectedNotes.map(note => note.value),
+      // Update tag document
+      const tagDocRef = doc(tagsRef, tagID);
+      await updateDoc(tagDocRef, {
+        tagName: tagName, // assuming title is the field name
         description: tagDescription
       });
 
-      console.log('Tag updated with ID:', tagID);
+      // Batch update for flashcards and notes
+      const batch = db.batch();
+
+      selectedFlashcards.forEach(fc => {
+        const flashcardDocRef = doc(flashcardsRef, fc.value);
+        batch.update(flashcardDocRef, { tags: [tagID] }); // this will overwrite existing tags
+      });
+
+      selectedNotes.forEach(note => {
+        const noteDocRef = doc(notesRef, note.value);
+        batch.update(noteDocRef, { tags: [tagID] }); // this will overwrite existing tags
+      });
+
+      await batch.commit();
+
+      console.log('Tag and associated items updated with ID:', tagID);
       navigate("/mystuff");
     } catch (error) {
-      console.error("Error updating tag: ", error);
+      console.error("Error updating tag and associated items: ", error);
     }
   };
 

@@ -1,5 +1,11 @@
 import { db, auth } from "../../../config/firebase";
-import { doc, getDoc, updateDoc, setDoc } from "firebase/firestore";
+import {
+  doc,
+  getDoc,
+  updateDoc,
+  setDoc,
+  runTransaction,
+} from "firebase/firestore";
 
 const fibonacci = (n) => {
   let a = 1,
@@ -25,109 +31,91 @@ export const calculateNextRevisionDate = (
     return result;
   };
 
-  // calculate the gap based on the number of revisions
   const daysToAdd = fibonacci(numberOfRevisions + 1); // +1 because the sequence starts from 1, 1, 2...
-  const nextRevisionDate = addDays(new Date(lastRevisionDate), daysToAdd)
+  return addDays(new Date(lastRevisionDate), daysToAdd)
     .toISOString()
     .split("T")[0];
-
-  return nextRevisionDate;
 };
 
 const isSameDay = (dateStr1, dateStr2) => {
-  return dateStr1 === dateStr2;
+  return (
+    new Date(dateStr1).toDateString() === new Date(dateStr2).toDateString()
+  );
 };
-
 export const updateRevisionDates = async (flashcardId, actualRevisionDate) => {
-  const flashcardRef = doc(db, "flashcardSets", flashcardId);
-  const flashcardSnap = await getDoc(flashcardRef);
+  try {
+    // reference to the flashcard and user schedule in Firestore.
+    const flashcardRef = doc(db, "flashcardSets", flashcardId);
+    const userScheduleRef = doc(db, "revisionSchedules", auth.currentUser.uid);
 
-  if (flashcardSnap.exists()) {
-    const lastRevisedDateStr = flashcardSnap.data().revised;
+    // transaction to update both documents atomically.
+    await runTransaction(db, async (transaction) => {
+      const flashcardDoc = await transaction.get(flashcardRef);
+      const scheduleDoc = await transaction.get(userScheduleRef);
 
-    // if the flashcard was revised today, do not update revision dates
-    if (isSameDay(lastRevisedDateStr, actualRevisionDate)) {
-      console.log(
-        "Flashcard was already revised today. No update to revision dates."
+      if (!flashcardDoc.exists()) {
+        throw "Document does not exist!";
+      }
+
+      const flashcardData = flashcardDoc.data();
+
+      // check if the flashcard has already been revised today
+      if (isSameDay(flashcardData.revised, actualRevisionDate)) {
+        console.log(
+          "Flashcard has already been revised today. No updates will be made."
+        );
+        return;
+      }
+
+      // update the revised date for the flashcard
+      transaction.update(flashcardRef, {
+        revised: actualRevisionDate,
+      });
+
+      let revisionSchedule = scheduleDoc.data()?.revisionSchedule || [];
+      let scheduleItem = revisionSchedule.find(
+        (item) => item.flashcardId === flashcardId
       );
-      return;
-    }
-  }
 
-  await updateDoc(flashcardRef, {
-    revised: actualRevisionDate,
-  });
+      if (!scheduleItem) {
+        // if the flashcard schedule does not exist, create a new one
+        scheduleItem = {
+          flashcardId: flashcardId,
+          revisionDates: [actualRevisionDate],
+          numberOfRevisions: 1,
+        };
+        revisionSchedule.push(scheduleItem);
+      } else {
+        // find if actualRevisionDate is on the revisionDates list
+        const revisionIndex = scheduleItem.revisionDates.findIndex((date) =>
+          isSameDay(date, actualRevisionDate)
+        );
 
-  const userScheduleRef = doc(db, "revisionSchedules", auth.currentUser.uid);
-  const docSnap = await getDoc(userScheduleRef);
-
-  if (docSnap.exists() && docSnap.data().revisionSchedule) {
-    let flashcardScheduleExists = false;
-    const updatedSchedule = docSnap.data().revisionSchedule.map((item) => {
-      if (item.flashcardId === flashcardId) {
-        flashcardScheduleExists = true;
-        // check if the revision is made on the same day
-        if (
-          isSameDay(
-            item.revisionDates[item.revisionDates.length - 1],
-            actualRevisionDate
-          )
-        ) {
-          // do nothing if revising on the same day
-          return item;
-        } else {
-          // check if the revision is made early
-          const lastRevisionDate = new Date(
-            item.revisionDates[item.revisionDates.length - 1]
-          );
-          const actualDate = new Date(actualRevisionDate);
-          const differenceInDays =
-            (actualDate - lastRevisionDate) / (1000 * 3600 * 24);
-          let numberOfRevisions = item.numberOfRevisions;
-
-          if (differenceInDays < fibonacci(numberOfRevisions + 1)) {
-            // if the revision is made early, accelerate the schedule by one day
-            numberOfRevisions += 1;
-          }
-
+        if (revisionIndex !== -1) {
+          // revision was made on the correct day, so increment numberOfRevisions and calculate next date.
+          scheduleItem.numberOfRevisions++;
           const nextRevisionDate = calculateNextRevisionDate(
             actualRevisionDate,
-            numberOfRevisions
+            scheduleItem.numberOfRevisions
           );
-          return {
-            ...item,
-            revisionDates: [...item.revisionDates, nextRevisionDate],
-            numberOfRevisions: numberOfRevisions,
-          };
+          scheduleItem.revisionDates.push(nextRevisionDate);
+        } else {
+          // Revision was made early or late.
+          scheduleItem.numberOfRevisions = scheduleItem.numberOfRevisions - 1;
+          const nextRevisionDate = calculateNextRevisionDate(
+            actualRevisionDate,
+            scheduleItem.numberOfRevisions
+          );
+          scheduleItem.revisionDates = [nextRevisionDate];
         }
       }
-      return item;
+
+      // update the revision schedule.
+      transaction.set(userScheduleRef, { revisionSchedule }, { merge: true });
     });
 
-    if (!flashcardScheduleExists) {
-      // add the new flashcard to the schedule
-      updatedSchedule.push({
-        flashcardId: flashcardId,
-        revisionDates: [calculateNextRevisionDate(actualRevisionDate, 1)],
-        numberOfRevisions: 1,
-      });
-    }
-
-    await setDoc(
-      userScheduleRef,
-      { revisionSchedule: updatedSchedule },
-      { merge: true }
-    );
-  } else {
-    // no schedule exists, create a new one
-    const newSchedule = [
-      {
-        flashcardId: flashcardId,
-        revisionDates: [calculateNextRevisionDate(actualRevisionDate, 1)],
-        numberOfRevisions: 1,
-      },
-    ];
-
-    await setDoc(userScheduleRef, { revisionSchedule: newSchedule });
+    console.log("Successfully updated revision dates.");
+  } catch (e) {
+    console.error("Failed to update revision dates: ", e);
   }
 };

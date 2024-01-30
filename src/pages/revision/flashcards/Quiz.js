@@ -73,11 +73,10 @@ const Quiz = () => {
     } else {
       const options = {
         includeScore: true,
-        threshold: 0.3,
       };
       const fuse = new Fuse([correctAnswer], options);
       const result = fuse.search(userAnswer);
-      return result.length > 0 && result[0].score < 0.3; // relaxed checking
+      return result.length > 0 && result[0].score < 0.6; // relaxed checking
     }
   };
 
