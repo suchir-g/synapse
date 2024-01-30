@@ -1,91 +1,100 @@
 import React, { useEffect, useState, useRef } from "react";
 import Phaser from "phaser";
 import { useParams } from "react-router-dom";
-import { flashcardsFromSetID } from "../../../utilities";
+import { doc, getDoc, collection, getDocs } from "firebase/firestore";
+import { db } from "../../../config/firebase";
+import { sanitizeHTML } from "../../../utilities";
 
-function preload() {
-  this.load.image("meteor", "/temp_meteor.png");
-}
+class MyScene extends Phaser.Scene {
+  constructor() {
+    super({ key: "MyScene" });
+  }
 
-function create() {
-  this.meteors = this.physics.add.group();
+  preload() {
+    this.load.image("meteor", "/temp_meteor.png");
+  }
 
-  let delay = 5000;
-  const minDelay = 1000;
-  const delayDecrement = 50;
+  create() {
+    this.meteors = this.physics.add.group();
 
-  const spawnMeteor = () => {
-    const x = Phaser.Math.Between(0, 800);
-    const targetX = this.sys.game.config.width / 2;
-    const targetY = this.sys.game.config.height;
-    const meteor = this.meteors
-      .create(x, -50, "meteor")
-      .setScale(Math.max(0.2, Math.min(0.5, Math.random())));
+    let delay = 5000; // Initial delay
+    const minDelay = 1000;
+    const delayDecrement = 50;
 
-    const flashcards = this.game.registry.get("flashcards");
-    const randomFlashcard =
-      flashcards[Phaser.Math.Between(0, flashcards.length - 1)];
-    meteor.flashcardQuestion = randomFlashcard.question;
-    meteor.flashcardAnswer = randomFlashcard.answer;
+    const spawnMeteor = () => {
+      const x = Phaser.Math.Between(0, 800);
+      const meteor = this.meteors
+        .create(x, -50, "meteor")
+        .setScale(Phaser.Math.FloatBetween(0.2, 0.5));
 
-    const distanceToTargetX = targetX - x;
-    const distanceToTargetY = targetY - 50;
-    const verticalVelocity = Phaser.Math.Between(10, 30);
-    const timeToTargetY = distanceToTargetY / verticalVelocity;
-    const velocityX = distanceToTargetX / timeToTargetY;
+      const randomFlashcard =
+        this.flashcards[Phaser.Math.Between(0, this.flashcards.length - 1)];
+      meteor.flashcardQuestion = randomFlashcard.question;
+      meteor.flashcardAnswer = randomFlashcard.answer;
 
-    meteor.setVelocity(velocityX, verticalVelocity);
-    meteor.setAngularVelocity(Phaser.Math.Between(-50, 50));
+      // Lower initial vertical velocity
+      const verticalVelocity = Phaser.Math.Between(1, 1.25); // Reduced initial velocity range
+      const horizontalVelocity = Phaser.Math.Between(-40, 40);
 
-    delay = Math.max(minDelay, delay - delayDecrement);
-    this.time.delayedCall(delay, spawnMeteor);
-  };
+      meteor.setVelocity(horizontalVelocity, verticalVelocity);
+      meteor.setAngularVelocity(Phaser.Math.Between(-25, 25));
 
-  this.time.delayedCall(delay, spawnMeteor);
-}
+      delay = Math.max(minDelay, delay - delayDecrement);
+      this.time.delayedCall(delay, spawnMeteor);
+    };
 
-function update() {
-  let lowestMeteor = null;
-  this.meteors.children.iterate(function (meteor) {
-    if (meteor) {
-      if (meteor.y > this.sys.game.config.height) {
+    spawnMeteor();
+    this.setCurrentQuestion(this.flashcards[0].question);
+  }
+
+  update() {
+    this.meteors.children.iterate(function (meteor) {
+      if (meteor && meteor.y > this.sys.game.config.height) {
         meteor.destroy();
-      } else {
-        const middleX = this.sys.game.config.width / 2;
-        const direction = meteor.x < middleX ? 1 : -1;
-        meteor.setVelocityX(50 * direction);
-        if (!lowestMeteor || meteor.y > lowestMeteor.y) {
-          lowestMeteor = meteor;
-        }
       }
-    }
-  }, this);
+    }, this);
 
-  if (lowestMeteor) {
-    const setCurrentQuestion = this.game.registry.get(
-      "setCurrentQuestionRef"
-    ).current;
-    if (setCurrentQuestion) {
-      setCurrentQuestion(lowestMeteor.flashcardQuestion);
+    // If you still want to set the current question based on the lowest meteor,
+    // keep this part. Otherwise, it can be removed.
+    let lowestMeteor = null;
+    this.meteors.children.iterate(function (meteor) {
+      if (!lowestMeteor || (meteor && meteor.y > lowestMeteor.y)) {
+        lowestMeteor = meteor;
+      }
+    }, this);
+
+    if (lowestMeteor) {
+      this.setCurrentQuestion(lowestMeteor.flashcardQuestion);
     }
   }
 }
-
 const MeteorQuiz = () => {
-  const [userAnswer, setUserAnswer] = useState("");
   const [flashcards, setFlashcards] = useState([]);
   const [currentQuestion, setCurrentQuestion] = useState("");
+  const [userAnswer, setUserAnswer] = useState("");
+  const [lives, setLives] = useState(3);
   const setCurrentQuestionRef = useRef();
-
-  const { setID } = useParams();
   setCurrentQuestionRef.current = setCurrentQuestion;
 
+  const { setID } = useParams();
   const gameInstance = useRef(null);
 
   useEffect(() => {
     const fetchFlashcards = async () => {
-      const fetchedFlashcards = await flashcardsFromSetID(setID);
-      setFlashcards(fetchedFlashcards);
+      const setDocRef = doc(db, "flashcardSets", setID);
+      const docSnap = await getDoc(setDocRef);
+
+      if (docSnap.exists()) {
+        const subcollectionRef = collection(docSnap.ref, "flashcards");
+        const querySnapshot = await getDocs(subcollectionRef);
+        const fetchedFlashcards = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setFlashcards(fetchedFlashcards);
+      } else {
+        console.log("Document does not exist");
+      }
     };
 
     if (setID) {
@@ -94,56 +103,39 @@ const MeteorQuiz = () => {
   }, [setID]);
 
   useEffect(() => {
-    const gameConfig = {
-      type: Phaser.AUTO,
-      width: 800,
-      height: 600,
-      parent: "phaser-game",
-      physics: {
-        default: "arcade",
-        arcade: {
-          gravity: { y: 50 },
-          debug: false,
+    if (flashcards.length > 0 && !gameInstance.current) {
+      MyScene.prototype.flashcards = flashcards;
+      MyScene.prototype.setCurrentQuestion = setCurrentQuestionRef.current;
+
+      gameInstance.current = new Phaser.Game({
+        type: Phaser.AUTO,
+        width: 800,
+        height: 600,
+        parent: "phaser-game",
+        physics: {
+          default: "arcade",
+          arcade: {
+            gravity: { y: 20 },
+            debug: false,
+          },
         },
-      },
-      scene: {
-        data: { flashcards, setCurrentQuestionRef },
-        preload,
-        create,
-        update,
-      },
-    };
+        scene: [MyScene],
+      });
 
-    gameInstance.current = new Phaser.Game(gameConfig);
-
-    return () => {
-      if (gameInstance.current) {
-        gameInstance.current.destroy(true);
-      }
-    };
+      return () => {
+        if (gameInstance.current) {
+          gameInstance.current.destroy(true);
+        }
+      };
+    }
   }, [flashcards]);
 
   const handleAnswerChange = (event) => {
     setUserAnswer(event.target.value);
   };
 
-  const handleAnswerSubmit = () => {
-    if (gameInstance.current) {
-      const scene = gameInstance.current.scene.keys.default;
-      const closestMeteor = findClosestMeteor(scene);
-      if (
-        closestMeteor &&
-        userAnswer.toLowerCase() === closestMeteor.flashcardAnswer.toLowerCase()
-      ) {
-        closestMeteor.destroy();
-        setUserAnswer("");
-      } else {
-        // Handle incorrect answers
-      }
-    }
-  };
-
-  const findClosestMeteor = (scene) => {
+  const findClosestMeteor = () => {
+    const scene = gameInstance.current.scene.keys.MyScene;
     let lowestMeteor = null;
     scene.meteors.getChildren().forEach((meteor) => {
       if (!lowestMeteor || meteor.y > lowestMeteor.y) {
@@ -152,13 +144,63 @@ const MeteorQuiz = () => {
     });
     return lowestMeteor;
   };
+  const getTextFromHtml = (htmlString) => {
+    const div = document.createElement("div");
+    div.innerHTML = htmlString;
+    return div.textContent || div.innerText || "";
+  };
+
+  // Function to handle answer submission
+  const handleAnswerSubmit = () => {
+    const closestMeteor = findClosestMeteor();
+    const plainAnswer = getTextFromHtml(closestMeteor.flashcardAnswer);
+
+    if (closestMeteor) {
+      if (userAnswer.toLowerCase() === plainAnswer.toLowerCase()) {
+        // Correct answer
+        closestMeteor.setTint(0x00ff00); // Green tint for correct answer
+        closestMeteor.destroy(); // Optionally, destroy the meteor
+        setUserAnswer(""); // Reset user input
+        setCurrentQuestion(flashcards.length > 1 ? flashcards[1].question : "");
+      } else {
+        // Incorrect answer
+        closestMeteor.setTint(0xff0000); // Red tint for incorrect answer
+        let newVelocityY = closestMeteor.body.velocity.y + 2; // Gradual increase in speed
+        closestMeteor.setVelocityY(newVelocityY);
+        closestMeteor.setVelocityY(closestMeteor.body.velocity.y + 500); // Significant increase in speed
+        closestMeteor.setAngularVelocity(Phaser.Math.Between(-200, 200)); // Erratic spinning
+
+        setLives((prevLives) => Math.max(prevLives - 1, 0));
+
+        // Check for game over
+        if (lives == 0) {
+          console.log("Game Over"); // Replace with your game-over logic
+          // Optionally, reset the game or navigate to a different screen
+        }
+      }
+    }
+    setUserAnswer("");
+  };
+
+  const handleKeyDown = (event) => {
+    if (event.key === "Enter") {
+      handleAnswerSubmit();
+    }
+  };
 
   return (
     <div>
-      <div id="phaser-game" style={{ width: "800px", height: "600px" }} />
-      <div>Question: {currentQuestion}</div>
-      <input type="text" value={userAnswer} onChange={handleAnswerChange} />
+      <div id="phaser-game" style={{ width: "800px", height: "600px" }}></div>
+      <div>Question:</div>
+      <div dangerouslySetInnerHTML={sanitizeHTML(currentQuestion)}></div>
+      <input
+        type="text"
+        value={userAnswer}
+        onChange={handleAnswerChange}
+        onKeyDown={handleKeyDown}
+      />
       <button onClick={handleAnswerSubmit}>Submit Answer</button>
+      <div>Lives: {lives}</div>
     </div>
   );
 };
