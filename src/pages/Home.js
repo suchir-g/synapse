@@ -1,9 +1,13 @@
-import React from 'react'
-
-const Home = ({isAuth}) => {
+import React from "react";
+import Dashboard from "./Dashboard";
+const Home = ({ isAuth }) => {
   return (
-    <div>Home</div>
-  )
-}
+    <div>
+      <div>Home</div>
+      {/* Renders the dashboard if auth */}
+      {isAuth && <Dashboard isAuth={isAuth} />}
+    </div>
+  );
+};
 
-export default Home
+export default Home;

@@ -4,6 +4,7 @@ import { collection, getDocs, query, orderBy, doc, getDoc } from "firebase/fires
 import Flashcard from "./Flashcard";
 import { useNavigate, useParams } from "react-router-dom";
 import { updateRevisionDates } from "../interleaving/updateFlashcards";
+import updateStreak from "../../../UpdateStreak";
 
 const SimpleDisplay = () => {
   const history = useNavigate();
@@ -34,6 +35,7 @@ const SimpleDisplay = () => {
     }
     return array;
   };
+  
 
   useEffect(() => {
     const fetchFlashcards = async () => {
@@ -94,6 +96,7 @@ const SimpleDisplay = () => {
               console.error("Error updating revision dates:", error);
             });
         }
+        updateStreak(auth?.currentUser?.uid)
         setIsCompleted(true); // set completion to true when the last card is reached
         return prevIndex;
       }

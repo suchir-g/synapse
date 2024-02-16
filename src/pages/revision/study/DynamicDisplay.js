@@ -44,6 +44,12 @@ export const DynamicDisplay = ({
     setAnswerSubmitted(true);
   };
 
+  const handleEnter = (event) => {
+    if (event.key === "Enter") {
+      handleWrittenAnswer();
+    }
+  };
+
   const handleNextClick = () => {
     // now we call onAnswerSubmit with the stored answer correctness
     onAnswerSubmit(flashcard.id, isCorrect);
@@ -86,6 +92,7 @@ export const DynamicDisplay = ({
             value={userInput}
             onChange={(e) => setUserInput(e.target.value)}
             disabled={answerSubmitted}
+            onKeyDown={handleEnter}
           />
           <button onClick={handleWrittenAnswer} disabled={answerSubmitted}>
             Submit

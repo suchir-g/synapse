@@ -1,0 +1,33 @@
+{
+  "indexes": [
+    {
+      "collectionGroup": "flashcardSets",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "owners",
+          "arrayConfig": "CONTAINS"
+        },
+        {
+          "fieldPath": "viewed",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "notes",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "owners",
+          "arrayConfig": "CONTAINS"
+        },
+        {
+          "fieldPath": "viewed",
+          "order": "DESCENDING"
+        }
+      ]
+    }
+  ],
+  "fieldOverrides": []
+}

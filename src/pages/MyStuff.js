@@ -133,6 +133,7 @@ const MyStuff = ({ isAuth }) => {
     <div>
       <h1>My Stuff</h1>
       <button onClick={navigateToTags}>Tags</button>
+      <button onClick={(e) => navigate("/timers")}>Timers</button>
       <section>
         {setsToReviseToday.length > 0 && (
           <section>

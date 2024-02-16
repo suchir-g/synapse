@@ -128,6 +128,12 @@ const Quiz = () => {
   const percentageCorrect =
     currentCardIndex > 0 ? (correct / currentCardIndex) * 100 : 0;
 
+  const handleEnter = (event) => {
+    if (event.key === "Enter") {
+      handleSubmit();
+    }
+  };
+
   if (isLoading) {
     return <div>Loading...</div>;
   }
@@ -160,6 +166,7 @@ const Quiz = () => {
             value={userAnswer}
             onChange={handleAnswerChange}
             placeholder="Type your answer here"
+            onKeyDown={handleEnter}
           />
           <button onClick={handleSubmit}>Submit Answer</button>
           <hr />

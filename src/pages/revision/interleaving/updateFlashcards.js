@@ -44,22 +44,16 @@ const isSameDay = (dateStr1, dateStr2) => {
 };
 export const updateRevisionDates = async (flashcardId, actualRevisionDate) => {
   try {
-    // reference to the flashcard and user schedule in Firestore.
     const flashcardRef = doc(db, "flashcardSets", flashcardId);
     const userScheduleRef = doc(db, "revisionSchedules", auth.currentUser.uid);
 
-    // transaction to update both documents atomically.
     await runTransaction(db, async (transaction) => {
       const flashcardDoc = await transaction.get(flashcardRef);
       const scheduleDoc = await transaction.get(userScheduleRef);
 
-      if (!flashcardDoc.exists()) {
-        throw "Document does not exist!";
-      }
-
+      if (!flashcardDoc.exists()) throw "Document does not exist!";
       const flashcardData = flashcardDoc.data();
 
-      // check if the flashcard has already been revised today
       if (isSameDay(flashcardData.revised, actualRevisionDate)) {
         console.log(
           "Flashcard has already been revised today. No updates will be made."
@@ -67,10 +61,8 @@ export const updateRevisionDates = async (flashcardId, actualRevisionDate) => {
         return;
       }
 
-      // update the revised date for the flashcard
-      transaction.update(flashcardRef, {
-        revised: actualRevisionDate,
-      });
+      // Always update the flashcard's last revised date
+      transaction.update(flashcardRef, { revised: actualRevisionDate });
 
       let revisionSchedule = scheduleDoc.data()?.revisionSchedule || [];
       let scheduleItem = revisionSchedule.find(
@@ -78,39 +70,51 @@ export const updateRevisionDates = async (flashcardId, actualRevisionDate) => {
       );
 
       if (!scheduleItem) {
-        // if the flashcard schedule does not exist, create a new one
+        // If no schedule exists, create a new schedule item with the next revision date
+        const nextRevisionDate = calculateNextRevisionDate(
+          actualRevisionDate,
+          1
+        );
         scheduleItem = {
           flashcardId: flashcardId,
-          revisionDates: [actualRevisionDate],
+          revisionDates: [nextRevisionDate], // Start with the next revision date
           numberOfRevisions: 1,
         };
         revisionSchedule.push(scheduleItem);
       } else {
-        // find if actualRevisionDate is on the revisionDates list
+        // Check if actualRevisionDate is in the revisionDates array
         const revisionIndex = scheduleItem.revisionDates.findIndex((date) =>
           isSameDay(date, actualRevisionDate)
         );
 
         if (revisionIndex !== -1) {
-          // revision was made on the correct day, so increment numberOfRevisions and calculate next date.
-          scheduleItem.numberOfRevisions++;
-          const nextRevisionDate = calculateNextRevisionDate(
-            actualRevisionDate,
-            scheduleItem.numberOfRevisions
-          );
+          // If revised on a scheduled date, remove that date
+          scheduleItem.revisionDates.splice(revisionIndex, 1);
+        }
+
+        // Regardless of whether a date was popped or not, calculate the next revision date
+        // The calculation is based on the existing number of revisions plus one for the next step
+        const nextRevisionDate = calculateNextRevisionDate(
+          actualRevisionDate,
+          scheduleItem.numberOfRevisions + 1
+        );
+        if (!scheduleItem.revisionDates.includes(nextRevisionDate)) {
           scheduleItem.revisionDates.push(nextRevisionDate);
-        } else {
-          // Revision was made early or late.
-          scheduleItem.numberOfRevisions = scheduleItem.numberOfRevisions - 1;
-          const nextRevisionDate = calculateNextRevisionDate(
-            actualRevisionDate,
+        }
+
+        // Adjust numberOfRevisions only if a date was popped
+        if (revisionIndex !== -1) {
+          scheduleItem.numberOfRevisions = Math.max(
+            1,
             scheduleItem.numberOfRevisions
           );
-          scheduleItem.revisionDates = [nextRevisionDate];
+        } else {
+          // Increment if we're adding a new date not based on a pop
+          scheduleItem.numberOfRevisions++;
         }
       }
 
-      // update the revision schedule.
+      // Update the revision schedule with the new or modified schedule item
       transaction.set(userScheduleRef, { revisionSchedule }, { merge: true });
     });
 
