@@ -3,7 +3,7 @@ import Phaser from "phaser";
 import { useParams } from "react-router-dom";
 import { doc, getDoc, collection, getDocs } from "firebase/firestore";
 import { db } from "../../../config/firebase";
-import { sanitizeHTML } from "../../../utilities";
+import { sanitizeAndTruncateHtml } from "../../../utilities";
 
 class MyScene extends Phaser.Scene {
   constructor() {
@@ -29,11 +29,11 @@ class MyScene extends Phaser.Scene {
 
       const randomFlashcard =
         this.flashcards[Phaser.Math.Between(0, this.flashcards.length - 1)];
-      meteor.flashcardQuestion = randomFlashcard.question;
+      meteor.flashcardQuestion = sanitizeAndTruncateHtml(randomFlashcard.question);
       meteor.flashcardAnswer = randomFlashcard.answer;
 
       // Create a text object for the meteor
-      const text = this.add.text(x, -50, randomFlashcard.question, {
+      const text = this.add.text(x, -50, sanitizeAndTruncateHtml(randomFlashcard.question), {
         font: "16px Arial",
         fill: "#ffffff",
       });
