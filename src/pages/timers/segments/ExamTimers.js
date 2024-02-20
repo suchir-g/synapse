@@ -39,7 +39,7 @@ const ExamTimers = () => {
             setExamConfigs(configs);
           } catch (error) {
             console.error("Error fetching exam configs: ", error);
-            // handle the error state as appropriately
+            // handle the errsor state as appropriately
           }
         };
 

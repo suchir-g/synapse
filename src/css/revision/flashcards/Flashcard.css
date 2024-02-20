@@ -11,17 +11,21 @@
   position: relative; /* Changed from absolute to relative */
   transition: transform 0.6s; /* change to adjust the flip speed */
   transform-style: preserve-3d; /* This is important for flipping */
+
 }
 
 .card .front,
 .card .back {
   width: 100%;
   height: 100%;
-  border: 1px solid #ddd;
+  border: 1px solid #4c2719;
   border-radius: 10px;
   backface-visibility: hidden; /* hide the back side during the flip */
   position: absolute; /* this is important to stack the front and back */
   overflow: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 /* Hide scrollbar for Chrome, Safari and Opera */
@@ -31,11 +35,11 @@
 
 
 .card .front {
-  background: white;
+  background: #fcfcf9;
 }
 
 .card .back {
-  background: lightblue;
+  background: #fcfcf9;
   transform: rotateY(180deg); /* this flips the back side */
 }
 
