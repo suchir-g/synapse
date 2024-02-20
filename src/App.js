@@ -1,4 +1,5 @@
-import "./App.css";
+import "./css/App.css";
+import "./css/Reset.css";
 
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 
@@ -8,7 +9,7 @@ import Login from "./pages/Login";
 import Profile from "./pages/Profile";
 import Post from "./pages/Post";
 
-import MyStuff from "./pages/MyStuff";
+import MyStuff from "./pages/mystuff/MyStuff";
 
 import FlashcardSet from "./pages/flashcards/FlashcardSet";
 import EditFlashcards from "./pages/flashcards/EditFlashcards";
@@ -42,6 +43,8 @@ import PostWhiteboard from "./pages/whiteboards/PostWhiteboard";
 import WhiteboardPage from "./pages/whiteboards/ShowWhiteboards";
 
 import { useState } from "react";
+import styles from "./css/Navbar.module.css"
+import logo from "./assets/logos/whiteTelescope.png";
 
 function App() {
   const [isAuth, setIsAuth] = useState(localStorage.getItem("isAuth"));
@@ -49,12 +52,35 @@ function App() {
 
   return (
     <Router>
-      <Link to="/">Home</Link>
-      {/* This will make it so that profile is shown when you are logged in, else it's login */}
-      {isAuth && <Link to="/profile">Profile</Link>}
-      {!isAuth && <Link to="/login">Login</Link>}
-      <Link to="/post">Post</Link>
-      {isAuth && <Link to="/mystuff">My Stuff</Link>}
+      <nav className={styles.navbar}>
+        <div className={styles.navbar_logo}>
+          <Link to="/" className={styles.navbar_brand}>
+            <img src={logo} alt="Synapse Logo" />
+            <span>Synapse</span>
+          </Link>
+        </div>
+
+        <ul className={styles.navbar_links}>
+          <li>
+            <Link to="/post">Post</Link>
+          </li>
+          {isAuth && (
+            <li>
+              <Link to="/mystuff">My Stuff</Link>
+            </li>
+          )}
+          {isAuth && (
+            <li>
+              <Link to="/profile">Profile</Link>
+            </li>
+          )}
+          {!isAuth && (
+            <li>
+              <Link to="/login">Login</Link>
+            </li>
+          )}
+        </ul>
+      </nav>
 
       <Routes>
         <Route path="/" element={<Home isAuth={isAuth} />} />

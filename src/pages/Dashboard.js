@@ -8,10 +8,13 @@ import {
   getDocs,
   orderBy,
   limit,
-  doc,
-  getDoc,
 } from "firebase/firestore";
 import { sanitizeAndTruncateHtml } from "../utilities";
+import { checkAndResetStreak } from "../UpdateStreak";
+import styles from "../css/Dashboard.module.css";
+
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faFire } from "@fortawesome/free-solid-svg-icons";
 
 const Dashboard = ({ isAuth }) => {
   const navigate = useNavigate();
@@ -19,20 +22,29 @@ const Dashboard = ({ isAuth }) => {
   const [latestSets, setLatestSets] = useState([]);
   const [latestNotes, setLatestNotes] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [hasRevisedToday, setHasRevisedToday] = useState(false);
 
   useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((user) => {
+    const unsubscribe = auth.onAuthStateChanged(async (user) => {
       if (user) {
-        // user is signed in.
-        loadData(user.uid);
+        await loadData(user.uid);
+        checkAndResetStreak(user.uid);
       } else {
-        // no user is signed in.
         navigate("/login");
       }
     });
 
     return () => unsubscribe(); // remember to unsubscribe on component unmount
-  }, [navigate]);
+  }, [navigate]); // Consider adding all dependencies here
+
+  const checkRevisionStatus = (lastRevised) => {
+    if (!lastRevised) return;
+    const lastRevisedDate = lastRevised.toDate(); // Assuming lastRevised is a Firestore Timestamp
+    const today = new Date();
+    const revisedToday =
+      lastRevisedDate.setHours(0, 0, 0, 0) === today.setHours(0, 0, 0, 0);
+    setHasRevisedToday(revisedToday);
+  };
 
   const loadData = async (userId) => {
     setIsLoading(true);
@@ -45,8 +57,11 @@ const Dashboard = ({ isAuth }) => {
 
       if (!usersSnapshot.empty) {
         const userDoc = usersSnapshot.docs[0];
-        setUserData(userDoc.data());
+        const userData = userDoc.data();
+        setUserData(userData);
+        checkRevisionStatus(userData.lastRevisionDate);
       }
+
       const setsQuery = query(
         collection(db, "flashcardSets"),
         where("owners", "array-contains", userId),
@@ -78,49 +93,56 @@ const Dashboard = ({ isAuth }) => {
     return <div>Loading...</div>;
   }
   return (
-    <div>
-      <h1>Hello, {userData ? userData.username : "there"}!</h1>
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "row", // ensures the children are in a row
-          justifyContent: "space-between",
-          marginBottom: "20px",
-        }}
-      >
-        <div style={{ flex: 1, marginRight: "10px" }}>
-          {" "}
+    <div className={styles.dashboardContainer}>
+      <div className={styles.welcomeSection}>
+        <h1 className={styles.title}>
+          Hello, {userData ? userData.firstName : "there"}!
+        </h1>
+        {userData && (
+          <div className={styles.streakDisplay}>
+            <FontAwesomeIcon icon={faFire} />
+            <span className="streakCount">{userData.streak}</span>
+          </div>
+        )}
+        <h2>You have {hasRevisedToday ? "" : "not "}revised today.</h2>
+      </div>
+      <div className={styles.flexRow}>
+        <div className={`${styles.flexItem} ${styles.flashcards}`}>
           <h2>Latest Flashcard Sets</h2>
           {latestSets.map((set) => (
-            <div key={set.id}>
+            <div key={set.id} className={styles.card}>
               <h3>
-                <Link to={`/sets/${set.id}`}>{set.title}</Link>
+                <Link to={`/sets/${set.id}`} className={styles.cardLink}>
+                  {set.title}
+                </Link>
               </h3>
-              <p>{set.description}</p>
+              <p className={styles.cardDescription}>{set.description}</p>
             </div>
           ))}
         </div>
-        <div style={{ flex: 1 }}>
-          {" "}
-          {/* added flex: 1 to take up the remaining space */}
+        <div className={`${styles.flexItem} ${styles.notes}`}>
           <h2>Latest Notes</h2>
           {latestNotes.map((note) => (
-            <div key={note.id}>
+            <div key={note.id} className={styles.card}>
               <h3>
-                <Link to={`/notes/${note.id}`}>{note.title}</Link>
+                <Link to={`/notes/${note.id}`} className={styles.cardLink}>
+                  {note.title}
+                </Link>
               </h3>
-              {/* render a preview of the note content using the sanitizeAndTruncateHtml function from the utility function */}
               <div
+                className={styles.cardContent}
                 dangerouslySetInnerHTML={{
                   __html: sanitizeAndTruncateHtml(note.content),
-                }}
+                }} // Assuming content is safe and sanitized
               ></div>
             </div>
           ))}
         </div>
       </div>
       <div>
-        <button onClick={() => navigate("/mystuff")}>Go to My Stuff</button>
+        <button className={styles.button} onClick={() => navigate("/mystuff")}>
+          Go to My Stuff
+        </button>
       </div>
     </div>
   );

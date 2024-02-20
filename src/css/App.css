@@ -1,0 +1,15 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100..900&display=swap');
+
+:root {
+    --navbar-color: #252422;
+
+    --primary: #eb5e28;
+    --secondary: #333533;
+    --accent: #f26419;
+    --muted: #9999a1;
+    --black: #1a1a1a;
+    
+    --primary-hover:rgb(208, 84, 36)8;
+    --secondary-hover: #222322;
+    --accent-hover: #ca5310;
+}

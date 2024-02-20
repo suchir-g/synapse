@@ -1,16 +1,24 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Stage, Layer, Line, Image as KonvaImage } from "react-konva";
+import { Stage, Layer, Line, Image as KonvaImage, Rect } from "react-konva";
 import { auth, db } from "../../config/firebase";
-import { addDoc, collection, updateDoc, doc, getDoc } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  updateDoc,
+  doc,
+  getDoc,
+  deleteDoc,
+} from "firebase/firestore";
 import { onAuthStateChanged } from "firebase/auth";
-import useImage from "use-image";
-
+import { deleteObject } from "firebase/storage";
 import {
   getStorage,
   ref as firebaseStorageRef,
   uploadBytes,
   getDownloadURL,
 } from "firebase/storage";
+import { useNavigate } from "react-router-dom";
+import { Text } from "react-konva";
 
 const Whiteboard = ({ whiteboardID }) => {
   const [tool, setTool] = useState("pen"); // 'pen', 'eraser', 'pencil'
@@ -22,7 +30,16 @@ const Whiteboard = ({ whiteboardID }) => {
   const isDrawing = useRef(false);
   const [backgroundImage, setBackgroundImage] = useState(null);
   const [image, setImage] = useState(null);
+  const [textBoxes, setTextBoxes] = useState([]);
+  const [selectedTextBoxId, setSelectedTextBoxId] = useState(null);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editText, setEditText] = useState("");
+  const [backgroundType, setBackgroundType] = useState("plain");
+  const [backgroundShapes, setBackgroundShapes] = useState([]);
+  const [opacity, setOpacity] = useState(1); // Opacity range between 0 (transparent) and 1 (opaque)
+
   const stageRef = useRef();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleKeyDown = (e) => {
@@ -69,6 +86,7 @@ const Whiteboard = ({ whiteboardID }) => {
       if (docSnap.exists()) {
         const whiteboardData = docSnap.data();
 
+        setTitle(whiteboardData.title);
         setBackgroundImage(whiteboardData.downloadURL);
         console.log(image);
         console.log("No such whiteboard!");
@@ -82,6 +100,10 @@ const Whiteboard = ({ whiteboardID }) => {
     // which means this hook will rerun if the whiteboardID prop changes,
     // ensuring that the component can respond to changes in the whiteboardID prop dynamically.
   }, [whiteboardID]); // Dependency array with whiteboardID
+
+  useEffect(() => {
+    updateBackgroundShapes();
+  }, [backgroundType]); // Depend on backgroundType to re-generate shapes
 
   const handleMouseDown = (e) => {
     isDrawing.current = true;
@@ -98,13 +120,13 @@ const Whiteboard = ({ whiteboardID }) => {
 
   const handleMouseUp = () => {
     isDrawing.current = false;
-    setHistory([...history, lines]);
+    setHistory([...history, [...lines]]);
   };
 
   const addLine = (point) => {
     const newLines = [
       ...lines,
-      { tool, points: [point.x, point.y], penSize, color },
+      { tool, points: [point.x, point.y], penSize, color, opacity },
     ];
     setLines(newLines);
   };
@@ -116,6 +138,28 @@ const Whiteboard = ({ whiteboardID }) => {
       .slice(0, lines.length - 1)
       .concat([{ ...lastLine, points: newPoints }]);
     setLines(updatedLines);
+  };
+
+  const updateBackgroundShapes = () => {
+    const width = window.innerWidth - 100;
+    const height = window.innerHeight;
+    const lineSpacing = 50; // Adjust as needed
+
+    let shapes = [];
+
+    if (backgroundType === "lined") {
+      for (let i = 0; i < height / lineSpacing; i++) {
+        shapes.push({ type: "Line", y: i * lineSpacing });
+      }
+    } else if (backgroundType === "squared") {
+      for (let i = 0; i < width / lineSpacing; i++) {
+        for (let j = 0; j < height / lineSpacing; j++) {
+          shapes.push({ type: "Rect", x: i * lineSpacing, y: j * lineSpacing });
+        }
+      }
+    }
+
+    setBackgroundShapes(shapes);
   };
 
   const saveDrawing = async () => {
@@ -161,12 +205,93 @@ const Whiteboard = ({ whiteboardID }) => {
   };
 
   const undoLastAction = () => {
-    if (history.length > 0) {
-      const previousState = history[history.length - 1];
-      setLines(previousState);
-      setHistory(history.slice(0, history.length - 1));
+    if (history.length === 0) return; // exit if there's nothing to undo
+
+    const previousState = history[history.length - 2]; // get the state before the last action
+    setLines(previousState || []); // revert to the previous state, or empty if none exists
+    setHistory(history.slice(0, history.length - 1)); // remove the last action from history
+  };
+
+  const resetDrawing = () => {
+    // reset React state variables
+    setLines([]);
+    setHistory([]);
+    setBackgroundImage(null); // reset background image state if necessary
+
+    // access the Konva Stage and iterate over all layers to clear
+    const stage = stageRef.current;
+    if (stage) {
+      const layers = stage.getLayers();
+      layers.forEach((layer) => {
+        layer.removeChildren(); // removes all shapes from the layer
+        layer.draw(); // redraw the layer to reflect changes
+      });
     }
   };
+
+  const deleteDrawingFromStorage = async () => {
+    if (!whiteboardID || !auth.currentUser) {
+      console.log("No whiteboard ID provided or user is not authenticated");
+      return;
+    }
+
+    const storage = getStorage(); // Ensure you have initialized Firebase Storage
+    const filePath = `drawings/${auth.currentUser.uid}/${whiteboardID}.png`;
+    const storageRef = firebaseStorageRef(storage, filePath);
+    console.log("Deleting file at path:", filePath);
+    try {
+      await deleteObject(storageRef);
+      console.log("File deleted successfully from storage");
+    } catch (error) {
+      console.error("Error deleting file from storage:", error);
+    }
+  };
+
+  const deleteDrawingFromFirestore = async () => {
+    if (!whiteboardID) {
+      console.log("No whiteboard ID provided");
+      return;
+    }
+
+    const docRef = doc(db, "whiteboards", whiteboardID);
+
+    try {
+      await deleteDoc(docRef);
+      console.log("Document deleted successfully from Firestore");
+    } catch (error) {
+      console.error("Error deleting document from Firestore:", error);
+    }
+  };
+
+  const deleteDrawing = async () => {
+    if (!whiteboardID || !auth.currentUser) {
+      console.log("No whiteboard ID provided or user is not authenticated");
+      return;
+    }
+
+    await deleteDrawingFromStorage();
+    await deleteDrawingFromFirestore();
+
+    setLines([]);
+    setHistory([]);
+    setBackgroundImage(null);
+    navigate("/whiteboards");
+  };
+
+  const addTextBox = () => {
+    const newText = {
+      x: 50, // Default position
+      y: 50, // Default position
+      text: "New Text",
+      fontSize: 20,
+      color: "#000000",
+      id: textBoxes.length + 1, // Simple ID assignment
+    };
+    setTextBoxes([...textBoxes, newText]);
+  };
+
+  const lineSpacing = 50;
+  const stageWidth = window.innerWidth - 100; // Match the container width
 
   return (
     <div style={{ display: "flex" }}>
@@ -177,9 +302,25 @@ const Whiteboard = ({ whiteboardID }) => {
           value={title}
           onChange={(e) => setTitle(e.target.value)} // Update title state when input changes
         />
+        <div>
+          {/* Background selection UI */}
+          <button onClick={() => setBackgroundType("plain")}>
+            Plain Background
+          </button>
+          <button onClick={() => setBackgroundType("lined")}>
+            Lined Background
+          </button>
+          <button onClick={() => setBackgroundType("squared")}>
+            Squared Background
+          </button>
+        </div>
         <button onClick={() => setTool("pen")}>Pen</button>
         <button onClick={() => setTool("pencil")}>Pencil</button>
         <button onClick={() => setTool("eraser")}>Eraser</button>
+        <button onClick={addTextBox}>Add Text Box</button>
+        <br />
+        <button onClick={resetDrawing}>Reset</button>{" "}
+        {/* Add the reset button here */}
         <br />
         <input
           type="color"
@@ -194,6 +335,36 @@ const Whiteboard = ({ whiteboardID }) => {
           value={penSize}
           onChange={(e) => setPenSize(parseInt(e.target.value))}
         />
+        <br />
+        <input
+          type="range"
+          min="0"
+          max="1"
+          step="0.1"
+          value={opacity}
+          onChange={(e) => setOpacity(parseFloat(e.target.value))}
+        />
+        <br />
+        {isEditing && (
+          <input
+            type="text"
+            value={editText}
+            onChange={(e) => setEditText(e.target.value)}
+            onKeyPress={(e) => {
+              if (e.key === "Enter") {
+                // update the text of the selected textbox and close the editor
+                const updatedTextBoxes = textBoxes.map((box) =>
+                  box.id === selectedTextBoxId
+                    ? { ...box, text: editText }
+                    : box
+                );
+                setTextBoxes(updatedTextBoxes);
+                setIsEditing(false);
+                setSelectedTextBoxId(null);
+              }
+            }}
+          />
+        )}
       </div>
       <div
         style={{
@@ -212,6 +383,32 @@ const Whiteboard = ({ whiteboardID }) => {
           ref={stageRef}
         >
           <Layer>
+            {backgroundShapes.map((shape, i) => {
+              if (shape.type === "Line") {
+                return (
+                  <Line
+                    key={i}
+                    points={[0, shape.y, stageWidth, shape.y]}
+                    strokeWidth={1}
+                  />
+                );
+              } else if (shape.type === "Rect") {
+                return (
+                  <Rect
+                    key={i}
+                    x={shape.x}
+                    y={shape.y}
+                    width={lineSpacing}
+                    height={lineSpacing}
+                    stroke="#ddd"
+                    strokeWidth={1}
+                  />
+                );
+              }
+              return null;
+            })}
+          </Layer>
+          <Layer>
             {image && (
               <KonvaImage
                 image={image}
@@ -223,13 +420,41 @@ const Whiteboard = ({ whiteboardID }) => {
               <Line
                 key={i}
                 points={line.points}
-                stroke={line.tool === "eraser" ? "#FFFFFF" : line.color}
+                stroke={line.color}
                 strokeWidth={line.penSize}
                 globalCompositeOperation={
                   line.tool === "eraser" ? "destination-out" : "source-over"
                 }
                 tension={0.5}
                 lineCap="round"
+                opacity={line.opacity}
+              />
+            ))}
+
+            {textBoxes.map((box, i) => (
+              <Text
+                key={i}
+                x={box.x}
+                y={box.y}
+                text={box.text}
+                fontSize={box.fontSize}
+                fill={box.color}
+                draggable
+                onDragEnd={(e) => {
+                  // Update position in the state
+                  const updatedTextBoxes = textBoxes.slice();
+                  updatedTextBoxes[i] = {
+                    ...box,
+                    x: e.target.x(),
+                    y: e.target.y(),
+                  };
+                  setTextBoxes(updatedTextBoxes);
+                }}
+                onDblClick={() => {
+                  setSelectedTextBoxId(box.id);
+                  setEditText(box.text);
+                  setIsEditing(true);
+                }}
               />
             ))}
           </Layer>
@@ -240,6 +465,12 @@ const Whiteboard = ({ whiteboardID }) => {
         style={{ position: "absolute", right: 20, top: 10 }}
       >
         Save Drawing
+      </button>
+      <button
+        onClick={deleteDrawing}
+        style={{ position: "absolute", right: 20, top: 35 }}
+      >
+        Delete Drawing
       </button>
     </div>
   );

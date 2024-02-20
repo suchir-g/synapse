@@ -1,10 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { auth, db } from "../../../config/firebase";
-import { collection, getDocs, query, orderBy, doc, getDoc } from "firebase/firestore";
+import {
+  collection,
+  getDocs,
+  query,
+  orderBy,
+  doc,
+  getDoc,
+} from "firebase/firestore";
 import Flashcard from "./Flashcard";
 import { useNavigate, useParams } from "react-router-dom";
 import { updateRevisionDates } from "../interleaving/updateFlashcards";
-import updateStreak from "../../../UpdateStreak";
+import { updateStreak } from "../../../UpdateStreak";
 
 const SimpleDisplay = () => {
   const history = useNavigate();
@@ -12,7 +19,7 @@ const SimpleDisplay = () => {
 
   const [flashcards, setFlashcards] = useState([]);
   const [originalFlashcards, setOriginalFlashcards] = useState([]); // to store the original order
-  const [owner, setOwner] = useState([])
+  const [owner, setOwner] = useState([]);
   const [currentCardIndex, setCurrentCardIndex] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [interleaving, setInterleaving] = useState(false); // state to track the mode
@@ -35,7 +42,6 @@ const SimpleDisplay = () => {
     }
     return array;
   };
-  
 
   useEffect(() => {
     const fetchFlashcards = async () => {
@@ -48,7 +54,7 @@ const SimpleDisplay = () => {
 
         if (setDocSnap.exists()) {
           const setData = setDocSnap.data();
-          setOwner(setData.owners)
+          setOwner(setData.owners);
           const interleavingSetting = setData.interleaving;
 
           // fetch the flashcards
@@ -96,7 +102,7 @@ const SimpleDisplay = () => {
               console.error("Error updating revision dates:", error);
             });
         }
-        updateStreak(auth?.currentUser?.uid)
+        updateStreak(auth?.currentUser?.uid);
         setIsCompleted(true); // set completion to true when the last card is reached
         return prevIndex;
       }

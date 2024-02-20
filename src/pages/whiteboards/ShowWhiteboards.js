@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { auth, db } from "../../config/firebase";
 import { collection, query, where, getDocs } from "firebase/firestore";
-import { Link } from "react-router-dom"; // Assuming you're using react-router for navigation
+import { Link, useNavigate } from "react-router-dom"; // Assuming you're using react-router for navigation
 import { onAuthStateChanged } from "firebase/auth";
 
 const WhiteboardsPage = () => {
   const [whiteboards, setWhiteboards] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -37,17 +38,22 @@ const WhiteboardsPage = () => {
     <div>
       <h2>My Whiteboards</h2>
       {whiteboards.length > 0 ? (
-        <ul>
-          {whiteboards.map((whiteboard) => (
-            <li key={whiteboard.id}>
-              {whiteboard.title} -{" "}
-              <Link to={`/whiteboards/${whiteboard.id}`}>View/Edit</Link>
-            </li>
-          ))}
-        </ul>
+        <div>
+          <ul>
+            {whiteboards.map((whiteboard) => (
+              <li key={whiteboard.id}>
+                {whiteboard.title} -{" "}
+                <Link to={`/whiteboards/${whiteboard.id}`}>View/Edit</Link>
+              </li>
+            ))}
+          </ul>
+        </div>
       ) : (
-        <p>No whiteboards fodund.</p>
+        <p>No whiteboards found.</p>
       )}
+      <button onClick={(e) => navigate("/whiteboards/post")}>
+        Create whiteboard
+      </button>
     </div>
   );
 };
