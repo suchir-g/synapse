@@ -71,6 +71,8 @@ const SearchResultsGrid = ({ searchQuery, currentUserID }) => {
     fetchResults();
   }, [searchQuery, currentUserID]);
 
+  /* Hlloe */
+
   if (isLoading) return <div>Loading...</div>;
   if (!Object.values(results).some((category) => category.length))
     return <div>No results found for "{searchQuery}"</div>;
