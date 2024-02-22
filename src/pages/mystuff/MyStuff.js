@@ -27,7 +27,6 @@ const MyStuff = ({ isAuth }) => {
   const [currentUserID, setCurrentUserID] = useState(null);
   const [activeTab, setActiveTab] = useState("flashcards");
   const [searchQuery, setSearchQuery] = useState("");
-  const [showSearchResults, setShowSearchResults] = useState(false);
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(async (user) => {
@@ -106,7 +105,6 @@ const MyStuff = ({ isAuth }) => {
 
   const handleSearch = (query) => {
     setSearchQuery(query);
-    setShowSearchResults(true);
   };
 
   if (isLoading) {
@@ -149,17 +147,23 @@ const MyStuff = ({ isAuth }) => {
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
         />
-        <button onClick={() => handleSearch(searchQuery)}>Search</button>
       </div>
 
-      {showSearchResults && <SearchResultsGrid searchQuery={searchQuery} currentUserID={currentUserID}/>}
+      <SearchResultsGrid
+        searchQuery={searchQuery}
+        currentUserID={currentUserID}
+      />
       <section className={styles.contentSection}>
         {activeTab === "flashcards" && (
           <FlashcardGrid currentUserID={currentUserID} />
         )}
-        {activeTab === "notes" && <NotesGrid currentUserID={currentUserID} />}
-        {activeTab === "tags" && <TagsGrid currentUserID={currentUserID} />}
-        {activeTab === "whiteboards" && (
+        {activeTab === "notes" && !searchQuery && (
+          <NotesGrid currentUserID={currentUserID} />
+        )}
+        {activeTab === "tags" && !searchQuery && (
+          <TagsGrid currentUserID={currentUserID} />
+        )}
+        {activeTab === "whiteboards" && !searchQuery && (
           <WhiteboardsGrid currentUserID={currentUserID} />
         )}
       </section>
