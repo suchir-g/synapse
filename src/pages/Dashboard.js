@@ -34,8 +34,8 @@ const Dashboard = ({ isAuth }) => {
       }
     });
 
-    return () => unsubscribe(); // remember to unsubscribe on component unmount
-  }, [navigate]); // Consider adding all dependencies here
+    return () => unsubscribe();
+  }, [navigate]); 
 
   const checkRevisionStatus = (lastRevised) => {
     if (!lastRevised) return;

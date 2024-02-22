@@ -66,10 +66,11 @@
     cursor: pointer;
     transition: background-color 0.3s ease;
     align-self: center;
+    font-family: "Roboto Slab", serif;
 }
 
 .button:hover {
-    background-color: #0056b3;
+    background-color: #dc2f02;
 }
 
 .streakDisplay {
