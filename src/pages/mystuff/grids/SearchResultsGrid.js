@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { db } from "../../../config/firebase";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import Fuse from "fuse.js";
 import styles from "../../../css/grids/SearchResultsGrid.module.css";
+import { sanitizeAndTruncateHtml } from "../../../utilities";
 
 const SearchResultsGrid = ({ searchQuery, currentUserID }) => {
   const [data, setData] = useState({
@@ -23,7 +25,6 @@ const SearchResultsGrid = ({ searchQuery, currentUserID }) => {
     const fetchData = async () => {
       setIsLoading(true);
 
-      // Define your queries here, just like before but without the searchQuery
       const queries = {
         flashcardsQuery: query(
           collection(db, "flashcardSets"),
@@ -43,7 +44,6 @@ const SearchResultsGrid = ({ searchQuery, currentUserID }) => {
         ),
       };
 
-      // Fetch data for each category
       const fetchDataForCategory = async (q) => {
         const querySnapshot = await getDocs(q);
         return querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
@@ -74,23 +74,13 @@ const SearchResultsGrid = ({ searchQuery, currentUserID }) => {
       return;
     }
 
-    // Initialize Fuse.js for each category with options tailored to your data structure and needs
     const fuseOptions = {
       includeScore: true,
-      threshold: 0.2, // Lower this for stricter matching
+      threshold: 0.2,
       location: 0,
       distance: 100,
-      minMatchCharLength: 2, // Adjust as needed
-      keys: [
-        {
-          name: "title",
-          weight: 0.7,
-        },
-        {
-          name: "tagName",
-          weight: 0.7,
-        },
-      ],
+      minMatchCharLength: 2,
+      keys: ["title", "tagName", "description"], // Assuming description is a key you want to search through as well
     };
 
     const searchInCategory = (items) =>
@@ -104,82 +94,59 @@ const SearchResultsGrid = ({ searchQuery, currentUserID }) => {
     });
   }, [searchQuery, data]);
 
+  if (!searchQuery) {
+    return <> </>;
+  }
+
   if (isLoading) return <div>Loading...</div>;
   if (!Object.values(results).some((category) => category.length))
     return <div>No results found for "{searchQuery}"</div>;
 
-  if (!searchQuery) {
-    return <></>;
-  }
-
   return (
     <div>
-      {isLoading && <div>Loading...</div>}
-      {!isLoading &&
-        Object.values(results).every((category) => category.length === 0) && (
-          <div>No results found for "{searchQuery}"</div>
-        )}
-
       {!isLoading && (
         <div className={styles.content_section}>
-          {/* Flashcards */}
-          {results.flashcards.length > 0 && (
-            <div>
-              <h2>Flashcards</h2>
-              <div className={styles.cards_grid}>
-                {results.flashcards.map((flashcard) => (
-                  <div key={flashcard.id} className={styles.card}>
-                    <div className={styles.card_title}>{flashcard.title}</div>
-                    {/* Include other details you might want to show */}
+          {Object.entries(results).map(
+            ([categoryName, items]) =>
+              items.length > 0 && (
+                <div key={categoryName} className={styles.category_section}>
+                  <h2 className={styles.category_title}>
+                    {categoryName.charAt(0).toUpperCase() +
+                      categoryName.slice(1)}
+                  </h2>
+                  <div className={styles.category_separator}></div>
+                  <div className={styles.cards_grid}>
+                    {items.map((item) => (
+                      <Link
+                        to={`/${categoryName}/${item.id}`}
+                        key={item.id}
+                        className={styles.card_link}
+                      >
+                        <div className={styles.card}>
+                          <div className={styles.card_title}>
+                            {item.title || item.tagName}
+                          </div>
+                          {categoryName === "flashcards" &&
+                            item.description && (
+                              <div className={styles.card_content}>
+                                {item.description}
+                              </div>
+                            )}
+                          {categoryName === "notes" && (
+                            <div className={styles.card_content}>
+                              <div
+                                dangerouslySetInnerHTML={{
+                                  __html: sanitizeAndTruncateHtml(item.content),
+                                }}
+                              ></div>
+                            </div>
+                          )}
+                        </div>
+                      </Link>
+                    ))}
                   </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Tags */}
-          {results.tags.length > 0 && (
-            <div>
-              <h2>Tags</h2>
-              <div className={styles.cards_grid}>
-                {results.tags.map((tag) => (
-                  <div key={tag.id} className={styles.card}>
-                    <div className={styles.card_title}>{tag.tagName}</div>
-                    {/* Include other details you might want to show */}
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Notes */}
-          {results.notes.length > 0 && (
-            <div>
-              <h2>Notes</h2>
-              <div className={styles.cards_grid}>
-                {results.notes.map((note) => (
-                  <div key={note.id} className={styles.card}>
-                    <div className={styles.card_title}>{note.title}</div>
-                    {/* Include other details you might want to show */}
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Whiteboards */}
-          {results.whiteboards.length > 0 && (
-            <div>
-              <h2>Whiteboards</h2>
-              <div className={styles.cards_grid}>
-                {results.whiteboards.map((whiteboard) => (
-                  <div key={whiteboard.id} className={styles.card}>
-                    <div className={styles.card_title}>{whiteboard.title}</div>
-                    {/* Include other details you might want to show */}
-                  </div>
-                ))}
-              </div>
-            </div>
+                </div>
+              )
           )}
         </div>
       )}

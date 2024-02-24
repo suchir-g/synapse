@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
-
 import { db, auth } from "../../config/firebase";
-
 import { doc, getDoc, collection, updateDoc, setDoc } from "firebase/firestore";
-
 import { flashcardsFromSet, usernameFromUserID } from "../../utilities";
-
 import { sanitizeHTML } from "../../utilities";
+
+import styles from "../../css/revision/flashcards/FlashcardSet.module.css";
+
+import Flashcard from "../revision/flashcards/Flashcard";
 
 const FlashcardSet = ({ isAuth }) => {
   const params = useParams();
@@ -18,6 +18,7 @@ const FlashcardSet = ({ isAuth }) => {
   const [owners, setOwners] = useState([]);
   const [flashcards, setFlashcards] = useState([]);
   const [isInterleavingEnabled, setIsInterleavingEnabled] = useState(false);
+  const [currentFlashcardIndex, setCurrentFlashcardIndex] = useState(0);
 
   const [isLoading, setIsLoading] = useState(true);
 
@@ -149,54 +150,107 @@ const FlashcardSet = ({ isAuth }) => {
     }
   };
 
+  const handleNextFlashcard = () => {
+    setCurrentFlashcardIndex((prevIndex) =>
+      prevIndex + 1 < flashcards.length ? prevIndex + 1 : 0
+    );
+  };
+
+  const handlePreviousFlashcard = () => {
+    setCurrentFlashcardIndex((prevIndex) =>
+      prevIndex - 1 >= 0 ? prevIndex - 1 : flashcards.length - 1
+    );
+  };
+
   if (isLoading) {
     return <div>Loading...</div>;
   }
 
   return (
-    <div>
-      <h1>{title}</h1>
-      <p>{description}</p>
-      {owners.map((owner, index) => (
-        <i key={index}>{owner}</i>
-      ))}
-      <hr />
-      <div>
+    <div className={styles.container}>
+      <h1 className={styles.title}>{title}</h1>
+      <p className={styles.description}>{description}</p>
+      <div className={styles.ownerContainer}>
+        {owners.map((owner, index) => (
+          <i key={index} className={styles.owner}>
+            {owner}
+          </i>
+        ))}
+      </div>
+      <div className={styles.tags}>
         <strong>Tags: </strong>
         {tags.map((tag, index) => (
-          <span key={index}>
-            <Link to={`/tags/${tag.id}`}>{tag.name}</Link>
-            {/* some short circuiting to make a list - i never knew how useful this is until now */}
+          <span key={index} className={styles.tag}>
+            <Link to={`/tags/${tag.id}`} className={styles.tagLink}>
+              {tag.name}
+            </Link>
             {index < tags.length - 1 ? ", " : ""}
           </span>
         ))}
       </div>
-      <hr />
-      <button onClick={handleInterleavingToggle}>
+      <button className={styles.button} onClick={handleInterleavingToggle}>
         {isInterleavingEnabled ? "Disable" : "Enable"} Interleaving
       </button>
 
       <hr />
+
+      <div className={styles.flashcardCarousel}>
+        <button onClick={handlePreviousFlashcard}>&lt;</button>
+        {flashcards.length > 0 && (
+          <Flashcard
+            flashcard={flashcards[currentFlashcardIndex]}
+            isQuestionFirst={true}
+            size={{ width: "40vw", height: "24.72vw" }}
+          />
+        )}
+        <button onClick={handleNextFlashcard}>&gt;</button>
+      </div>
+      <div className={styles.linksContainer}>
+        <button
+          onClick={() => navigate(`/${params.setID}/flashcards`)}
+          className={styles.tabButton}
+        >
+          Flashcards
+        </button>
+        <button
+          onClick={() => navigate(`/${params.setID}/quiz`)}
+          className={styles.tabButton}
+        >
+          Quiz
+        </button>
+        <button
+          onClick={() => navigate(`/${params.setID}/study`)}
+          className={styles.tabButton}
+        >
+          Memorise
+        </button>
+        <button
+          onClick={() => navigate(`/${params.setID}/spacedRepetition`)}
+          className={styles.tabButton}
+        >
+          Spaced repetition
+        </button>
+        <button
+          onClick={() => navigate(`/${params.setID}/meteors`)}
+          className={styles.tabButton}
+        >
+          Meteors
+        </button>
+        <button
+          onClick={() => navigate(`/sets/${params.setID}/edit`)}
+          className={styles.editButton}
+        >
+          &#x270E; {/* This is the Unicode character for a pencil */}
+        </button>
+      </div>
+      <hr />
+
       {flashcards.map((flashcard, index) => (
-        <div key={index}>
+        <div key={index} className={styles.flashcard}>
           <h3 dangerouslySetInnerHTML={sanitizeHTML(flashcard.question)}></h3>
           <p dangerouslySetInnerHTML={sanitizeHTML(flashcard.answer)}></p>
         </div>
       ))}
-
-      <div>
-        <Link to={`/${params.setID}/flashcards`}>Flashcards</Link>
-        <br />
-        <Link to={`/${params.setID}/quiz`}>Take a Quiz</Link>
-        <br />
-        <Link to={`/${params.setID}/study`}>Memorise</Link>
-        <br />
-        <Link to={`/${params.setID}/meteors`}>Meteors</Link>
-        <br />
-        <Link to={`/${params.setID}/spacedRepetition`}>Spaced repetition</Link>
-      </div>
-
-      <a href={`/sets/${params.setID}/edit`}>Edit this set</a>
     </div>
   );
 };

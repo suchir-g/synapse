@@ -114,39 +114,42 @@ const MyStuff = ({ isAuth }) => {
   return (
     <div className={styles.container}>
       <h1 className={styles.pageTitle}>My Stuff</h1>
-      <div className={styles.tabs}>
-        <button
-          className={`${styles.tab} ${
-            activeTab === "flashcards" ? styles.active : ""
-          }`}
-          onClick={() => handleTabClick("flashcards")}
-        >
-          Flashcards
-        </button>
-        <button
-          className={`${styles.tab} ${
-            activeTab === "notes" ? styles.active : ""
-          }`}
-          onClick={() => handleTabClick("notes")}
-        >
-          Notes
-        </button>
-        <button
-          className={`${styles.tab} ${
-            activeTab === "whiteboards" ? styles.active : ""
-          }`}
-          onClick={() => handleTabClick("whiteboards")}
-        >
-          Whiteboards
-        </button>
-      </div>
-      <div>
-        <input
-          type="text"
-          placeholder="Search..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-        />
+      <div className={styles.header}>
+        <div className={styles.tabs}>
+          <button
+            className={`${styles.tab} ${
+              activeTab === "flashcards" ? styles.active : ""
+            }`}
+            onClick={() => handleTabClick("flashcards")}
+          >
+            Flashcards
+          </button>
+          <button
+            className={`${styles.tab} ${
+              activeTab === "notes" ? styles.active : ""
+            }`}
+            onClick={() => handleTabClick("notes")}
+          >
+            Notes
+          </button>
+          <button
+            className={`${styles.tab} ${
+              activeTab === "whiteboards" ? styles.active : ""
+            }`}
+            onClick={() => handleTabClick("whiteboards")}
+          >
+            Whiteboards
+          </button>
+        </div>
+        <div className={styles.searchWrapper}>
+          <input
+            className={styles.searchInput}
+            type="text"
+            placeholder="Search..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+        </div>
       </div>
 
       <SearchResultsGrid
@@ -154,7 +157,7 @@ const MyStuff = ({ isAuth }) => {
         currentUserID={currentUserID}
       />
       <section className={styles.contentSection}>
-        {activeTab === "flashcards" && (
+        {activeTab === "flashcards" && !searchQuery && (
           <FlashcardGrid currentUserID={currentUserID} />
         )}
         {activeTab === "notes" && !searchQuery && (

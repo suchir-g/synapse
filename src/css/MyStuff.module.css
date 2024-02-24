@@ -90,7 +90,23 @@
     overflow: hidden;
     text-overflow: ellipsis;
 }
-
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .searchWrapper {
+    min-width: 200px; /* or any other fixed width */
+  }
+  
+  .searchInput {
+    height: 35px; /* Adjust the height to match your tabs */
+    /* border: 1px solid #ccc;  */
+    border: 1px solid #f77f00;
+    border-radius: 4px; /* To match the rounded corners of your tabs */
+    padding: 0 10px; /* Text padding inside search input */
+  }
 
 .section-title {
     color: #004643;

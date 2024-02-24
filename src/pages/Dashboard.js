@@ -35,7 +35,7 @@ const Dashboard = ({ isAuth }) => {
     });
 
     return () => unsubscribe();
-  }, [navigate]); 
+  }, [navigate]);
 
   const checkRevisionStatus = (lastRevised) => {
     if (!lastRevised) return;
@@ -100,10 +100,24 @@ const Dashboard = ({ isAuth }) => {
         </h1>
         {userData && (
           <div className={styles.streakDisplay}>
-            <FontAwesomeIcon icon={faFire} />
-            <span className="streakCount">{userData.streak}</span>
+            <FontAwesomeIcon
+              icon={faFire}
+              className={
+                hasRevisedToday ? styles.fireActive : styles.fireInactive
+              }
+            />
+            <span
+              className={`${
+                hasRevisedToday
+                  ? styles.streakCountActive
+                  : styles.streakCountInactive
+              }`}
+            >
+              {userData.streak}
+            </span>
           </div>
         )}
+
         <h2>You have {hasRevisedToday ? "" : "not "}revised today.</h2>
       </div>
       <div className={styles.flexRow}>

@@ -26,7 +26,7 @@ const Whiteboard = ({ whiteboardID }) => {
   const [history, setHistory] = useState([]);
   const [penSize, setPenSize] = useState(5);
   const [color, setColor] = useState("#000000");
-  const [title, setTitle] = useState("Title");
+  const [title, setTitle] = useState("Untitled");
   const isDrawing = useRef(false);
   const [backgroundImage, setBackgroundImage] = useState(null);
   const [image, setImage] = useState(null);

@@ -3,8 +3,8 @@ import Dashboard from "./Dashboard";
 const Home = ({ isAuth }) => {
   return (
     <div>
-      <div>Home</div>
-      {/* Renders the dashboard if auth */}
+      {/* renders the dashboard if auth */}
+      <div className="text-3xl font-bold underline">ddd</div>
       {isAuth && <Dashboard isAuth={isAuth} />}
     </div>
   );
