@@ -16,6 +16,8 @@ import styles from "../css/Dashboard.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFire } from "@fortawesome/free-solid-svg-icons";
 
+import { WavyBackground } from "../components/ui/WavyBackground";
+
 const Dashboard = ({ isAuth }) => {
   const navigate = useNavigate();
   const [userData, setUserData] = useState(null);
@@ -94,10 +96,12 @@ const Dashboard = ({ isAuth }) => {
   }
   return (
     <div className={styles.dashboardContainer}>
+      <WavyBackground>Hello world</WavyBackground>
       <div className={styles.welcomeSection}>
         <h1 className={styles.title}>
           Hello, {userData ? userData.firstName : "there"}!
         </h1>
+        <p className="text-bold">sa</p>
         {userData && (
           <div className={styles.streakDisplay}>
             <FontAwesomeIcon
