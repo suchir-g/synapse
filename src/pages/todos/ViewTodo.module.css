@@ -1,0 +1,65 @@
+/* styles.module.css */
+:root {
+  --color-primary: #ff7f50; /* Coral */
+  --color-primary-dark: #e56740; /* Darker shade of coral */
+  --color-accent: #303030; /* Dark grey for text */
+  --color-background: #f5f5f5; /* Light grey for background */
+}
+
+.container {
+  max-width: 600px;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: var(--color-accent);
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.title {
+  color: var(--color-primary);
+  text-align: center;
+}
+
+.todoItem {
+  background-color: var(--color-secondary);
+  border: 1px solid #ddd;
+  padding: 10px 15px;
+  margin-bottom: 10px;
+  border-radius: 6px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.todoItem:not(:last-child) {
+  margin-bottom: 15px;
+}
+
+.todoText {
+  margin: 0;
+  flex-grow: 1;
+}
+
+.button {
+  padding: 6px 12px;
+  background-color: var(--color-primary);
+  color: var(--color-secondary);
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin-left: 10px;
+}
+
+.button:hover {
+  background-color: var(--color-primary-dark);
+}
+
+.buttonAddTodo {
+  display: block;
+  width: 100%;
+  padding: 10px 0;
+  margin-top: 20px;
+  font-size: 16px;
+}

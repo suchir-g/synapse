@@ -11,12 +11,12 @@ import {
 } from "firebase/firestore";
 import { sanitizeAndTruncateHtml } from "../utilities";
 import { checkAndResetStreak } from "../UpdateStreak";
-import styles from "../css/Dashboard.module.css";
-
+import { Slot, Card, Button } from "@radix-ui/themes";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFire } from "@fortawesome/free-solid-svg-icons";
+import styles from "./Dashboard.module.css";
 
-import { WavyBackground } from "../components/ui/WavyBackground";
+import CompactTodoList from "./todos/CompactTodoList";
 
 const Dashboard = ({ isAuth }) => {
   const navigate = useNavigate();
@@ -25,6 +25,7 @@ const Dashboard = ({ isAuth }) => {
   const [latestNotes, setLatestNotes] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [hasRevisedToday, setHasRevisedToday] = useState(false);
+  const [mainTodoListId, setMainTodoListId] = useState(null);
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(async (user) => {
@@ -85,6 +86,17 @@ const Dashboard = ({ isAuth }) => {
       setLatestNotes(
         notesSnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }))
       );
+
+      const todoListsQuery = query(
+        collection(db, "todoLists"),
+        where("owner", "==", userId),
+        where("main", "==", true),
+        limit(1)
+      );
+      const todoListsSnapshot = await getDocs(todoListsQuery);
+      if (!todoListsSnapshot.empty) {
+        setMainTodoListId(todoListsSnapshot.docs[0].id);
+      }
     } catch (error) {
       console.error("Error loading dashboard data:", error);
     }
@@ -96,32 +108,35 @@ const Dashboard = ({ isAuth }) => {
   }
   return (
     <div className={styles.dashboardContainer}>
-      <WavyBackground>Hello world</WavyBackground>
+      <CompactTodoList todoID={mainTodoListId}> </CompactTodoList>
       <div className={styles.welcomeSection}>
-        <h1 className={styles.title}>
-          Hello, {userData ? userData.firstName : "there"}!
-        </h1>
-        <p className="text-bold">sa</p>
+        <div className={styles.titleBox}>
+          <h1 className={styles.title}>
+            Hello, {userData ? userData.firstName : "there"}!
+          </h1>
+        </div>
         {userData && (
           <div className={styles.streakDisplay}>
-            <FontAwesomeIcon
-              icon={faFire}
-              className={
-                hasRevisedToday ? styles.fireActive : styles.fireInactive
-              }
-            />
+            <span className={styles.fireIconWrapper}>
+              <FontAwesomeIcon
+                icon={faFire}
+                className={
+                  hasRevisedToday ? styles.fireActive : styles.fireInactive
+                }
+              />
+            </span>
+
             <span
-              className={`${
+              className={
                 hasRevisedToday
                   ? styles.streakCountActive
                   : styles.streakCountInactive
-              }`}
+              }
             >
               {userData.streak}
             </span>
           </div>
         )}
-
         <h2>You have {hasRevisedToday ? "" : "not "}revised today.</h2>
       </div>
       <div className={styles.flexRow}>
@@ -151,8 +166,8 @@ const Dashboard = ({ isAuth }) => {
                 className={styles.cardContent}
                 dangerouslySetInnerHTML={{
                   __html: sanitizeAndTruncateHtml(note.content),
-                }} // Assuming content is safe and sanitized
-              ></div>
+                }}
+              />
             </div>
           ))}
         </div>

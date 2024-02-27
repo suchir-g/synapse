@@ -5,7 +5,7 @@ import { signInWithPopup, signInWithEmailAndPassword } from "firebase/auth";
 
 import { useNavigate, Link } from "react-router-dom";
 
-import { query, collection, where, getDocs, addDoc } from "firebase/firestore";
+import { query, collection, where, getDocs, addDoc, serverTimestamp } from "firebase/firestore";
 
 const Login = ({ setIsAuth }) => {
   const navigate = useNavigate();
@@ -13,14 +13,6 @@ const Login = ({ setIsAuth }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const usersRef = collection(db, "users");
-
-  // const userExists = async (email) => {
-  //     // this will return True if the user exists because if it dosen't, then we can't log in.
-  //     const emailQuery = query(usersRef, where("email", "==", email))
-  //     const querySnapshot = await getDocs(emailQuery)
-  //     return !querySnapshot.empty; // returning False if it's empty and true otherwise
-
-  // }
 
   const loginWithEmailAndPassword = async () => {
     await signInWithEmailAndPassword(auth, email, password)
@@ -57,6 +49,15 @@ const Login = ({ setIsAuth }) => {
           yearGroup: "", // You would need to collect this info from the user
           streak: 0,
           lastRevisionDate: new Date(), // Set to the current date
+        });
+
+        const todoListsRef = collection(db, "todoLists");
+        await addDoc(todoListsRef, {
+          owner: auth.currentUser.uid,
+            name: "Main",
+          todos: [], // Initialize with an empty array
+          main: true, // Indicates this is the primary todo list for the user
+          createdAt: serverTimestamp(),
         });
       }
       navigate("/");

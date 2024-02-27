@@ -1,12 +1,17 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import App from "./App";
+import reportWebVitals from "./reportWebVitals";
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+import "@radix-ui/themes/styles.css";
+import { Theme } from "@radix-ui/themes";
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <App />
+    <Theme appearance="dark" accentColor="orange" radius="small" scaling="95%">
+      <App />
+    </Theme>
   </React.StrictMode>
 );
 

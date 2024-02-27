@@ -1,16 +1,17 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100..900&display=swap');
-
+@import url("https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100..900&display=swap");
 
 :root {
-    --navbar-color: #252422;
-
-    --primary: #eb5e28;
-    --secondary: #333533;
-    --accent: #f26419;
-    --muted: #9999a1;
-    --black: #1a1a1a;
+    --navbar-color: #1e1e1e;
+    --background-color: #121212;
     
-    --primary-hover:rgb(208, 84, 36)8;
-    --secondary-hover: #222322;
-    --accent-hover: #ca5310;
+    --text-color: white;
+    --text-muted-color:#d4d4d4;
+
+    --card-color: #1e1e1e;
+    --card-border-color: #3c3c3c;
+}
+
+.mainContainer {
+    background-color: var(--background-color); /* Very dark base color */
+    color: var(--text-color);
 }

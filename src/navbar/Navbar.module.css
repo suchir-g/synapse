@@ -1,0 +1,160 @@
+.navbar {
+    background-color: var(--navbar-color);
+    /* Adjusted to a darker teal color for contrast */
+    color: white;
+    padding: 0.5rem 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    border-bottom: 1px solid  #232628;
+    box-shadow: 0px 10px 20px black;
+}
+
+body {
+    background-color: #fefefe;
+}
+
+/* Logo styles */
+.navbar_logo {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    /* Align logo and text to the left */
+}
+
+/* Ensure the logo and text are aligned in a row */
+.navbar_logo a {
+    display: flex;
+    align-items: center;
+    color: white;
+    /* Set the color for the Synapse text */
+}
+
+.navbar_logo img {
+    height: 40px;
+    /* Adjust as necessary */
+}
+
+/* Navigation links */
+.navbar_links {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    align-items: center;
+    flex-grow: 1;
+    /* Allow the navbar links to grow to use available space */
+    justify-content: flex-end;
+    /* Align the links to the end of the navbar */
+}
+
+.navbar_links li {
+    margin-right: 1rem;
+    /* Adjust this value as needed */
+    flex: 0 1 auto;
+    /* Don't grow, allow shrink, base size on content */
+}
+
+.navbar_links li a {
+    color: white;
+    transition: color 0.3s ease;
+    padding: 0.5rem;
+    /* Add padding for clickable area, adjust as needed */
+    white-space: nowrap;
+    /* Prevents the text from wrapping */
+}
+
+.navbar_links {
+    list-style: none;
+    /* your existing styles */
+}
+
+.dropdownTrigger {
+    background: none;
+    border: none;
+    cursor: pointer;
+    position: relative; /* Relative position for the trigger */
+    z-index: 10;
+    /* Add any additional styles you want for the trigger */
+}
+
+.dropdownContent {
+    min-width: 200px;
+    background-color: #242424;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 6px;
+    padding: 5px;
+    margin-top: 13px;
+    margin-right: 10px;
+}
+
+.dropdownItem {
+    padding: 10px;
+    list-style: none;
+    cursor: pointer;
+    /* Add hover effect */
+    transition: background 0.2s ease-in-out;
+    display: block; /* to ensure full width */
+    margin-bottom: 4px; /* add some margin between items */
+    text-decoration: none; /* remove underline from links */
+    color: #000; /* text color for links and buttons */
+    width: 100%; /* Full width for each dropdown item */
+    box-sizing: border-box;
+}
+.dropdownItem:last-child {
+    margin-bottom: 0; /* no margin for the last item */
+}
+.dropdownButton {
+    background: none;
+    border: none;
+    text-align: left; /* align text to the left */
+    /* Add any additional button styles here */
+    text-align: left; /* Align text to the left */
+    display: block; /* Ensure it's a block element */
+    width: 100%; /* Full width */
+    color: white;
+    font: inherit;
+}
+.dropdownItem:hover {
+    background-color: #696969;
+}
+.profilePic {
+    width: 40px; /* Adjust the size as needed */
+    height: 40px; /* Adjust the size as needed */
+    border-radius: 50%; /* This makes the image round */
+    object-fit: cover; /* This ensures the image covers the area without losing aspect ratio */
+    border: 2px solid white; /* Optional: adds a border around the image */
+    margin-right: 8px; /* Optional: adds some space between the icon and the next element */
+    user-select: none; /* This prevents the image from being selectable */
+    -webkit-user-drag: none; /* Prevents dragging the image on some browsers */
+  }
+  
+/* Use a media query for responsive adjustment */
+@media (max-width: 768px) {
+    .navbar-links li {
+        margin-right: 0.5rem;
+        /* Less margin for smaller screens */
+    }
+
+    .navbar_logo img {
+        height: 30px;
+        /* Smaller logo for smaller screens */
+    }
+}
+
+/* Adjust the space between the logo image and the "Synapse" text */
+.navbar_logo img {
+    margin-right: 0.5rem;
+    /* Adjust this to increase space between logo and text */
+}
+
+/* Additional styles if needed for the text next to the logo */
+.navbar_logo span {
+    margin-left: 0.5rem; /* Space between logo image and text */
+    font-weight: bold; /* Make the text bold */
+    font-size: 1.3rem; /* Make the text larger; adjust size as desired */
+    color: white; /* Keep the text color consistent with the logo color */
+    text-shadow: #fefefe48 0px 0px 5px; /* Give it some depth */
+    letter-spacing: 2px;
+}
