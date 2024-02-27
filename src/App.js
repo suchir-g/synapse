@@ -46,9 +46,11 @@ import CreateTodoList from "pages/todos/CreateTodo";
 import ShowTodos from "pages/todos/ShowTodos";
 import ViewTodo from "pages/todos/ViewTodo";
 
-import { useState } from "react";
+import ViewExams from "pages/exams/ViewExams";
 
 import Navbar from "navbar/Navbar";
+
+import { useState } from "react";
 
 function App() {
   const [isAuth, setIsAuth] = useState(localStorage.getItem("isAuth"));
@@ -147,6 +149,10 @@ function App() {
           />
           <Route path="/todos" element={<ShowTodos isAuth={isAuth} />} />
           <Route path="/todos/:todoID" element={<ViewTodo />}/>
+
+          {/* exam calendar */}
+
+          <Route path="/exams" element={<ViewExams isAuth={isAuth}/>}/>
         </Routes>
       </Router>
     </div>
