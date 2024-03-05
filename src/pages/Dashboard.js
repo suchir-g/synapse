@@ -64,6 +64,7 @@ const Dashboard = ({ isAuth }) => {
         setUserData(userData);
         checkRevisionStatus(userData.lastRevisionDate);
       }
+      //ghello
 
       const setsQuery = query(
         collection(db, "flashcardSets"),
