@@ -17,6 +17,7 @@ import CompactTimerPage from "./timers/CompactTimerPage";
 import CompactTodoList from "./todos/CompactTodoList";
 import ExamCountdown from "./exams/ExamCountdown";
 import StreakDisplay from "./StreakDisplay";
+import { CollectionsBookmarkOutlined } from "@mui/icons-material";
 
 const Dashboard = ({ isAuth }) => {
   const navigate = useNavigate();
@@ -38,7 +39,7 @@ const Dashboard = ({ isAuth }) => {
     });
 
     return () => unsubscribe();
-  }, [navigate]);
+  }, []);
 
   const checkRevisionStatus = (lastRevised) => {
     if (!lastRevised) return;
@@ -64,8 +65,6 @@ const Dashboard = ({ isAuth }) => {
         setUserData(userData);
         checkRevisionStatus(userData.lastRevisionDate);
       }
-      //ghello
-
       const setsQuery = query(
         collection(db, "flashcardSets"),
         where("owners", "array-contains", userId),
@@ -109,8 +108,8 @@ const Dashboard = ({ isAuth }) => {
   }
   return (
     <div className={`${styles.dashboardContainer} container text-center`}>
-      <div className="row justify-content-md-center">
-        <div className={`${styles.mainContent} col-8`}>
+      <div className="row justify-content-md-center py-5 mx-0">
+        <div className={`${styles.mainContent} col-9`}>
           <div className={styles.mainSection}>
             <div className={styles.greetingSection}>
               <h1 className={styles.welcomeText}>
@@ -120,9 +119,57 @@ const Dashboard = ({ isAuth }) => {
                 Nice to have you back.
               </h3>
             </div>
+            <section className={styles.contentSection}>
+              <div className={styles.latestFlashcards}>
+                <h2 className={styles.latestText}>Latest Flashcard Sets</h2>
+                <div className={styles.gridContainer}>
+                  {latestSets.map((set) => (
+                    <div key={set.id} className={styles.card}>
+                      <div className={styles.cardBody}>
+                        <Link to={`/sets/${set.id}`} className={styles.cardLink}>
+                          <h3>{set.title}</h3>
+                        </Link>
+                        <p className={styles.cardDescription}>{set.description}</p>
+                      </div>
+                      <div className={styles.cardFooter}>
+                        <span className={styles.lastRevised}>
+                          Last revised: {set.revised}
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className={styles.latestNotes}>
+                <h2 className={styles.latestText}>Latest Notes</h2>
+                <div className={styles.gridContainer}>
+                  {latestNotes.map((note) => (
+                    <div key={note.id} className={styles.card}>
+                      <div className={styles.cardMainSection}> 
+                        <Link to={`/notes/${note.id}`} className={styles.cardLink}>
+                          <h3>{note.title}</h3>
+                        </Link>
+                        <div
+                          className={`${styles.cardContent}`}
+                          dangerouslySetInnerHTML={{
+                            __html: sanitizeAndTruncateHtml(note.content),
+                          }}
+                        />
+                      </div>
+                      <div className={styles.cardFooter}>
+                        <span className={styles.lastRevised}>
+                          Last revised: {note.lastRevised}
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </section>
           </div>
         </div>
-        <div className={`${styles.sidebar} col-4`}>
+        <div className={`${styles.sidebar} col-3`}>
           <div className={styles.todoList}>
             <h2>Todo list</h2>
             <CompactTodoList todoID={mainTodoListId} />
@@ -140,50 +187,7 @@ const Dashboard = ({ isAuth }) => {
           <div className={styles.examCountdown}>
             <ExamCountdown />
           </div>
-          <section className={styles.latestContentSection}>
-            <div className={styles.latestFlashcards}>
-              <h2>Latest Flashcard Sets</h2>
-              <div className={styles.gridContainer}>
-                {latestSets.map((set) => (
-                  <div key={set.id} className={styles.card}>
-                    <Link to={`/sets/${set.id}`} className={styles.cardLink}>
-                      <h3>{set.title}</h3>
-                    </Link>
-                    <p className={styles.cardDescription}>{set.description}</p>
-                    <div className={styles.cardFooter}>
-                      <span className={styles.lastRevised}>
-                        Last revised: {set.lastRevised}
-                      </span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
 
-            <div className={styles.latestNotes}>
-              <h2>Latest Notes</h2>
-              <div className={styles.gridContainer}>
-                {latestNotes.map((note) => (
-                  <div key={note.id} className={styles.card}>
-                    <Link to={`/notes/${note.id}`} className={styles.cardLink}>
-                      <h3>{note.title}</h3>
-                    </Link>
-                    <div
-                      className={styles.cardContent}
-                      dangerouslySetInnerHTML={{
-                        __html: sanitizeAndTruncateHtml(note.content),
-                      }}
-                    />
-                    <div className={styles.cardFooter}>
-                      <span className={styles.lastRevised}>
-                        Last revised: {note.lastRevised}
-                      </span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </section>
         </div>
       </div>
 

@@ -3,24 +3,35 @@ h.welcomeText {
   font-size: 64px;
   margin-bottom: 0;
   padding-bottom: 0;
+  text-align: left;
 }
 .welcomeTextSubtitle {
   font-size: 24px;
   font-weight: 400;
+  text-align: left;
 }
 
 .card {
-    height: 135px ;
-    width: 315px;
+  height: 140px;
+  width: 227px;
+  padding: 20px;
   background: #ffffff;
   border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0px 23.6px rgba(0, 0, 0, 0.25);
   margin-bottom: 20px;
   transition: box-shadow 0.3s ease-in-out;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.dashboardContainer {
+  width: 100%;
 }
 
 .card:hover {
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 0px 24px rgba(0, 0, 0, 0.35);
 }
 
 .card h3 {
@@ -29,7 +40,6 @@ h.welcomeText {
 }
 
 .card p {
-  padding: 0 16px 16px;
   margin: 0;
   font-size: 0.9rem;
   color: #666;
@@ -37,7 +47,19 @@ h.welcomeText {
 
 /* Hello */
 
-.card .last-revised {
+.cardLink {
+  text-decoration: none;
+  color: inherit;
+  text-align: left;
+  width: 100%;
+}
+
+.cardBody, .cardContent {
+  text-align: left;
+  width: 100%;
+}
+
+.lastRevised {
   font-size: 0.8rem;
   color: #999;
   text-align: right;
@@ -45,7 +67,31 @@ h.welcomeText {
   border-top: 1px solid #f0f0f0;
 }
 
-.cardLink {
-  text-decoration: none;
-  color: inherit;
+.gridContainer{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: start;
+  gap: 2em;
+  flex-wrap: wrap;
+}
+
+.latestText {
+  width: 100%;
+  text-align: left;
+  color: #676767;
+  font-weight: 300;
+  font-size: 15px;
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+.cardContent {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.cardMainSection {
+  ;
 }
