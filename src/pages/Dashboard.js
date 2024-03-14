@@ -17,6 +17,7 @@ import CompactTimerPage from "./timers/CompactTimerPage";
 import CompactTodoList from "./todos/CompactTodoList";
 import ExamCountdown from "./exams/ExamCountdown";
 import StreakDisplay from "./StreakDisplay";
+import { CollectionsBookmarkOutlined } from "@mui/icons-material";
 
 const Dashboard = ({ isAuth }) => {
   const navigate = useNavigate();
@@ -38,7 +39,7 @@ const Dashboard = ({ isAuth }) => {
     });
 
     return () => unsubscribe();
-  }, [navigate]);
+  }, []);
 
   const checkRevisionStatus = (lastRevised) => {
     if (!lastRevised) return;
@@ -64,8 +65,6 @@ const Dashboard = ({ isAuth }) => {
         setUserData(userData);
         checkRevisionStatus(userData.lastRevisionDate);
       }
-      //ghello
-
       const setsQuery = query(
         collection(db, "flashcardSets"),
         where("owners", "array-contains", userId),
@@ -143,19 +142,21 @@ const Dashboard = ({ isAuth }) => {
               </div>
 
               <div className={styles.latestNotes}>
-                <h2>Latest Notes</h2>
+                <h2 className={styles.latestText}>Latest Notes</h2>
                 <div className={styles.gridContainer}>
                   {latestNotes.map((note) => (
                     <div key={note.id} className={styles.card}>
-                      <Link to={`/notes/${note.id}`} className={styles.cardLink}>
-                        <h3>{note.title}</h3>
-                      </Link>
-                      <div
-                        className={`${styles.cardContent}`}
-                        dangerouslySetInnerHTML={{
-                          __html: sanitizeAndTruncateHtml(note.content),
-                        }}
-                      />
+                      <div className={styles.cardMainSection}> 
+                        <Link to={`/notes/${note.id}`} className={styles.cardLink}>
+                          <h3>{note.title}</h3>
+                        </Link>
+                        <div
+                          className={`${styles.cardContent}`}
+                          dangerouslySetInnerHTML={{
+                            __html: sanitizeAndTruncateHtml(note.content),
+                          }}
+                        />
+                      </div>
                       <div className={styles.cardFooter}>
                         <span className={styles.lastRevised}>
                           Last revised: {note.lastRevised}
