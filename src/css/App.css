@@ -1,15 +1,34 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:slnt,wght@-10..0,100..900&display=swap');
+
 :root {
-    --navbar-color: #1e1e1e;
-    --background-color: #121212;
+    --navbar-color: #ffffff;
+    --background-color: #ffffff;
+    --dots-color: #D2D6DB;
     
-    --text-color: white;
-    --text-muted-color:#d4d4d4;
+    --text-color: black;
+    --text-muted-color:#414141;
 
     --card-color: #1e1e1e;
     --card-border-color: #3c3c3c;
+
+    --select-color: #313131;
+
+    --primary: #3A86FF;
+    --secondary: #D2D6DB;
+    --success: #5DC133;
+    --danger: #FD2B3B;
+    --primary-variant: #000080;
+
+    --muted: #797979;
+    --font: "Inter", sans-serif; 
 }
 
 .mainContainer {
-    background-color: var(--background-color); /* Very dark base color */
+    background-color: var(--background-color);
+    background-image: radial-gradient(var(--dots-color) 1px, transparent 0);
+    background-size: 40px 40px;
     color: var(--text-color);
+    height: 100vh;
+    width: 100vw;
+    font-family: var(--font);
 }

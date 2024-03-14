@@ -1,0 +1,46 @@
+/* CompactTimerPage.module.css */
+.container {
+    max-width: max(300px, auto);
+    margin: auto;
+    background-color: var(--card-color);
+    color: #fff;
+    padding: 20px;
+    border: 1px solid var(--card-border-color);
+    border-radius: 5px;
+    margin: 10px 0;
+}
+
+.header {
+    text-align: center;
+    color: #fff;
+}
+
+
+.button {
+    background-color: var(--secondary);
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 15px;
+    margin: 5px;
+    cursor: pointer;
+}
+
+.input {
+    background-color: var(--select-color);
+    color: #fff;
+    border: 1px solid var(--card-border-color);
+    border-radius: 5px;
+    padding: 10px;
+    margin: 5px 0;
+    width: 95%;
+}
+
+.selectOption {
+    background-color: #555;
+}
+
+.label {
+    display: block;
+    margin: 10px 0;
+}

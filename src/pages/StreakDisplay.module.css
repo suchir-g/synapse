@@ -1,0 +1,82 @@
+.card {
+    text-align: center;
+}
+
+.streakDisplay {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.welcomeText {
+    font-size: 2.5em; /* Large text */
+    font-weight: bold;
+    text-align: center; /* Center the text */
+    padding: 20px 0; /* Add some padding */
+    background: linear-gradient(60deg, #eb5e28, #dc2f02, #e71d36, #ff9f1c); /* Gradient colors */
+    background-size: 200% auto; /* Size of the gradient */
+    -webkit-background-clip: text; /* For Chrome/Safari */
+    background-clip: text; /* Standard syntax */
+    color: transparent; /* Fallback for browsers that don't support background-clip */
+    -webkit-text-fill-color: transparent; /* For Chrome/Safari */
+    animation: movingGradient 4s linear infinite; /* Animation: name, duration, easing, repeat */
+    text-shadow: 0px 0px 20px rgba(255, 85, 0, 0.325);
+}
+
+.fireGif {
+    width: 50px; /* Or any other size */
+    height: auto;
+    display: block; /* Ensures it takes up the entire block */
+}
+
+.fireIconWrapper {
+    color: #f50; /* Flame icon color */
+    font-size: 3rem; /* Increase the size of the fire icon */
+}
+
+.fireActive {
+    color: #e25822; /* Active flame color */
+}
+
+.fireInactive {
+    color: #ccc; /* Inactive flame color */
+}
+
+.streakCountActive,
+.streakCountInactive {
+    position: absolute;
+    top: 0; /* Adjust as necessary to position correctly over the flame */
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 1.5rem; /* Size of the streak number */
+    color: #fff; /* Color of the streak number */
+
+    /* Create a mask if you want to clip the text for a visual effect */
+    /* This is an example, you might need to adjust it based on the actual icon size */
+    width: 2.5rem; /* Size of the mask */
+    height: 2.5rem; /* Size of the mask */
+    overflow: hidden;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.streakCountActive {
+    color: white; /* Active streak count color */
+    font-weight: bold;
+}
+
+.streakCountInactive {
+    color: #ccc; /* Inactive streak count color */
+}
+
+.button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    margin: 10px;
+}

@@ -3,6 +3,7 @@ import { auth, googleAuthProvider, db } from "../config/firebase";
 import { createUserWithEmailAndPassword, signInWithPopup } from "firebase/auth";
 
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
+import streakFire from '../assets/streak-fire.gif';
 
 const Register = ({ setIsAuth }) => {
   // states for user's email, password, and other details

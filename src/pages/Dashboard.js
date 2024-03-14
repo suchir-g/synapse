@@ -11,12 +11,12 @@ import {
 } from "firebase/firestore";
 import { sanitizeAndTruncateHtml } from "../utilities";
 import { checkAndResetStreak } from "../UpdateStreak";
-import { Slot, Card, Button } from "@radix-ui/themes";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFire } from "@fortawesome/free-solid-svg-icons";
 import styles from "./Dashboard.module.css";
 
+import CompactTimerPage from "./timers/CompactTimerPage";
 import CompactTodoList from "./todos/CompactTodoList";
+import ExamCountdown from "./exams/ExamCountdown";
+import StreakDisplay from "./StreakDisplay";
 
 const Dashboard = ({ isAuth }) => {
   const navigate = useNavigate();
@@ -69,7 +69,7 @@ const Dashboard = ({ isAuth }) => {
         collection(db, "flashcardSets"),
         where("owners", "array-contains", userId),
         orderBy("viewed", "desc"),
-        limit(5)
+        limit(3)
       );
       const setsSnapshot = await getDocs(setsQuery);
       setLatestSets(
@@ -80,7 +80,7 @@ const Dashboard = ({ isAuth }) => {
         collection(db, "notes"),
         where("owners", "array-contains", userId),
         orderBy("viewed", "desc"),
-        limit(5)
+        limit(3)
       );
       const notesSnapshot = await getDocs(notesQuery);
       setLatestNotes(
@@ -107,71 +107,85 @@ const Dashboard = ({ isAuth }) => {
     return <div>Loading...</div>;
   }
   return (
-    <div className={styles.dashboardContainer}>
-      <CompactTodoList todoID={mainTodoListId}> </CompactTodoList>
-      <div className={styles.welcomeSection}>
-        <div className={styles.titleBox}>
-          <h1 className={styles.title}>
-            Hello, {userData ? userData.firstName : "there"}!
-          </h1>
-        </div>
-        {userData && (
-          <div className={styles.streakDisplay}>
-            <span className={styles.fireIconWrapper}>
-              <FontAwesomeIcon
-                icon={faFire}
-                className={
-                  hasRevisedToday ? styles.fireActive : styles.fireInactive
-                }
-              />
-            </span>
-
-            <span
-              className={
-                hasRevisedToday
-                  ? styles.streakCountActive
-                  : styles.streakCountInactive
-              }
-            >
-              {userData.streak}
-            </span>
+    <div className={`${styles.dashboardContainer} container text-center`}>
+      <div className="row justify-content-md-center">
+        <div className={`${styles.mainContent} col-8`}>
+          <div className={styles.mainSection}>
+            <div className={styles.greetingSection}>
+              <h1 className={styles.welcomeText}>
+                Welcome, {userData ? userData.firstName : "there"}
+              </h1>
+              <h3 className={styles.welcomeTextSubtitle}>
+                Nice to have you back.
+              </h3>
+            </div>
           </div>
-        )}
-        <h2>You have {hasRevisedToday ? "" : "not "}revised today.</h2>
-      </div>
-      <div className={styles.flexRow}>
-        <div className={`${styles.flexItem} ${styles.flashcards}`}>
-          <h2>Latest Flashcard Sets</h2>
-          {latestSets.map((set) => (
-            <div key={set.id} className={styles.card}>
-              <h3>
-                <Link to={`/sets/${set.id}`} className={styles.cardLink}>
-                  {set.title}
-                </Link>
-              </h3>
-              <p className={styles.cardDescription}>{set.description}</p>
-            </div>
-          ))}
         </div>
-        <div className={`${styles.flexItem} ${styles.notes}`}>
-          <h2>Latest Notes</h2>
-          {latestNotes.map((note) => (
-            <div key={note.id} className={styles.card}>
-              <h3>
-                <Link to={`/notes/${note.id}`} className={styles.cardLink}>
-                  {note.title}
-                </Link>
-              </h3>
-              <div
-                className={styles.cardContent}
-                dangerouslySetInnerHTML={{
-                  __html: sanitizeAndTruncateHtml(note.content),
-                }}
-              />
+        <div className={`${styles.sidebar} col-4`}>
+          <div className={styles.todoList}>
+            <h2>Todo list</h2>
+            <CompactTodoList todoID={mainTodoListId} />
+          </div>
+          <div className={styles.timerPage}>
+            <CompactTimerPage />
+          </div>
+          <div className={styles.streakDisplay}>
+            <StreakDisplay
+              userData={userData}
+              hasRevisedToday={hasRevisedToday}
+            />
+          </div>
+
+          <div className={styles.examCountdown}>
+            <ExamCountdown />
+          </div>
+          <section className={styles.latestContentSection}>
+            <div className={styles.latestFlashcards}>
+              <h2>Latest Flashcard Sets</h2>
+              <div className={styles.gridContainer}>
+                {latestSets.map((set) => (
+                  <div key={set.id} className={styles.card}>
+                    <Link to={`/sets/${set.id}`} className={styles.cardLink}>
+                      <h3>{set.title}</h3>
+                    </Link>
+                    <p className={styles.cardDescription}>{set.description}</p>
+                    <div className={styles.cardFooter}>
+                      <span className={styles.lastRevised}>
+                        Last revised: {set.lastRevised}
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
-          ))}
+
+            <div className={styles.latestNotes}>
+              <h2>Latest Notes</h2>
+              <div className={styles.gridContainer}>
+                {latestNotes.map((note) => (
+                  <div key={note.id} className={styles.card}>
+                    <Link to={`/notes/${note.id}`} className={styles.cardLink}>
+                      <h3>{note.title}</h3>
+                    </Link>
+                    <div
+                      className={styles.cardContent}
+                      dangerouslySetInnerHTML={{
+                        __html: sanitizeAndTruncateHtml(note.content),
+                      }}
+                    />
+                    <div className={styles.cardFooter}>
+                      <span className={styles.lastRevised}>
+                        Last revised: {note.lastRevised}
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
         </div>
       </div>
+
       <div>
         <button className={styles.button} onClick={() => navigate("/mystuff")}>
           Go to My Stuff

@@ -2,14 +2,14 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { db } from "../../config/firebase";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
-import { Dialog, DialogTrigger, DialogContent } from "@radix-ui/react-dialog";
-
 import TodoItem from "./Todo";
 import styles from "./ViewTodo.module.css";
 
 const ViewTodo = () => {
   const { todoID } = useParams();
-  const [todoList, setTodoList] = useState(null);
+  const [completedTodos, setCompletedTodos] = useState([]);
+  const [uncompletedTodos, setUncompletedTodos] = useState([]);
+  const [todoTitle, setTodoTitle] = useState("");
   const [newTodoText, setNewTodoText] = useState("");
   const [isEditing, setIsEditing] = useState(null);
   const [editText, setEditText] = useState("");
@@ -20,7 +20,11 @@ const ViewTodo = () => {
       const docSnap = await getDoc(docRef);
 
       if (docSnap.exists()) {
-        setTodoList({ id: docSnap.id, ...docSnap.data() });
+        const data = docSnap.data();
+        setTodoTitle(data.title);
+        const todos = data.todos || [];
+        setCompletedTodos(todos.filter((todo) => todo.completed));
+        setUncompletedTodos(todos.filter((todo) => !todo.completed));
       } else {
         console.log("No such document!");
       }
@@ -29,32 +33,46 @@ const ViewTodo = () => {
     fetchTodoList();
   }, [todoID]);
 
+  const updateTodos = async (todos) => {
+    await updateDoc(doc(db, "todoLists", todoID), { todos });
+    setCompletedTodos(todos.filter((todo) => todo.completed));
+    setUncompletedTodos(todos.filter((todo) => !todo.completed));
+  };
+
   const addTodo = async () => {
     if (!newTodoText.trim()) return;
     const todoToAdd = { text: newTodoText, completed: false };
-    await updateDoc(doc(db, "todoLists", todoID), {
-      todos: [...todoList.todos, todoToAdd],
-    });
-    setTodoList((prev) => ({
-      ...prev,
-      todos: [...prev.todos, todoToAdd],
-    }));
+    const updatedTodos = [...uncompletedTodos, todoToAdd];
+    await updateTodos([...updatedTodos, ...completedTodos]);
     setNewTodoText("");
   };
 
-  const toggleTodoCompletion = async (index) => {
-    const newTodos = [...todoList.todos];
-    newTodos[index].completed = !newTodos[index].completed;
-    await updateDoc(doc(db, "todoLists", todoID), { todos: newTodos });
-    setTodoList((prev) => ({
-      ...prev,
-      todos: newTodos,
-    }));
+  const toggleTodoCompletion = async (todo, isCompleted) => {
+    const updatedTodo = { ...todo, completed: !isCompleted };
+    const updatedTodos = isCompleted
+      ? [...uncompletedTodos, updatedTodo].concat(
+          completedTodos.filter((t) => t !== todo)
+        )
+      : [...completedTodos, updatedTodo].concat(
+          uncompletedTodos.filter((t) => t !== todo)
+        );
+    await updateTodos(updatedTodos);
   };
 
-  const startEditing = (index) => {
-    setIsEditing(index);
-    setEditText(todoList.todos[index].text);
+  const startEditing = (todo) => {
+    setIsEditing(todo);
+    setEditText(todo.text);
+  };
+
+  const saveTodoEdit = async (todo, isCompleted) => {
+    const newTodos = (isCompleted ? completedTodos : uncompletedTodos).map(
+      (t) => (t === todo ? { ...t, text: editText } : t)
+    );
+    await updateTodos([
+      ...newTodos,
+      ...(isCompleted ? uncompletedTodos : completedTodos),
+    ]);
+    cancelEditing();
   };
 
   const cancelEditing = () => {
@@ -62,39 +80,22 @@ const ViewTodo = () => {
     setEditText("");
   };
 
-  const saveTodoEdit = async (index) => {
-    const newTodos = [...todoList.todos];
-    newTodos[index].text = editText;
-    await updateDoc(doc(db, "todoLists", todoID), { todos: newTodos });
-    setTodoList((prev) => ({
-      ...prev,
-      todos: newTodos,
-    }));
-    setIsEditing(null);
-    setEditText("");
-  };
-
-  if (!todoList) return <div>Loading...</div>;
-
-  // Separating completed and uncompleted todos
-  const completedTodos = todoList.todos.filter((todo) => todo.completed);
-  const uncompletedTodos = todoList.todos.filter((todo) => !todo.completed);
+  if (!todoTitle) return <div>Loading...</div>;
 
   return (
     <div className={styles.container}>
-      <h2 className={styles.title}>{todoList.title}</h2>
+      <h2 className={styles.title}>{todoTitle}</h2>
       <h3>Uncompleted Todos</h3>
       <ul>
         {uncompletedTodos.map((todo, index) => (
           <TodoItem
             key={index}
             todo={todo}
-            isEditing={isEditing}
+            isEditing={isEditing === todo}
             index={index}
-            toggleTodoCompletion={toggleTodoCompletion}
-            isEditingToggle={true}
-            startEditing={startEditing}
-            saveTodoEdit={saveTodoEdit}
+            toggleTodoCompletion={() => toggleTodoCompletion(todo, false)}
+            startEditing={() => startEditing(todo)}
+            saveTodoEdit={() => saveTodoEdit(todo, false)}
             cancelEditing={cancelEditing}
             setEditText={setEditText}
             editText={editText}
@@ -106,14 +107,13 @@ const ViewTodo = () => {
       <ul>
         {completedTodos.map((todo, index) => (
           <TodoItem
-            key={index + uncompletedTodos.length} // Ensure unique keys
+            key={index}
             todo={todo}
-            isEditing={isEditing}
-            index={index + uncompletedTodos.length} // Adjust index for completed todos
-            toggleTodoCompletion={toggleTodoCompletion}
-            isEditingToggle={true}
-            startEditing={startEditing}
-            saveTodoEdit={saveTodoEdit}
+            isEditing={isEditing === todo}
+            index={index}
+            toggleTodoCompletion={() => toggleTodoCompletion(todo, true)}
+            startEditing={() => startEditing(todo)}
+            saveTodoEdit={() => saveTodoEdit(todo, true)}
             cancelEditing={cancelEditing}
             setEditText={setEditText}
             editText={editText}
@@ -121,20 +121,14 @@ const ViewTodo = () => {
         ))}
       </ul>
 
-      <Dialog>
-        <DialogTrigger asChild>
-          <button className={styles.button}>Add Todo</button>
-        </DialogTrigger>
-        <DialogContent className={styles.dialogContent}>
-          <input
-            type="text"
-            value={newTodoText}
-            onChange={(e) => setNewTodoText(e.target.value)}
-            placeholder="Todo text"
-          />
-          <button onClick={addTodo}>Add Todo</button>
-        </DialogContent>
-      </Dialog>
+      <button className={styles.button}>Add Todo</button>
+      <input
+        type="text"
+        value={newTodoText}
+        onChange={(e) => setNewTodoText(e.target.value)}
+        placeholder="Todo text"
+      />
+      <button onClick={addTodo}>Add Todo</button>
     </div>
   );
 };

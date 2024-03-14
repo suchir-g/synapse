@@ -1,14 +1,9 @@
 .navbar {
     background-color: var(--navbar-color);
-    /* Adjusted to a darker teal color for contrast */
-    color: white;
-    padding: 0.5rem 1rem;
+    padding: 1.5rem 1rem;
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    position: relative;
-    border-bottom: 1px solid  #232628;
-    box-shadow: 0px 10px 20px black;
+    box-shadow: 0px 4px 12.3px rgba(0, 0, 0, 0.166);
+    height: 5vh;
 }
 
 body {
@@ -27,7 +22,6 @@ body {
 .navbar_logo a {
     display: flex;
     align-items: center;
-    color: white;
     /* Set the color for the Synapse text */
 }
 
@@ -57,7 +51,6 @@ body {
 }
 
 .navbar_links li a {
-    color: white;
     transition: color 0.3s ease;
     padding: 0.5rem;
     /* Add padding for clickable area, adjust as needed */
@@ -113,7 +106,6 @@ body {
     text-align: left; /* Align text to the left */
     display: block; /* Ensure it's a block element */
     width: 100%; /* Full width */
-    color: white;
     font: inherit;
 }
 .dropdownItem:hover {
@@ -124,7 +116,6 @@ body {
     height: 40px; /* Adjust the size as needed */
     border-radius: 50%; /* This makes the image round */
     object-fit: cover; /* This ensures the image covers the area without losing aspect ratio */
-    border: 2px solid white; /* Optional: adds a border around the image */
     margin-right: 8px; /* Optional: adds some space between the icon and the next element */
     user-select: none; /* This prevents the image from being selectable */
     -webkit-user-drag: none; /* Prevents dragging the image on some browsers */
@@ -152,9 +143,33 @@ body {
 /* Additional styles if needed for the text next to the logo */
 .navbar_logo span {
     margin-left: 0.5rem; /* Space between logo image and text */
-    font-weight: bold; /* Make the text bold */
-    font-size: 1.3rem; /* Make the text larger; adjust size as desired */
-    color: white; /* Keep the text color consistent with the logo color */
-    text-shadow: #fefefe48 0px 0px 5px; /* Give it some depth */
-    letter-spacing: 2px;
+    font-weight: 900; /* Make the text bold */
+    font-size: 20px; /* Make the text larger; adjust size as desired */
+}
+
+.myStuffButton, .postButton, .loginButton, .registerButton {
+    font-weight: 600;
+    font-size: 16px;
+}
+
+.postButton, .loginButton {
+    background-color: var(--primary);
+    height: 38px;
+    width: 95px;
+    border-radius: 5px;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.registerButton {
+    background-color: var(--primary-variant);
+    height: 38px;
+    width: 95px;
+    border-radius: 5px;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }

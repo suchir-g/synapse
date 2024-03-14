@@ -14,7 +14,6 @@
     "@mui/material": "^5.15.11",
     "@nextui-org/react": "^2.2.9",
     "@radix-ui/react-checkbox": "^1.0.4",
-    "@radix-ui/themes": "^2.0.3",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
@@ -39,6 +38,7 @@
     "tailwind-merge": "^2.2.1",
     "use-image": "^1.1.1",
     "uuid": "^9.0.1",
+    "uuidv4": "^6.2.13",
     "web-vitals": "^2.1.4"
   },
   "scripts": {

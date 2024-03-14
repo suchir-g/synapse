@@ -7,6 +7,8 @@ import {
   query,
   where,
   getDocs,
+  deleteDoc,
+  Timestamp,
 } from "firebase/firestore";
 import { auth, db } from "../../config/firebase"; // Import your Firebase configuration
 import { useNavigate } from "react-router-dom";
@@ -16,7 +18,8 @@ const ViewExams = ({ isAuth }) => {
   const [examName, setExamName] = useState("");
   const [examDate, setExamDate] = useState("");
   const [editingExamId, setEditingExamId] = useState(null);
-  const [userId, setUserId] = useState(null); // To store the user's ID
+  const [exams, setExams] = useState([]); // Store exams here
+  const [userId, setUserId] = useState(null);
 
   const navigate = useNavigate();
 
@@ -31,60 +34,92 @@ const ViewExams = ({ isAuth }) => {
         const q = query(usersCollection, where("userID", "==", user.uid));
         const querySnapshot = await getDocs(q);
         querySnapshot.forEach((doc) => {
-          console.log(doc.id, " => ", doc.data());
-          setUserId(doc.id); // Assuming you want to use the document ID in Firestore
+          setUserId(doc.id); // Set the user ID
+          fetchExams(doc.id); // Fetch exams whenever the user ID is set
         });
       } else {
-        // User is signed out
         navigate("/");
       }
     });
 
-    // Clean up the listener when the component unmounts
     return () => unsubscribe();
   }, [navigate]);
 
-  const addExam = async (userId, exam) => {
-    await addDoc(collection(db, `users/${userId}/exams`), exam);
+  const fetchExams = async (userId) => {
+    const examsCollection = collection(db, `users/${userId}/exams`);
+    const examSnapshot = await getDocs(examsCollection);
+    const examsList = examSnapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+    setExams(examsList);
+  };
+  const formatDate = (timestamp) => {
+    if (timestamp && timestamp.toDate) {
+      const date = timestamp.toDate(); // Convert Firestore Timestamp to JavaScript Date
+      return `${date.getDate().toString().padStart(2, "0")}/${(
+        date.getMonth() + 1
+      )
+        .toString()
+        .padStart(2, "0")}/${date.getFullYear()}`;
+    } else {
+      return "Invalid Date"; // Return a placeholder or handle as required
+    }
   };
 
-  // Update an existing exam
-  const updateExam = async (userId, examId, updatedExam) => {
-    const examDoc = doc(db, `users/${userId}/exams`, examId);
-    await updateDoc(examDoc, updatedExam);
+  const deleteExam = async (userId, examId) => {
+    await deleteDoc(doc(db, `users/${userId}/exams`, examId));
+    fetchExams(userId); // Refresh the exams list after deletion
   };
 
+  // Define the handleAddExam function
   const handleAddExam = async () => {
-    // Check that both exam name and exam date are provided
     if (!examName || !examDate) {
       alert("Please provide both an exam name and a date.");
       return;
     }
     const exam = {
       name: examName,
-      date: new Date(examDate).toISOString(), // Convert to ISO string for consistency in the database
+      date: Timestamp.fromDate(new Date(examDate)), // Convert to Firestore Timestamp
     };
-    await addExam(userId, exam);
-    // Clear input fields after adding
+    await addDoc(collection(db, `users/${userId}/exams`), exam);
+    fetchExams(userId); // Refresh exams list after adding
     setExamName("");
     setExamDate("");
   };
 
+  // Define the handleUpdateExam function
   const handleUpdateExam = async () => {
-    // Check that both exam name and exam date are provided
-    if (!examName || !examDate) {
+    if (!examName || !examDate || !editingExamId) {
       alert("Please provide both an exam name and a date.");
       return;
     }
     const updatedExam = {
       name: examName,
-      date: new Date(examDate).toISOString(),
+      date: Timestamp.fromDate(new Date(examDate)), // Convert to Firestore Timestamp
     };
-    await updateExam(userId, editingExamId, updatedExam);
-    // Clear editing state and input fields after updating
+    await updateDoc(
+      doc(db, `users/${userId}/exams`, editingExamId),
+      updatedExam
+    );
+    fetchExams(userId); // Refresh exams list after updating
     setEditingExamId(null);
     setExamName("");
     setExamDate("");
+  };
+
+  const handleEditExam = (examId) => {
+    const exam = exams.find((exam) => exam.id === examId);
+    setEditingExamId(examId);
+    setExamName(exam.name);
+
+    // Ensure exam.date is a Firestore Timestamp before converting
+    if (exam.date && exam.date.toDate) {
+      setExamDate(exam.date.toDate().toISOString().split("T")[0]); // Convert to 'YYYY-MM-DD'
+    } else {
+      console.error("Invalid exam date", exam.date);
+      setExamDate(""); // Reset the date if invalid
+    }
   };
 
   return (
@@ -106,6 +141,16 @@ const ViewExams = ({ isAuth }) => {
       ) : (
         <button onClick={handleAddExam}>Add Exam</button>
       )}
+
+      <ul>
+        {exams.map((exam) => (
+          <li key={exam.id}>
+            {exam.name} - {formatDate(exam.date)}
+            <button onClick={() => handleEditExam(exam.id)}>Edit</button>
+            <button onClick={() => deleteExam(userId, exam.id)}>Delete</button>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 };

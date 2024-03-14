@@ -1,0 +1,44 @@
+.compact_whiteboards_grid_container {
+    overflow-x: auto;
+    padding: 10px 0;
+}
+
+.compact_whiteboards_grid {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+.compact_whiteboard_card {
+    flex: 0 0 auto; /* Flex item is fully inflexible and doesn't grow or shrink */
+    width: 200px; /* Fixed width */
+    height: 100%; /* Fixed height, adjust as needed */
+    background-color: var(--card-color); /* Example background color */
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-right: 10px; /* Spacing between cards */
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Spacing content inside the card */
+}
+
+.card_content {
+    height: 100%;
+    padding: 10px; /* Padding inside the card */
+}
+
+.compact_whiteboard_preview_image {
+    max-width: 100%;
+    max-height: 100%; /* Fixed height for image, adjust as needed */
+    object-fit: cover; /* Ensures the image covers the area, could also be 'contain' based on preference */
+    border-radius: 4px;
+}
+
+h3 {
+    font-size: 14px; /* Adjust font size for compact display */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin: 5px 0; /* Spacing for the title */
+}

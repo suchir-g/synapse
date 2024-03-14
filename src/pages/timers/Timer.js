@@ -12,12 +12,18 @@ const Timer = ({
   const [timeLeft, setTimeLeft] = useState(duration * 60);
 
   useEffect(() => {
-    if (isActive) {
-      // set the end time based on the current time plus the remaining time
-      if (!endTime) {
-        setEndTime(Date.now() + timeLeft * 1000);
-      }
+    // This effect resets the timer when the duration changes.
+    setTimeLeft(duration * 60);
+    setEndTime(null);
+    setIsActive(isTimerRunning);
+    // If the timer is supposed to be running, restart it with the new duration.
+    if (isTimerRunning) {
+      setEndTime(Date.now() + duration * 60 * 1000);
+    }
+  }, [duration, isTimerRunning]);
 
+  useEffect(() => {
+    if (isActive) {
       const interval = setInterval(() => {
         const now = Date.now();
         const updatedTimeLeft = Math.round((endTime - now) / 1000);
@@ -33,16 +39,8 @@ const Timer = ({
       }, 1000);
 
       return () => clearInterval(interval);
-    } else {
-      // reset the end time when the timer is not active
-      setEndTime(null);
     }
-  }, [isActive, endTime, timeLeft, onTimerFinish]);
-
-  useEffect(() => {
-    // automatically start or stop the timer based on isTimerRunning prop changes
-    setIsActive(isTimerRunning);
-  }, [isTimerRunning]);
+  }, [isActive, endTime, onTimerFinish]);
 
   useEffect(() => {
     // update the document title with the timer status
@@ -55,17 +53,13 @@ const Timer = ({
 
   const startTimer = () => {
     setIsActive(true);
-    onTimerStart();
-    if (!endTime) {
-      // calculate and set the end time if not already set
-      setEndTime(Date.now() + timeLeft * 1000);
-    }
+    if (onTimerStart) onTimerStart();
+    setEndTime(Date.now() + timeLeft * 1000);
   };
 
   const pauseTimer = () => {
     setIsActive(false);
-    // adjust the endTime to null to ensure it recalculates when resumed
-    setEndTime(null);
+    setEndTime(null); // Save the remaining time to start from there later
   };
 
   const resetTimer = () => {
