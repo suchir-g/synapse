@@ -115,7 +115,12 @@ const Dashboard = ({ isAuth }) => {
       );
       const notesSnapshot = await getDocs(notesQuery);
       setLatestNotes(
-        notesSnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }))
+        notesSnapshot.docs.map((doc) => {
+          const noteData = doc.data();
+          const viewedDate = noteData.viewed.toDate();
+          const formattedViewedDate = viewedDate.toLocaleDateString("en-US");
+          return { id: doc.id, ...noteData, viewed: formattedViewedDate };
+        })
       );
 
       const todoListsQuery = query(
@@ -210,11 +215,8 @@ const Dashboard = ({ isAuth }) => {
                 <div className={styles.gridContainer}>
                   {latestNotes.map((note) => (
                     <div key={note.id} className={styles.card}>
-                      <div className={styles.cardMainSection}>
-                        <Link
-                          to={`/notes/${note.id}`}
-                          className={styles.cardLink}
-                        >
+                      <div className={styles.cardBody}> 
+                        <Link to={`/notes/${note.id}`} className={styles.cardLink}>
                           <h3>{note.title}</h3>
                         </Link>
                         <div
@@ -226,7 +228,7 @@ const Dashboard = ({ isAuth }) => {
                       </div>
                       <div className={styles.cardFooter}>
                         <span className={styles.lastRevised}>
-                          Last revised: {formatFirestoreTimestamp(note.viewed)}
+                          Last revised: {note.lastRevised}
                         </span>
                       </div>
                     </div>
