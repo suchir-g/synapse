@@ -41,7 +41,6 @@
 
 .card p, .cardDescription {
   margin: 0;
-.card p {
   margin-top: 4px;
   font-size: 0.9rem;
   color: #666;
@@ -99,4 +98,3 @@
   width: 100%;
   align-items: flex-start;
 }
-
