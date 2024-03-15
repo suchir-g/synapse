@@ -40,7 +40,7 @@
 }
 
 .card p {
-  margin: 0;
+  margin-top: 4px;
   font-size: 0.9rem;
   color: #666;
 }
