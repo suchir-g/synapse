@@ -1,66 +1,81 @@
-/* styles.module.css */
-:root {
-    --color-primary: #ff7f50; /* Coral */
-    --color-primary-dark: #e56740; /* Darker shade of coral */
-    --color-accent: #303030; /* Dark grey for text */
-    --color-background: #f5f5f5; /* Light grey for background */
-  }
-  
-  .container {
-    max-width: 600px;
-    padding: 20px;
-    background-color: var(--card-color);
-    border: 1px solid var(--card-border-color);
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  }
-  
-  .title {
-    color: var(--color-primary);
-    text-align: center;
-  }
-  
-  .todoItem {
-    background-color: var(--color-secondary);
-    border: 1px solid #ddd;
-    padding: 10px 15px;
-    margin-bottom: 10px;
-    border-radius: 6px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-  
-  .todoItem:not(:last-child) {
-    margin-bottom: 15px;
-  }
-  
-  .todoText {
-    margin: 0;
-    flex-grow: 1;
-  }
-  
-  .button {
-    padding: 6px 12px;
-    background-color: var(--color-primary);
-    color: var(--color-secondary);
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-    margin-left: 10px;
-  }
-  
-  .button:hover {
-    background-color: var(--color-primary-dark);
-  }
-  
-  .buttonAddTodo {
-    display: block;
-    width: 100%;
-    padding: 10px 0;
-    margin-top: 20px;
-    font-size: 16px;
-  }
-  
+.container {
+  max-width: 600px;
+  padding: 20px;
+  background-color: white;
+  border-radius: 5px;
+  box-shadow: var(--shadow);
+}
+
+.todoItem {
+  background-color: blue;
+  border: 1px solid #ddd;
+  height: 56px;
+  margin-bottom: 10px;
+  border-radius: 6px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.todoItem:not(:last-child) {
+  margin-bottom: 15px;
+}
+
+.todoText {
+  margin: 0;
+  flex-grow: 1;
+}
+
+.button {
+  background-color: var(--color-primary);
+  color: var(--color-secondary);
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin-left: 10px;
+}
+.addTodo {
+  background-color: var(--muted);
+  width: 95px;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 600;
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+.button:hover {
+  background-color: var(--color-primary-dark);
+}
+
+
+.todoInput {
+  border-radius: 5px;
+  border: none;
+  background-color: var(--muted-background);
+  margin-bottom: 10px;
+  padding: 15px 20px;
+  width: 70%;
+}
+
+.addTodoSection {
+  width: 100%;
+  display: flex;
+  gap: 10px;
+}
+
+.todoListTitle {
+  font-size: large;
+  margin-bottom: 5px;
+  text-align: left;
+}
+
+.todoNameBold {
+  font-weight: 600;
+}

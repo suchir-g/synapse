@@ -1,110 +1,48 @@
-/* Assuming a dark theme similar to the screenshot provided */
-
-/* Base reset for button */
-button {
-  all: unset;
-  cursor: pointer;
-  padding: 8px 16px;
-  border: 1px solid var(--card-border-color); /* Slightly lighter border for visibility */
-  border-radius: 4px;
-  margin-left: 8px;
-  background-color: #333; /* Darker background for buttons */
-  color: #ccc; /* Light text for contrast */
-  font-size: 0.9rem;
-  transition: background-color 0.3s ease; /* Smooth transition for hover effect */
-}
-
-button:hover {
-  background-color: #444; /* Lighten the button on hover */
-}
-
-button:focus {
-  outline: 2px solid #777; /* Focus outline to match the dark theme */
-  outline-offset: 2px;
-}
-
-/* Todo item styles */
 .todoItem {
   display: flex;
   align-items: center;
-  padding: 1em;
-  border-radius: 10px;
-  background-color: #222; /* Dark background for each item */
-  color: #ddd; /* Light text for contrast */
-  margin-bottom: 0.4em;
-  gap: 10px
+  background-color: var(--muted-background);
+  margin-bottom: 10px;
+  padding: 10px 15px;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+
+.todoItem:hover {
+  background-color: #f9f9f9;
+}
+
+.editText {
+  flex: 1;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  margin-right: 10px;
+}
+
+.CheckboxInput {
+  appearance: none;
+  -webkit-appearance: none;
+  height: 37px;
+  width: 37px;
+  background-color: var(--tertiary);
+  border-radius: 5px;
+  margin-right: 10px;
+  position: relative;
+}
+
+.CheckboxLabel {
+  cursor: pointer;
+}
+
+.CheckboxInput:checked + .CheckboxLabel::before {
+  content: "✓";
+  position: absolute;
+  left: 5px;
+  color: white;
 }
 
 .long {
-  justify-content: space-between;
+  flex-direction: column;
+  align-items: start;
 }
-
-/* Checkbox styles */
-.CheckboxRoot {
-  background-color: #333; /* Checkbox background */
-  width: 25px;
-  height: 25px;
-  border-radius: 4px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 1px solid #555;
-}
-
-.CheckboxRoot:checked {
-  background-color: #555; /* Darker background for checked state */
-}
-
-.CheckboxRoot:hover {
-  background-color: #444; /* Slightly lighter on hover */
-}
-
-.CheckboxRoot:focus {
-  outline: 2px solid #777;
-  outline-offset: 2px;
-}
-
-.CheckboxIndicator {
-  color: #ccc; /* Light color for the checkmark or indicator */
-}
-
-/* Label styles */
-.Label {
-  color: #ccc; /* Light text color for readability */
-  padding-left: 15px;
-  font-size: 1rem; /* Adjusted font size */
-}
-
-/* Input styles for editing */
-input {
-  flex: 1;
-  font-size: 1rem;
-  padding: 8px;
-  margin-right: 8px;
-  background-color: #333; /* Input background */
-  color: #ddd; /* Input text color */
-  border: 1px solid #444; /* Border color */
-  border-radius: 4px;
-}
-
-input:focus {
-  outline: none;
-  border-color: #555; /* Focus border color */
-}
-
-/* Apply the same button styles to all buttons within a todoItem */
-.todoItem button {
-  background-color: #555; /* Button background */
-  color: #ccc; /* Button text color */
-}
-
-.todoItem button:hover {
-  background-color: #666; /* Hover state */
-}
-
-.todoItem button:focus {
-  outline: 2px solid #777; /* Focus state */
-  outline-offset: 2px;
-}
-
-/* Additional styles could be added for animations, active states, and responsiveness if needed */

@@ -17,7 +17,8 @@ import CompactTimerPage from "./timers/CompactTimerPage";
 import CompactTodoList from "./todos/CompactTodoList";
 import ExamCountdown from "./exams/ExamCountdown";
 import StreakDisplay from "./StreakDisplay";
-import { CollectionsBookmarkOutlined } from "@mui/icons-material";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
 
 const Dashboard = ({ isAuth }) => {
   const navigate = useNavigate();
@@ -27,7 +28,6 @@ const Dashboard = ({ isAuth }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [hasRevisedToday, setHasRevisedToday] = useState(false);
   const [mainTodoListId, setMainTodoListId] = useState(null);
-  const [revisionSetsDueToday, setRevisionSetsDueToday] = useState([]);
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(async (user) => {
@@ -39,38 +39,8 @@ const Dashboard = ({ isAuth }) => {
       }
     });
 
-    loadRevisionsDueToday();
     return () => unsubscribe();
   }, []);
-
-  const isRevisionDueToday = (revisionDates) => {
-    const today = new Date();
-    const dateString = `${today.getFullYear()}-${(today.getMonth() + 1)
-      .toString()
-      .padStart(2, "0")}-${today.getDate().toString().padStart(2, "0")}`;
-    return revisionDates.includes(dateString);
-  };
-
-  const loadRevisionsDueToday = async (userId) => {
-    const today = new Date();
-    const dateString = `${today.getFullYear()}-${(today.getMonth() + 1)
-      .toString()
-      .padStart(2, "0")}-${today.getDate().toString().padStart(2, "0")}`;
-
-    // Query revisionSchedules where today's date is within the revisionDates array
-    const revisionSchedulesQuery = query(
-      collection(db, "revisionSchedules"),
-      where(`revisionDates`, "array-contains", dateString)
-    );
-    const querySnapshot = await getDocs(revisionSchedulesQuery);
-
-    const revisionsDueToday = [];
-    querySnapshot.forEach((doc) => {
-      revisionsDueToday.push({ id: doc.id, ...doc.data() });
-    });
-
-    setRevisionSetsDueToday(revisionsDueToday);
-  };
 
   const checkRevisionStatus = (lastRevised) => {
     if (!lastRevised) return;
@@ -104,7 +74,12 @@ const Dashboard = ({ isAuth }) => {
       );
       const setsSnapshot = await getDocs(setsQuery);
       setLatestSets(
-        setsSnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }))
+        setsSnapshot.docs.map((doc) => {
+          const setData = doc.data();
+          const viewedDate = setData.viewed.toDate();
+          const formattedViewedDate = viewedDate.toLocaleDateString("en-US");
+          return { id: doc.id, ...setData, lastRevised: formattedViewedDate };
+        })
       );
 
       const notesQuery = query(
@@ -138,14 +113,6 @@ const Dashboard = ({ isAuth }) => {
     }
     setIsLoading(false);
   };
-  const formatFirestoreTimestamp = (timestamp) => {
-    if (!timestamp) return "";
-    const date = timestamp.toDate(); // Converts the Timestamp to a JavaScript Date object
-    const day = date.getDate().toString().padStart(2, "0"); // Ensures the day is two digits
-    const month = (date.getMonth() + 1).toString().padStart(2, "0"); // Months are 0-indexed, plus ensures two digits
-    const year = date.getFullYear();
-    return `${day}-${month}-${year}`; // Concatenates in "dd-mm-yyyy" format
-  };
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -164,26 +131,6 @@ const Dashboard = ({ isAuth }) => {
               </h3>
             </div>
             <section className={styles.contentSection}>
-              <div className={styles.revisionsDueTodaySection}>
-                <h2>Revisions Due Today</h2>
-                <div className={styles.gridContainer}>
-                  {revisionSetsDueToday.map((set) => (
-                    <div key={set.id} className={styles.card}>
-                      <div className={styles.cardBody}>
-                        <Link
-                          to={`/sets/${set.flashcardId}`}
-                          className={styles.cardLink}
-                        >
-                          <h3>Revision: {set.flashcardId}</h3>
-                        </Link>
-                        <p className={styles.cardDescription}>
-                          Number of Revisions: {set.numberOfRevisions}
-                        </p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
               <div className={styles.latestFlashcards}>
                 <h2 className={styles.latestText}>Latest Flashcard Sets</h2>
                 <div className={styles.gridContainer}>
@@ -202,11 +149,12 @@ const Dashboard = ({ isAuth }) => {
                       </div>
                       <div className={styles.cardFooter}>
                         <span className={styles.lastRevised}>
-                          Last revised: {set.revised}
+                          Last revised: {set.lastRevised}
                         </span>
                       </div>
                     </div>
                   ))}
+                  <FontAwesomeIcon icon={faChevronRight} color="grey" />
                 </div>
               </div>
 
@@ -215,12 +163,15 @@ const Dashboard = ({ isAuth }) => {
                 <div className={styles.gridContainer}>
                   {latestNotes.map((note) => (
                     <div key={note.id} className={styles.card}>
-                      <div className={styles.cardBody}> 
-                        <Link to={`/notes/${note.id}`} className={styles.cardLink}>
+                      <div className={styles.cardBody}>
+                        <Link
+                          to={`/notes/${note.id}`}
+                          className={styles.cardLink}
+                        >
                           <h3>{note.title}</h3>
                         </Link>
                         <div
-                          className={`${styles.cardDescription}`}
+                          className={`${styles.cardContent}`}
                           dangerouslySetInnerHTML={{
                             __html: sanitizeAndTruncateHtml(note.content, 20),
                           }}
@@ -228,19 +179,22 @@ const Dashboard = ({ isAuth }) => {
                       </div>
                       <div className={styles.cardFooter}>
                         <span className={styles.lastRevised}>
-                          Last revised: {note.lastRevised}
+                          Last revised: {note.viewed}
                         </span>
                       </div>
                     </div>
                   ))}
+                  <FontAwesomeIcon icon={faChevronRight} color="grey" />
                 </div>
               </div>
             </section>
+            <Link className={styles.myStuffLink} to="/mystuff">
+              My stuff
+            </Link>
           </div>
         </div>
         <div className={`${styles.sidebar} col-3`}>
           <div className={styles.todoList}>
-            <h2>Todo list</h2>
             <CompactTodoList todoID={mainTodoListId} />
           </div>
           <div className={styles.timerPage}>

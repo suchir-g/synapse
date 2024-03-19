@@ -1,7 +1,7 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
-import * as Checkbox from "@radix-ui/react-checkbox";
 import styles from "./Todo.module.css";
+
 const TodoItem = ({
   todo,
   isEditing,
@@ -14,37 +14,43 @@ const TodoItem = ({
   editText,
   isEditingToggle,
 }) => {
-  const todoItemClass = isEditingToggle ? `${styles.todoItem} ${styles.long}` : styles.todoItem;
+  const todoItemClass = isEditingToggle
+    ? `${styles.todoItem} ${styles.long}`
+    : styles.todoItem;
+
+  const handleCheckboxChange = () => {
+    toggleTodoCompletion(index);
+  };
 
   return (
-    
     <li className={todoItemClass}>
       {isEditing === index ? (
         <>
           <input
+            type="text"
             value={editText}
             onChange={(e) => setEditText(e.target.value)}
+            className={styles.editText}
           />
           <button onClick={() => saveTodoEdit(index)}>Save</button>
           <button onClick={cancelEditing}>Cancel</button>
         </>
       ) : (
         <>
-          <>
-            <Checkbox.Root
-              checked={todo.completed}
-              onCheckedChange={() => toggleTodoCompletion(index)}
-              className={styles.CheckboxRoot}
-            >
-              <Checkbox.Indicator className={styles.CheckboxIndicator}>
-                <FontAwesomeIcon icon={faCheck} />
-              </Checkbox.Indicator>
-            </Checkbox.Root>
-            {todo.text}
-            {isEditingToggle && (
-              <button onClick={() => startEditing(index)}>Edit</button>
-            )}
-          </>
+          <input
+            id={`checkbox-${index}`}
+            type="checkbox"
+            checked={todo.completed}
+            onChange={handleCheckboxChange}
+            className={styles.CheckboxInput}
+          />
+          <label htmlFor={`checkbox-${index}`} className={styles.CheckboxLabel}>
+            {todo.completed && <FontAwesomeIcon icon={faCheck} />}
+          </label>
+          {todo.text}
+          {isEditingToggle && (
+            <button onClick={() => startEditing(index)}>Edit</button>
+          )}
         </>
       )}
     </li>

@@ -88,16 +88,25 @@ const CompactTodoList = ({ todoID }) => {
 
   return (
     <div className={styles.container}>
-      <h1>
-        <Link to={`/todos/${todoID}`}>{todoTitle}</Link>
+      <h1 className={styles.todoListTitle}>
+        <Link to={`/todos/${todoID}`}>Todo List: </Link>
+        <b className={styles.todoNameBold}>
+          <Link to={`/todos/${todoID}`}>{todoTitle}</Link>
+        </b>
       </h1>
-      <input
-        type="text"
-        value={newTodoText}
-        onChange={(e) => setNewTodoText(e.target.value)}
-        placeholder="Add new todo"
-      />
-      <button onClick={addNewTodo}>Add Todo</button>
+      <div className={styles.addTodoSection}>
+        <input
+          type="text"
+          value={newTodoText}
+          onChange={(e) => setNewTodoText(e.target.value)}
+          placeholder="E.g. Maths HW  "
+          className={styles.todoInput}
+        />
+        <button onClick={addNewTodo} className={styles.addTodo}>
+          Add
+        </button>
+      </div>
+
       <ul className={styles.todoList}>
         {uncompletedTodos.slice(0, 6).map((todo, index) => (
           <TodoItem

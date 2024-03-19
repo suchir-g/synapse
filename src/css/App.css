@@ -3,6 +3,7 @@
 :root {
     --navbar-color: #ffffff;
     --background-color: #ffffff;
+    --muted-background: #F3F3F3; 
     --dots-color: #D2D6DB;
     
     --text-color: black;
@@ -15,12 +16,16 @@
 
     --primary: #3A86FF;
     --secondary: #D2D6DB;
+    --tertiary: #D9D9D9;
     --success: #5DC133;
     --danger: #FD2B3B;
     --primary-variant: #000080;
 
     --muted: #797979;
     --font: "Inter", sans-serif; 
+    
+    --shadow: 0 0px 23.6px rgba(0, 0, 0, 0.25);
+
 }
 
 .mainContainer {
