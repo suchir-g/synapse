@@ -2,17 +2,15 @@
 .container {
     max-width: max(300px, auto);
     margin: auto;
-    background-color: var(--card-color);
-    color: #fff;
+    background-color: white;
     padding: 20px;
-    border: 1px solid var(--card-border-color);
+    box-shadow: var(--shadow);
     border-radius: 5px;
     margin: 10px 0;
 }
 
 .header {
     text-align: center;
-    color: #fff;
 }
 
 
@@ -27,17 +25,12 @@
 }
 
 .input {
-    background-color: var(--select-color);
-    color: #fff;
-    border: 1px solid var(--card-border-color);
     border-radius: 5px;
     padding: 10px;
     margin: 5px 0;
     width: 95%;
-}
-
-.selectOption {
-    background-color: #555;
+    background-color: var(--muted-background);
+    border: transparent;
 }
 
 .label {

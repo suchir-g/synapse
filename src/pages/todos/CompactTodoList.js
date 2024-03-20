@@ -108,7 +108,7 @@ const CompactTodoList = ({ todoID }) => {
       </div>
 
       <ul className={styles.todoList}>
-        {uncompletedTodos.slice(0, 6).map((todo, index) => (
+        {uncompletedTodos.slice(0, 5).map((todo, index) => (
           <TodoItem
             key={index}
             todo={todo}

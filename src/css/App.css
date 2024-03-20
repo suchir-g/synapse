@@ -9,11 +9,6 @@
     --text-color: black;
     --text-muted-color:#414141;
 
-    --card-color: #1e1e1e;
-    --card-border-color: #3c3c3c;
-
-    --select-color: #313131;
-
     --primary: #3A86FF;
     --secondary: #D2D6DB;
     --tertiary: #D9D9D9;
@@ -21,10 +16,17 @@
     --danger: #FD2B3B;
     --primary-variant: #000080;
 
+    --flashcards-color: #8338ec;
+
     --muted: #797979;
+
+    --light-button: #e9e9e9;
+    --light-button-hover: #d2d2d2;
+    
     --font: "Inter", sans-serif; 
     
     --shadow: 0 0px 23.6px rgba(0, 0, 0, 0.25);
+    --lesser-shadow: 0 0px 10px rgba(0, 0, 0, 0.17);
 
 }
 

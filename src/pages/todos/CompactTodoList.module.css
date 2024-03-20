@@ -60,7 +60,7 @@
   border: none;
   background-color: var(--muted-background);
   margin-bottom: 10px;
-  padding: 15px 20px;
+  padding: 10px 15px;
   width: 70%;
 }
 
@@ -71,7 +71,7 @@
 }
 
 .todoListTitle {
-  font-size: large;
+  font-size: 17px;
   margin-bottom: 5px;
   text-align: left;
 }

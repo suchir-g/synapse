@@ -38,3 +38,10 @@
 .create_whiteboard_btn:hover {
   background-color: #0b333d; /* A darker green on hover */
 }
+
+.card_title {
+  font-size: 19px;
+  margin-bottom: 5px;
+  flex-grow: 1;
+  font-weight: 500;
+}

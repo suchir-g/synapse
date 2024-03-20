@@ -1,0 +1,27 @@
+.content_section {
+  background: #f9f9f9;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.cards_grid {
+  display: flex;
+  flex-direction: column;
+}
+
+.card {
+  background-color: #fff;
+  border-radius: 5px;
+  box-shadow: var(--lesser-shadow);
+  padding: 15px;
+  display: flex; 
+  flex-direction: column; 
+  margin: 10px 0px 10px 0px;
+}
+
+.card_title {
+  font-size: 19px;
+  margin-bottom: 5px;
+  flex-grow: 1;
+  font-weight: 500;
+}

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import styles from "./Timer.module.css";
 
 const Timer = ({
   duration,
@@ -46,9 +47,11 @@ const Timer = ({
     // update the document title with the timer status
     const minutes = Math.floor(timeLeft / 60);
     const seconds = timeLeft % 60;
-    document.title = `${title} - ${minutes}:${
-      seconds < 10 ? `0${seconds}` : seconds
-    }`;
+    if (title) {
+      document.title = `${title} - ${minutes}:${
+        seconds < 10 ? `0${seconds}` : seconds
+      }`;
+    }
   }, [timeLeft, title]);
 
   const startTimer = () => {
@@ -70,17 +73,27 @@ const Timer = ({
 
   return (
     <div>
-      <h3>{title}</h3>
-      <div>{`${Math.floor(timeLeft / 60)}:${
+      {title && <h3 className={styles.title}>{title}</h3>}
+      <div className={styles.timeLeft}>{`${Math.floor(timeLeft / 60)}:${
         timeLeft % 60 < 10 ? `0${timeLeft % 60}` : timeLeft % 60
       }`}</div>
-      <button onClick={startTimer} disabled={isActive}>
+      <button
+        onClick={startTimer}
+        disabled={isActive}
+        className={styles.button}
+      >
         Start
       </button>
-      <button onClick={pauseTimer} disabled={!isActive}>
+      <button
+        onClick={pauseTimer}
+        disabled={!isActive}
+        className={styles.button}
+      >
         Pause
       </button>
-      <button onClick={resetTimer}>Reset</button>
+      <button onClick={resetTimer} className={styles.button}>
+        Reset
+      </button>
     </div>
   );
 };

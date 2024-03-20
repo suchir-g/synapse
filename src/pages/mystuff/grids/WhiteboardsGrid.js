@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { collection, query, getDocs, where } from "firebase/firestore";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth, db } from "../../../config/firebase";
-import styles from "../../../css/grids/WhiteboardsGrid.module.css";
+import styles from "./WhiteboardsGrid.module.css";
 
 const WhiteboardsGrid = () => {
   const [whiteboards, setWhiteboards] = useState([]);
@@ -58,8 +58,7 @@ const WhiteboardsGrid = () => {
               className={styles.whiteboard_card}
             >
               <div>
-                <h3>{whiteboard.title}</h3>
-                {/* Display the image in a smaller size */}
+                <h3 className={styles.card_title}>{whiteboard.title}</h3>
                 {whiteboard.downloadURL && (
                   <img
                     src={whiteboard.downloadURL}
@@ -68,7 +67,6 @@ const WhiteboardsGrid = () => {
                     className={styles.whiteboard_preview_image}
                   />
                 )}
-                <p>View/Edit</p>
               </div>
             </Link>
           ))}

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { sanitizeHTML } from "../../../utilities";
-import "../../../css/revision/flashcards/Flashcard.css"; // import CSS for styling
+import "./Flashcard.css"; // import CSS for styling
 
 const Flashcard = ({ flashcard, isQuestionFirst, size }) => {
   const [isFlipped, setIsFlipped] = useState(false);

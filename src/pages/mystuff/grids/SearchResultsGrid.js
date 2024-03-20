@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { db } from "../../../config/firebase";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import Fuse from "fuse.js";
-import styles from "../../../css/grids/SearchResultsGrid.module.css";
+import styles from "./SearchResultsGrid.module.css";
 import { sanitizeAndTruncateHtml } from "../../../utilities";
 
 const SearchResultsGrid = ({ searchQuery, currentUserID }) => {

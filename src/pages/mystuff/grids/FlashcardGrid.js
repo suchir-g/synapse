@@ -8,7 +8,7 @@ import {
   orderBy,
   limit,
 } from "firebase/firestore";
-import styles from "../../../css/grids/FlashcardGrid.module.css"
+import styles from "./FlashcardGrid.module.css"
 
 import { db } from "../../../config/firebase";
 export const FlashcardGrid = ({ currentUserID }) => {

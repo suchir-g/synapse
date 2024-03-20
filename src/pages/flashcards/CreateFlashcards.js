@@ -13,6 +13,7 @@ import Select from "react-select";
 
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.bubble.css"; // Import the Bubble theme CSS
+import styles from "./CreateFlashcards.module.css"
 
 import { flashcardModule } from "../../config/quill";
 
@@ -143,7 +144,7 @@ const CreateFlashcards = ({ isAuth }) => {
 
   return (
     <div>
-      <Link to="/sets/import">Import flashcards</Link>
+      <Link to="/sets/import" className={styles.importButton}>Import flashcards</Link>
       <form onSubmit={handleCreateSet}>
         <input
           type="text"

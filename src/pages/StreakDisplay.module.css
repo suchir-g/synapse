@@ -1,82 +1,51 @@
 .card {
     text-align: center;
+    background-color: white;
+    border-radius: 10px; /* Rounded corners */
+    box-shadow: var(--shadow); /* Subtle shadow */
+    padding: 20px;
+    position: relative; /* For positioning the streak counter and fire */
 }
 
 .streakDisplay {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
+    margin-top: 20px; /* Add space above the streak display */
 }
 
-.welcomeText {
-    font-size: 2.5em; /* Large text */
-    font-weight: bold;
-    text-align: center; /* Center the text */
-    padding: 20px 0; /* Add some padding */
-    background: linear-gradient(60deg, #eb5e28, #dc2f02, #e71d36, #ff9f1c); /* Gradient colors */
-    background-size: 200% auto; /* Size of the gradient */
-    -webkit-background-clip: text; /* For Chrome/Safari */
-    background-clip: text; /* Standard syntax */
-    color: transparent; /* Fallback for browsers that don't support background-clip */
-    -webkit-text-fill-color: transparent; /* For Chrome/Safari */
-    animation: movingGradient 4s linear infinite; /* Animation: name, duration, easing, repeat */
-    text-shadow: 0px 0px 20px rgba(255, 85, 0, 0.325);
+.welcomeMessage {
+    font-size: 1rem; /* Adjust font size as necessary */
+    color: #707070; /* Muted text color */
 }
 
-.fireGif {
-    width: 50px; /* Or any other size */
+.fireGif, .fireInactive {
+    width: 100px; /* Size of the fire image/icon */
     height: auto;
-    display: block; /* Ensures it takes up the entire block */
-}
-
-.fireIconWrapper {
-    color: #f50; /* Flame icon color */
-    font-size: 3rem; /* Increase the size of the fire icon */
-}
-
-.fireActive {
-    color: #e25822; /* Active flame color */
-}
-
-.fireInactive {
-    color: #ccc; /* Inactive flame color */
+    margin: 0 auto; /* Center the fire image/icon */
 }
 
 .streakCountActive,
 .streakCountInactive {
     position: absolute;
-    top: 0; /* Adjust as necessary to position correctly over the flame */
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 1.5rem; /* Size of the streak number */
-    color: #fff; /* Color of the streak number */
-
-    /* Create a mask if you want to clip the text for a visual effect */
-    /* This is an example, you might need to adjust it based on the actual icon size */
-    width: 2.5rem; /* Size of the mask */
-    height: 2.5rem; /* Size of the mask */
-    overflow: hidden;
-    white-space: nowrap;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.streakCountActive {
-    color: white; /* Active streak count color */
-    font-weight: bold;
-}
-
-.streakCountInactive {
-    color: #ccc; /* Inactive streak count color */
+    top: 50%; /* Position at the vertical center of the parent */
+    left: 50%; /* Position at the horizontal center of the parent */
+    transform: translate(-50%, -50%); /* Center the element */
+    font-size: 3rem; /* Large font size for the streak number */
+    font-weight: bold; /* Make the streak number bold */
+    color: #333; /* Dark color for visibility */
 }
 
 .button {
-    padding: 10px 20px;
+    background-color: #4CAF50; /* Green background for the button */
+    color: white; /* White text on the button */
+    padding: 15px 25px;
     border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 16px;
-    margin: 10px;
+    border-radius: 5px; /* Slightly rounded corners for the button */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Shadow for the button */
+    font-weight: bold; /* Make button text bold */
+    text-transform: uppercase; /* Uppercase button text */
+    margin-top: 30px; /* Space above the button */
+    transition: background-color 0.3s ease; /* Smooth background color transition */
+}
+
+.button:hover {
+    background-color: #45a049; /* Darker green on hover */
 }

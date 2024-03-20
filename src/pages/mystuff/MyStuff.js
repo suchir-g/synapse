@@ -12,7 +12,7 @@ import {
   limit,
 } from "firebase/firestore";
 
-import styles from "../../css/MyStuff.module.css";
+import styles from "./MyStuff.module.css";
 import FlashcardGrid from "./grids/FlashcardGrid";
 import NotesGrid from "./grids/NotesGrid";
 import TagsGrid from "./grids/TagsGrid";
@@ -112,13 +112,13 @@ const MyStuff = ({ isAuth }) => {
   }
 
   return (
-    <div className={styles.container}>
+    <div className={`container ${styles.container}`}>
       <h1 className={styles.pageTitle}>My Stuff</h1>
       <div className={styles.header}>
         <div className={styles.tabs}>
           <button
             className={`${styles.tab} ${
-              activeTab === "flashcards" ? styles.active : ""
+              activeTab === "flashcards" ? styles.flashcardsActive : ""
             }`}
             onClick={() => handleTabClick("flashcards")}
           >
@@ -126,7 +126,7 @@ const MyStuff = ({ isAuth }) => {
           </button>
           <button
             className={`${styles.tab} ${
-              activeTab === "notes" ? styles.active : ""
+              activeTab === "notes" ? styles.notesActive : ""
             }`}
             onClick={() => handleTabClick("notes")}
           >
@@ -134,7 +134,7 @@ const MyStuff = ({ isAuth }) => {
           </button>
           <button
             className={`${styles.tab} ${
-              activeTab === "whiteboards" ? styles.active : ""
+              activeTab === "whiteboards" ? styles.whiteboardsActive : ""
             }`}
             onClick={() => handleTabClick("whiteboards")}
           >

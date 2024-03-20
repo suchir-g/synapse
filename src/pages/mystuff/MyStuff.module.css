@@ -1,0 +1,77 @@
+.container {
+    padding: 50px 0px 50px 0px;
+}
+
+.header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.pageTitle {
+    font-size: 34px;
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
+.tab {
+    background-color: var(--light-button);
+    border: transparent;
+    padding: 15px;
+    border-radius: 5px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    font-weight: 500;
+}
+
+.tab:hover {
+    background-color: var(--light-button-hover);
+}
+
+.flashcardsActive {
+    background-color: #8338ec;
+    color: white;
+    text-shadow: 0px 0px 10px rgba(255, 255, 255, 0.3);
+
+}
+
+.flashcardsActive:hover {
+    background-color: #6825c5;
+    color: white;
+    text-shadow: 0px 0px 10px rgba(255, 255, 255, 0.3);
+
+}
+
+.notesActive {
+    background-color: #fb5607;
+    color: white;
+    text-shadow: 0px 0px 10px rgba(255, 255, 255, 0.3);
+
+}
+.notesActive:hover {
+    background-color: #db5010;
+    color: white;
+    text-shadow: 0px 0px 10px rgba(255, 255, 255, 0.3);
+
+}
+
+.whiteboardsActive {
+    background-color: #e51022;
+    color: white;
+    text-shadow: 0px 0px 10px rgba(255, 255, 255, 0.3);
+
+}
+
+.whiteboardsActive:hover {
+    background-color: #d51323;
+    color: white;
+    text-shadow: 0px 0px 10px rgba(255, 255, 255, 0.3);
+
+}
+
+.searchInput {
+    border: transparent;
+    border-radius: 5px;
+    padding: 15px;
+    box-shadow: var(--lesser-shadow);
+}

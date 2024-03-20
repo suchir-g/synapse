@@ -5,7 +5,7 @@ import { doc, getDoc, collection, updateDoc, setDoc } from "firebase/firestore";
 import { flashcardsFromSet, usernameFromUserID } from "../../utilities";
 import { sanitizeHTML } from "../../utilities";
 
-import styles from "../../css/revision/flashcards/FlashcardSet.module.css";
+import styles from "./FlashcardSet.module.css";
 
 import Flashcard from "../revision/flashcards/Flashcard";
 
@@ -188,9 +188,6 @@ const FlashcardSet = ({ isAuth }) => {
           </span>
         ))}
       </div>
-      <button className={styles.button} onClick={handleInterleavingToggle}>
-        {isInterleavingEnabled ? "Disable" : "Enable"} Interleaving
-      </button>
 
       <hr />
 
@@ -207,35 +204,45 @@ const FlashcardSet = ({ isAuth }) => {
       </div>
       <div className={styles.linksContainer}>
         <button
-          onClick={() => navigate(`/${params.setID}/flashcards`)}
-          className={styles.tabButton}
+          className={styles.interleavingButton}
+          onClick={handleInterleavingToggle}
         >
-          Flashcards
+          {isInterleavingEnabled ? "Disable" : "Enable"} Interleaving
         </button>
-        <button
-          onClick={() => navigate(`/${params.setID}/quiz`)}
-          className={styles.tabButton}
-        >
-          Quiz
-        </button>
-        <button
-          onClick={() => navigate(`/${params.setID}/study`)}
-          className={styles.tabButton}
-        >
-          Memorise
-        </button>
-        <button
-          onClick={() => navigate(`/${params.setID}/spacedRepetition`)}
-          className={styles.tabButton}
-        >
-          Spaced repetition
-        </button>
-        <button
-          onClick={() => navigate(`/${params.setID}/meteors`)}
-          className={styles.tabButton}
-        >
-          Meteors
-        </button>
+        <div className={styles.tagSection}>
+          <button
+            onClick={() => navigate(`/${params.setID}/flashcards`)}
+            className={styles.tabButton}
+          >
+            Flashcards
+          </button>
+          <button
+            onClick={() => navigate(`/${params.setID}/quiz`)}
+            className={styles.tabButton}
+          >
+            Quiz
+          </button>
+          <button
+            onClick={() => navigate(`/${params.setID}/study`)}
+            className={styles.tabButton}
+          >
+            Memorise
+          </button>
+          <button
+            onClick={() => navigate(`/${params.setID}/spacedRepetition`)}
+            className={styles.tabButton}
+          >
+            Spaced repetition
+          </button>
+          <button
+            onClick={() => navigate(`/${params.setID}/meteors`)}
+            className={styles.tabButton}
+          >
+            Meteors
+          </button>
+        </div>
+      </div>
+      <div className={styles.linksContainerSecondary}>
         <button
           onClick={() => navigate(`/sets/${params.setID}/edit`)}
           className={styles.editButton}

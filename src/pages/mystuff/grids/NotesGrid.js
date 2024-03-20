@@ -10,7 +10,7 @@ import {
 } from "firebase/firestore";
 import { db } from "../../../config/firebase";
 import { sanitizeAndTruncateHtml } from "../../../utilities";
-import styles from "../../../css/grids/NotesGrid.module.css"
+import styles from "./NotesGrid.module.css";
 
 const NotesGrid = ({ currentUserID }) => {
   const [allNotes, setAllNotes] = useState([]);
@@ -49,7 +49,11 @@ const NotesGrid = ({ currentUserID }) => {
     <section className={styles.cards_grid}>
       {allNotes.length > 0 ? (
         allNotes.map((note, index) => (
-          <Link to={`/notes/${note.id}`} key={index} className={styles.card_link}>
+          <Link
+            to={`/notes/${note.id}`}
+            key={index}
+            className={styles.card_link}
+          >
             <div className={styles.card}>
               <h3 className={styles.card_title}>{note.title}</h3>
               <div

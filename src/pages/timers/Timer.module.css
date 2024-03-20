@@ -1,0 +1,16 @@
+.title {
+    font-weight: 600;
+}
+
+.button {
+    border: transparent;
+    border-radius: 5px;
+    padding: 10px 15px;
+    margin: 3px;
+}
+
+.timeLeft {
+    font-weight: 700;
+    font-size: 32px;
+    margin: 20px 0px 20px 0px;
+}

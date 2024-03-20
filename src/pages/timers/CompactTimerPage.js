@@ -65,7 +65,7 @@ const CompactTimerPage = () => {
 
   return (
     <div className={styles.container}>
-      <h2 className={styles.header}>Compact Timer</h2>
+      <h2 className={styles.header}> Timer</h2>
       <select
         className={styles.input}
         value={selectedConfigId}
@@ -104,7 +104,6 @@ const CompactTimerPage = () => {
       )}
       <Timer
         duration={duration}
-        title={configName}
         isTimerRunning={isTimerRunning}
         onTimerFinish={() => setIsTimerRunning(false)}
         onTimerStart={() => {}} // Timer start logic is now handled by config change

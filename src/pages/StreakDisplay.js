@@ -13,9 +13,6 @@ const StreakDisplay = ({ userData, hasRevisedToday }) => {
   return (
     <div className={styles.card}>
       <div className={styles.welcomeMessage}>
-        <h1 className={styles.welcomeText}>
-          Hello, {userData ? userData.firstName : "there"}!
-        </h1>
         <p className={styles.muted}>
           You have {hasRevisedToday ? "" : "not "}revised today.
         </p>
@@ -35,9 +32,6 @@ const StreakDisplay = ({ userData, hasRevisedToday }) => {
           {userData ? userData.streak : 0}
         </span>
       </div>
-      <button className={styles.button} onClick={() => navigate("/mystuff")}>
-        Go to My Stuff
-      </button>
     </div>
   );
 };

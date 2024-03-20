@@ -1,0 +1,5 @@
+.importButton {
+    background-color: var(--muted-background);
+    padding: 10px 15px;
+    margin: 10px;
+}
