@@ -23,6 +23,7 @@ const FlashcardSet = ({ isAuth }) => {
   const [isLoading, setIsLoading] = useState(true);
 
   const [tags, setTags] = useState([]);
+  const [copySuccess, setCopySuccess] = useState("");
 
   useEffect(() => {
     const collectData = async () => {
@@ -162,6 +163,18 @@ const FlashcardSet = ({ isAuth }) => {
     );
   };
 
+  const copyLinkToClipboard = async () => {
+    try {
+      const url = window.location.href; // Gets the current URL
+      await navigator.clipboard.writeText(url); // Copies the URL to the clipboard
+      setCopySuccess("Link copied to clipboard!"); // Update state to show success message
+      setTimeout(() => setCopySuccess(""), 2000); // Hide message after 2 seconds
+    } catch (err) {
+      console.error("Failed to copy: ", err); // Log error if copying fails
+      setCopySuccess("Failed to copy link"); // Update state to show failure message
+    }
+  };
+
   if (isLoading) {
     return <div>Loading...</div>;
   }
@@ -249,6 +262,14 @@ const FlashcardSet = ({ isAuth }) => {
         >
           &#x270E; {/* This is the Unicode character for a pencil */}
         </button>
+        <button
+          onClick={copyLinkToClipboard}
+          className={styles.shareButton}
+          title="Share this set"
+        >
+          Share
+        </button>
+        {copySuccess && <div className={styles.copyStatus}>{copySuccess}</div>}
       </div>
       <hr />
 
