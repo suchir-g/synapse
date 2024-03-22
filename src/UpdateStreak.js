@@ -13,7 +13,7 @@ export const checkAndResetStreak = async (userID) => {
     return; // Exit the function early
   }
   console.log("hello")
-
+  console.log("hello 2")
   const usersCollectionRef = collection(db, "users");
   const q = query(usersCollectionRef, where("userID", "==", userID));
 
