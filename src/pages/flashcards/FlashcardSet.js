@@ -30,6 +30,7 @@ const FlashcardSet = ({ isAuth }) => {
       if (!isAuth) {
         navigate("/");
       }
+      console.log("Hello world")
       const setRef = doc(db, "flashcardSets", params.setID);
       const usersRef = collection(db, "users");
       const setSnapshot = await getDoc(setRef);
