@@ -47,9 +47,6 @@ const FlashcardSet = ({ isAuth }) => {
     });
 
     const collectData = async () => {
-      if (!isAuth) {
-        navigate("/");
-      }
       const setRef = doc(db, "flashcardSets", params.setID);
       const usersRef = collection(db, "users");
       const setSnapshot = await getDoc(setRef);
