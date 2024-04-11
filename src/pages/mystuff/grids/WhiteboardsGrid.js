@@ -4,7 +4,7 @@ import { collection, query, getDocs, where } from "firebase/firestore";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth, db } from "../../../config/firebase";
 import styles from "./WhiteboardsGrid.module.css";
-
+import MyStuffLoadingComponent from "../MyStuffLoadingComponent"
 const WhiteboardsGrid = () => {
   const [whiteboards, setWhiteboards] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -44,7 +44,7 @@ const WhiteboardsGrid = () => {
   }, []);
 
   if (isLoading) {
-    return <div>Loading whiteboards...</div>;
+    return <MyStuffLoadingComponent />;
   }
 
   return (
@@ -63,7 +63,7 @@ const WhiteboardsGrid = () => {
                   <img
                     src={whiteboard.downloadURL}
                     alt="Preview"
-                    style={{ width: "100%", height: "auto" }} // Adjust size as needed
+                    style={{ width: "100%", height: "auto" }} 
                     className={styles.whiteboard_preview_image}
                   />
                 )}
@@ -76,7 +76,7 @@ const WhiteboardsGrid = () => {
       )}
       <button
         onClick={() => navigate("/whiteboards/post")}
-        className={styles.create_whiteboard_btn}
+        className={styles.createWhiteboardButton}
       >
         Create Whiteboard
       </button>

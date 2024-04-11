@@ -1,6 +1,6 @@
 .whiteboards_grid_container {
   margin: 20px;
-  font_family: 'Roboto Slab', serif;
+  height: max(auto, 90vh);
 }
 
 .whiteboards_grid {
@@ -10,38 +10,29 @@
 }
 
 .whiteboard_card {
-  background-color: #f8f9fa; /* Light grey background to match the Flashcards */
-  border: 1px solid #e0e0e0; /* Keeping the border color consistent */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Slightly lighter shadow for a softer look */
+  background-color: #f8f9fa; 
+  border: 1px solid #e0e0e0; 
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
   border-radius: 10px;
   padding: 16px;
   transition: box-shadow 0.3s ease-in-out;
 }
 
 .whiteboard_card:hover {
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); /* Slightly darker shadow on hover for a subtle lift effect */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); 
 }
-
-.create_whiteboard_btn {
-  background-color: #ff4e00; /* Keeping the green color for the button */
-  color: white;
-  padding: 8px 16px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  margin-top: 20px;
-  font-weight: bold;
-  font-size: 0.85em;
-  font-family: 'Roboto Slab', serif;
-}
-
-.create_whiteboard_btn:hover {
-  background-color: #0b333d; /* A darker green on hover */
-}
-
 .card_title {
   font-size: 19px;
   margin-bottom: 5px;
   flex-grow: 1;
   font-weight: 500;
+}
+
+.createWhiteboardButton {
+  background-color: #e51022;
+  color: white;
+  padding: 15px 15px;
+  border: transparent;
+  border-radius: 5px;
+  margin-top: 20px;
 }

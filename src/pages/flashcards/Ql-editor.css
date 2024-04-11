@@ -1,0 +1,10 @@
+.ql-editor {
+    font-size: 17px;
+    border: 1px solid #f1f1f1;
+    border-radius: 5px;
+}
+
+.ql-editor .ql-toolbar {
+    z-index: 9999;
+  }
+  

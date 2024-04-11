@@ -8,6 +8,7 @@ import { sanitizeHTML } from "../../utilities";
 import styles from "./FlashcardSet.module.css";
 
 import Flashcard from "../revision/flashcards/Flashcard";
+import LoadingComponent from "LoadingComponent";
 
 const FlashcardSet = ({ isAuth }) => {
   const params = useParams();
@@ -25,22 +26,40 @@ const FlashcardSet = ({ isAuth }) => {
   const [tags, setTags] = useState([]);
   const [copySuccess, setCopySuccess] = useState("");
 
+  const [isCurrentUserOwner, setIsCurrentUserOwner] = useState(false);
+
   useEffect(() => {
+
+    const unsubscribe = auth.onAuthStateChanged(async (user) => {
+      if (user) {
+        const setRef = doc(db, "flashcardSets", params.setID);
+        const setSnapshot = await getDoc(setRef);
+
+        if (setSnapshot.exists()) {
+          const setData = setSnapshot.data();
+          setIsCurrentUserOwner(setData.owners.includes(user.uid));
+        } else {
+          setIsCurrentUserOwner(false);
+        }
+      } else {
+        setIsCurrentUserOwner(false);
+      }
+    });
+
     const collectData = async () => {
       if (!isAuth) {
         navigate("/");
       }
-      console.log("Hello world")
       const setRef = doc(db, "flashcardSets", params.setID);
       const usersRef = collection(db, "users");
       const setSnapshot = await getDoc(setRef);
 
-      if (setSnapshot.exists() && isAuth) {
+      if (setSnapshot.exists()) {
         const setData = setSnapshot.data();
 
         // this is making it so the last viewed time is set properly, but ONLY if the viewer is the owner.
         // this stops random people from setting the last viewed time.
-        if (setData.owners.includes(auth.currentUser.uid)) {
+        if (isAuth && setData.owners.includes(auth.currentUser.uid)) {
           await updateDoc(setRef, {
             viewed: new Date(),
           });
@@ -134,7 +153,7 @@ const FlashcardSet = ({ isAuth }) => {
           revisionSchedule: schedule,
         });
       } else if (newInterleavingStatus) {
-        // User does not have a revision schedule, but wants to enable interleaving
+        // user does not have a revision schedule, but wants to enable interleaving
         const today = new Date().toISOString().split("T")[0];
         await setDoc(userScheduleRef, {
           revisionSchedule: [
@@ -168,16 +187,14 @@ const FlashcardSet = ({ isAuth }) => {
     try {
       const url = window.location.href; // Gets the current URL
       await navigator.clipboard.writeText(url); // Copies the URL to the clipboard
-      setCopySuccess("Link copied to clipboard!"); // Update state to show success message
-      setTimeout(() => setCopySuccess(""), 2000); // Hide message after 2 seconds
+      alert("Link copied to clipboard!")
     } catch (err) {
       console.error("Failed to copy: ", err); // Log error if copying fails
-      setCopySuccess("Failed to copy link"); // Update state to show failure message
     }
   };
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <LoadingComponent />;
   }
 
   return (
@@ -191,17 +208,19 @@ const FlashcardSet = ({ isAuth }) => {
           </i>
         ))}
       </div>
-      <div className={styles.tags}>
-        <strong>Tags: </strong>
-        {tags.map((tag, index) => (
-          <span key={index} className={styles.tag}>
-            <Link to={`/tags/${tag.id}`} className={styles.tagLink}>
-              {tag.name}
-            </Link>
-            {index < tags.length - 1 ? ", " : ""}
-          </span>
-        ))}
-      </div>
+      {tags.length > 0 && (
+          <div className={styles.tags}>
+          <strong>Tags: </strong>
+          {tags.map((tag, index) => (
+            <span key={index} className={styles.tag}>
+              <Link to={`/tags/${tag.id}`} className={styles.tagLink}>
+                {tag.name}
+              </Link>
+              {index < tags.length - 1 ? ", " : ""}
+            </span>
+          ))}
+        </div>
+        )}
 
       <hr />
 
@@ -217,12 +236,12 @@ const FlashcardSet = ({ isAuth }) => {
         <button onClick={handleNextFlashcard}>&gt;</button>
       </div>
       <div className={styles.linksContainer}>
-        <button
+        {isCurrentUserOwner && <button
           className={styles.interleavingButton}
           onClick={handleInterleavingToggle}
         >
           {isInterleavingEnabled ? "Disable" : "Enable"} Interleaving
-        </button>
+        </button>}
         <div className={styles.tagSection}>
           <button
             onClick={() => navigate(`/${params.setID}/flashcards`)}
@@ -257,12 +276,12 @@ const FlashcardSet = ({ isAuth }) => {
         </div>
       </div>
       <div className={styles.linksContainerSecondary}>
-        <button
+        {isCurrentUserOwner && <button
           onClick={() => navigate(`/sets/${params.setID}/edit`)}
           className={styles.editButton}
         >
           &#x270E; {/* This is the Unicode character for a pencil */}
-        </button>
+        </button>}
         <button
           onClick={copyLinkToClipboard}
           className={styles.shareButton}
@@ -270,7 +289,6 @@ const FlashcardSet = ({ isAuth }) => {
         >
           Share
         </button>
-        {copySuccess && <div className={styles.copyStatus}>{copySuccess}</div>}
       </div>
       <hr />
 

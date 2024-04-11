@@ -11,6 +11,7 @@ import {
 import { db } from "../../../config/firebase";
 import { sanitizeAndTruncateHtml } from "../../../utilities";
 import styles from "./NotesGrid.module.css";
+import MyStuffLoadingComponent from "../MyStuffLoadingComponent";
 
 const NotesGrid = ({ currentUserID }) => {
   const [allNotes, setAllNotes] = useState([]);
@@ -42,7 +43,7 @@ const NotesGrid = ({ currentUserID }) => {
   }, [currentUserID]);
 
   if (isLoading) {
-    return <div>Loading notes...</div>;
+    return <MyStuffLoadingComponent />;
   }
 
   return (

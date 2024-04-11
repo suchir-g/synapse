@@ -4,6 +4,8 @@ import { db } from "../../config/firebase";
 import { collection, query, getDocs, where, doc, getDoc } from "firebase/firestore";
 import { sanitizeAndTruncateHtml } from '../../utilities';
 
+
+
 const ShowTag = ({isAuth}) => {
 
   const navigate = useNavigate();
@@ -20,7 +22,7 @@ const ShowTag = ({isAuth}) => {
   useEffect(() => {
     const fetchTagData = async () => {
       try {
-        // Get the tag document by ID
+        // get the tag document by ID
         const tagDocRef = doc(db, "tags", tagID);
         const tagDocSnap = await getDoc(tagDocRef);
 

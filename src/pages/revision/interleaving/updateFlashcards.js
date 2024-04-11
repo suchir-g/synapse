@@ -42,6 +42,7 @@ const isSameDay = (dateStr1, dateStr2) => {
     new Date(dateStr1).toDateString() === new Date(dateStr2).toDateString()
   );
 };
+
 export const updateRevisionDates = async (flashcardId, actualRevisionDate) => {
   try {
     const flashcardRef = doc(db, "flashcardSets", flashcardId);
@@ -61,7 +62,7 @@ export const updateRevisionDates = async (flashcardId, actualRevisionDate) => {
         return;
       }
 
-      // Always update the flashcard's last revised date
+      // always update the flashcard's last revised date
       transaction.update(flashcardRef, { revised: actualRevisionDate });
 
       let revisionSchedule = scheduleDoc.data()?.revisionSchedule || [];
@@ -70,51 +71,44 @@ export const updateRevisionDates = async (flashcardId, actualRevisionDate) => {
       );
 
       if (!scheduleItem) {
-        // If no schedule exists, create a new schedule item with the next revision date
+        // if no schedule exists, create a new schedule item with the next revision date
         const nextRevisionDate = calculateNextRevisionDate(
           actualRevisionDate,
           1
         );
         scheduleItem = {
           flashcardId: flashcardId,
-          revisionDates: [nextRevisionDate], // Start with the next revision date
+          revisionDates: [nextRevisionDate], // start with the next revision date
           numberOfRevisions: 1,
         };
         revisionSchedule.push(scheduleItem);
       } else {
-        // Check if actualRevisionDate is in the revisionDates array
+        // check if actualRevisionDate is in the revisionDates array
         const revisionIndex = scheduleItem.revisionDates.findIndex((date) =>
           isSameDay(date, actualRevisionDate)
         );
 
+        // remove the old revision date, if it exists
         if (revisionIndex !== -1) {
-          // If revised on a scheduled date, remove that date
           scheduleItem.revisionDates.splice(revisionIndex, 1);
         }
 
-        // Regardless of whether a date was popped or not, calculate the next revision date
-        // The calculation is based on the existing number of revisions plus one for the next step
+        // calculate the next revision date
         const nextRevisionDate = calculateNextRevisionDate(
           actualRevisionDate,
           scheduleItem.numberOfRevisions + 1
         );
+
+        // add the new revision date
         if (!scheduleItem.revisionDates.includes(nextRevisionDate)) {
           scheduleItem.revisionDates.push(nextRevisionDate);
         }
 
-        // Adjust numberOfRevisions only if a date was popped
-        if (revisionIndex !== -1) {
-          scheduleItem.numberOfRevisions = Math.max(
-            1,
-            scheduleItem.numberOfRevisions
-          );
-        } else {
-          // Increment if we're adding a new date not based on a pop
-          scheduleItem.numberOfRevisions++;
-        }
+        // increment numberOfRevisions
+        scheduleItem.numberOfRevisions++;
       }
 
-      // Update the revision schedule with the new or modified schedule item
+      // update the revision schedule with the new or modified schedule item
       transaction.set(userScheduleRef, { revisionSchedule }, { merge: true });
     });
 

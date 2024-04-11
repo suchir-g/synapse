@@ -1,9 +1,11 @@
 import React, { useEffect, useState, useRef } from "react";
 import Phaser from "phaser";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import { doc, getDoc, collection, getDocs } from "firebase/firestore";
 import { db } from "../../../config/firebase";
 import { sanitizeAndTruncateHtml } from "../../../utilities";
+
+import styles from "./MeteorQuiz.module.css"
 
 class MyScene extends Phaser.Scene {
   constructor() {
@@ -32,9 +34,9 @@ class MyScene extends Phaser.Scene {
       meteor.flashcardQuestion = sanitizeAndTruncateHtml(randomFlashcard.question);
       meteor.flashcardAnswer = randomFlashcard.answer;
 
-      // Create a text object for the meteor
+      // create a text object for the meteor
       const text = this.add.text(x, -50, sanitizeAndTruncateHtml(randomFlashcard.question), {
-        font: "16px Arial",
+        font: "18px Inter",
         fill: "#ffffff",
       });
       meteor.setData("text", text);
@@ -68,16 +70,16 @@ class MyScene extends Phaser.Scene {
       if (meteor && meteor.active && meteor.y > this.sys.game.config.height) {
         const text = meteor.getData("text");
         if (text) {
-          text.destroy(); // Destroy the text object
+          text.destroy(); // destroy the text object
         }
         meteor.destroy();
 
-        // Decrease lives here
+        // decrease lives here
         if (typeof window.decreaseLives === "function") {
           window.decreaseLives();
         }
       } else if (meteor && meteor.active) {
-        // Update text position
+        // update text position
         const text = meteor.getData("text");
         if (text) {
           text.setPosition(meteor.x, meteor.y);
@@ -101,6 +103,8 @@ const MeteorQuiz = () => {
 
   const { setID } = useParams();
   const gameInstance = useRef(null);
+
+  const navigate = useNavigate();
 
   const decreaseLives = () => {
     setLives((prevLives) => {
@@ -137,7 +141,7 @@ const MeteorQuiz = () => {
 
   useEffect(() => {
     if (flashcards.length > 0) {
-      // Ensure that the scene knows how to update the question based on flipping
+      // ensure that the scene knows how to update the question based on flipping
       MyScene.prototype.updateCurrentQuestion = (question, answer) => {
         const textToShow = flipped ? answer : question;
         setCurrentQuestionRef.current(textToShow);
@@ -180,7 +184,7 @@ const MeteorQuiz = () => {
   };
 
   const handleFlip = () => {
-    setFlipped(!flipped); // Toggle between term and definition
+    setFlipped(!flipped); // toggle between term and definition
     const currentMeteor = findClosestMeteor();
     if (currentMeteor) {
       const textToShow = flipped
@@ -217,34 +221,34 @@ const MeteorQuiz = () => {
       const plainAnswer = getTextFromHtml(meteor.flashcardAnswer);
 
       if (userAnswer.toLowerCase() === plainAnswer.toLowerCase()) {
-        // Correct answer
-        meteor.setTint(0x00ff00); // Green tint for correct answer
-        meteor.destroy(); // Destroy the meteor
+        // correct answer
+        meteor.setTint(0x00ff00); // green tint for correct answer
+        meteor.destroy(); // destroy the meteor
         const text = meteor.getData("text");
         if (text) {
-          text.destroy(); // Also destroy the associated text
+          text.destroy(); // also destroy the associated text
         }
         answeredCorrectly = true;
-        setScore((prevScore) => prevScore + 1); // Increment score
-        setUserAnswer(""); // Reset user input
-        break; // Exit the loop after destroying a meteor
+        setScore((prevScore) => prevScore + 1); // increment score
+        setUserAnswer(""); // reset user input
+        break; // exit the loop after destroying a meteor
       }
     }
 
     if (!answeredCorrectly) {
       console.error("Answer was incorrect or no matching question found.");
-      setFlashRed(true); // Trigger the red flash
-      setTimeout(() => setFlashRed(false), 500); // Reset the flash state after 500ms
+      setFlashRed(true); // trigger the red flash
+      setTimeout(() => setFlashRed(false), 500); // reset the flash state after 500ms
       setLives((prevLives) => {
         const newLives = prevLives - 1;
         if (newLives <= 0) {
-          setGameOver(true); // End the game if lives reach 0
+          setGameOver(true); // end the game if lives reach 0
           console.log("It's over");
         }
         return newLives;
       });
     }
-    setUserAnswer(""); // Reset user input regardless of whether the answer was correct
+    setUserAnswer(""); // reset user input regardless of whether the answer was correct
   };
 
   const handleKeyDown = (event) => {
@@ -255,18 +259,26 @@ const MeteorQuiz = () => {
 
   if (gameOver) {
     return (
-      <div>
-        It's over
-        <div>Score: {score}</div> {/* Display the current score */}
+      <div className={styles.mainContainer}>
+        <span className={styles.flashcard}>
+          <h1 className={styles.finishedText}>It's over</h1>
+          <p className={styles.mutedText}>Thanks for playing - if you want more info on how this game works visit <Link className={styles.learnLink}>this page</Link></p>
+          <p>Score: {score}</p>
+          <div>
+            <button className={`${styles.restartButton} ${styles.afterButton}`} onClick={() => { navigate(0) }}> Restart</button>
+            <button className={`${styles.backButton} ${styles.afterButton}`} onClick={() => navigate(-1)}>Back</button>
+          </div>
+        </span>
       </div>
     );
   } else {
     return (
       <div
         style={{
-          backgroundColor: flashRed ? "red" : "transparent",
+          backgroundColor: flashRed ? "#ffaaaa" : "transparent",
           transition: "background-color 500ms",
         }}
+        className={styles.mainContainer}
       >
         <div id="phaser-game" style={{ width: "800px", height: "600px" }}></div>
         <input
@@ -274,10 +286,11 @@ const MeteorQuiz = () => {
           value={userAnswer}
           onChange={handleAnswerChange}
           onKeyDown={handleKeyDown}
+          className={styles.answerInput}
+          placeholder="Answer"
         />
-        <button onClick={handleAnswerSubmit}>Submit Answer</button>
+        <button onClick={handleAnswerSubmit} className={styles.submitButton}>Submit Answer</button>
         <div>Lives: {lives}</div>
-        <button onClick={handleFlip}>Flip</button>
       </div>
     );
   }

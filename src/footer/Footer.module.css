@@ -1,0 +1,19 @@
+.header {
+    font-weight: 700;
+    text-shadow: 0px 0px 23.6px rgba(255, 255, 255, 0.6);
+}
+
+.mainContainer {
+    background-color: var(--footer-color);
+    display: flex;
+    flex-direction: row;
+    padding: 50px;
+    justify-content: space-evenly;
+    border-bottom: 2px var(--muted) solid;
+}
+
+
+.item {
+    color: white;
+    margin: 10px 0px 20px 0px;
+}

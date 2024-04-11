@@ -1,3 +1,4 @@
+
 import "./css/App.css";
 import "./css/Reset.css";
 
@@ -50,11 +51,20 @@ import ViewExams from "pages/exams/ViewExams";
 
 import Navbar from "navbar/Navbar";
 
+import PageNotFound from "pages/PageNotFound";
+
+import AboutMe from "pages/about/AboutMe";
+import AboutSynapse from "pages/about/AboutSynapse";
+
 import { useState } from "react";
+import { Footer } from "footer/Footer";
+import TopTips from "pages/learn/TopTips";
 
 function App() {
   const [isAuth, setIsAuth] = useState(localStorage.getItem("isAuth"));
   // this will act as a sitewise marker which tells us if we are logged in or not
+
+  console.log("helo")
 
   return (
     <div className="mainContainer">
@@ -69,6 +79,7 @@ function App() {
           />
           <Route path="/login" element={<Login setIsAuth={setIsAuth} />} />
           <Route path="/mystuff" element={<MyStuff isAuth={isAuth} />} />
+          <Route path="/mystuff/:sectionName" element={<MyStuff isAuth={isAuth} />} />
 
           <Route path="/post" element={<Post isAuth={isAuth} />} />
 
@@ -111,6 +122,8 @@ function App() {
 
           {/* all the revision methods */}
 
+          <Route path="/learn/flashcards" element={<>HELLO!</>} />
+
           <Route path="/:setID/flashcards" element={<SimpleDisplay />} />
           <Route path="/:setID/quiz" element={<Quiz />} />
           <Route path="/:setID/study" element={<StudyFlashcards />} />
@@ -148,12 +161,34 @@ function App() {
             element={<CreateTodoList isAuth={isAuth} />}
           />
           <Route path="/todos" element={<ShowTodos isAuth={isAuth} />} />
-          <Route path="/todos/:todoID" element={<ViewTodo />}/>
+          <Route path="/todos/:todoID" element={<ViewTodo />} />
 
           {/* exam calendar */}
 
-          <Route path="/exams" element={<ViewExams isAuth={isAuth}/>}/>
+          <Route path="/exams" element={<ViewExams isAuth={isAuth} />} />
+
+          {/* About */}
+
+          <Route path="/aboutme" element={<AboutMe />} />
+          <Route path="/aboutus" element={<AboutSynapse />} />
+
+          {/* Learn */}
+
+          <Route path="/toptips" element={<TopTips />} />
+
+          <Route path="/learn/flashcards" element />
+
+          <Route path="/research" element={<AboutMe />} /> 
+
+
+          {/* Credits */}
+
+          <Route path="/credits" element={<AboutMe />} />
+
+          {/* 404 */}
+          <Route path="*" element={<PageNotFound />} />
         </Routes>
+        <Footer />
       </Router>
     </div>
   );

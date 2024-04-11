@@ -75,3 +75,25 @@
     padding: 15px;
     box-shadow: var(--lesser-shadow);
 }
+
+.postButton {
+    padding: 10px 15px;
+    background-color: var(--primary);
+    color: white;
+    border: transparent;
+    border-radius: 5px;
+    display: block;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: var(--shadow);
+    font-size: 20px;
+    font-weight: 600;
+    text-shadow: 0px 0px 23.6px rgba(255, 255, 255, 0.311);
+    position: fixed;
+    width: 150px;
+    height:60px;
+    top: 85%;
+    left: 85%;
+
+}

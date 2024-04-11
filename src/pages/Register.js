@@ -23,7 +23,7 @@ const Register = ({ setIsAuth }) => {
           localStorage.setItem("isAuth", true);
           setIsAuth(true);
 
-          // Update to include first name, last name, and year group
+          // update to include first name, last name, and year group
           addDoc(usersCollectionRef, {
             username,
             email,
@@ -38,14 +38,14 @@ const Register = ({ setIsAuth }) => {
           await addDoc(todoListsRef, {
             owner: auth.currentUser.uid,
             name: "Main",
-            todos: [], // Initialize with an empty array
-            main: true, // Indicates this is the primary todo list for the user
+            todos: [], // initialize with an empty array
+            main: true, // indicates this is the primary todo list for the user
             createdAt: serverTimestamp(),
           });
         }
       );
     } catch (e) {
-      console.log(e); // Improve error handling
+      console.log(e); // improve error handling
     }
   };
 
@@ -68,13 +68,13 @@ const Register = ({ setIsAuth }) => {
         await addDoc(todoListsRef, {
           owner: auth.currentUser.uid,
           name: "Main",
-          todos: [], // Initialize with an empty array
-          main: true, // Indicates this is the primary todo list for the user
+          todos: [], // initialize with an empty array
+          main: true, // indicates this is the primary todo list for the user
           createdAt: serverTimestamp(),
         });
       });
     } catch (e) {
-      console.log(e); // Improve error handling
+      console.log(e); // improve error handling
     }
   };
 

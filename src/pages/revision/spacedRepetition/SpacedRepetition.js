@@ -9,7 +9,8 @@ import {
   getDoc,
 } from "firebase/firestore";
 import { db } from "../../../config/firebase";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
+import styles from "./SpacedRepetition.module.css"
 
 const SpacedRepetition = () => {
   const [cards, setCards] = useState([]);
@@ -80,46 +81,36 @@ const SpacedRepetition = () => {
     fetchFlashcards(); // refetch or reset the flashcards to their initial state
   };
 
-  const renderCompletionScreen = () => (
-    <div>
-      <h2>Congratulations! You've completed the flashcard set.</h2>
-      <button onClick={handleRestart}>Restart</button>
-      <button onClick={() => navigate(-1)}>Go Back</button>
-    </div>
-  );
-
-  const renderFlashcards = () => (
-    <div>
-      <Flashcard
-        key={cards[0].id}
-        flashcard={cards[0]}
-        isQuestionFirst={true}
-      />
-      {renderConfidenceButtons()}
-    </div>
-  );
-
-  const renderConfidenceButtons = () => (
-    <div>
-      <p>How confident are you with this card?</p>
-      {[1, 2, 3, 4].map((level) => (
-        <button key={level} onClick={() => handleConfidence(level)}>
-          {level}
-        </button>
-      ))}
-    </div>
-  );
-
   if (isLoading) {
     return <div>Loading flashcards...</div>;
   }
 
   return (
-    <div>
+    <div className={styles.mainContainer}>
       {completed ? (
-        renderCompletionScreen()
+        <div className={styles.finishedFlashcard}>
+          <h2 className={styles.finishedText}>Congratulations! You've completed the flashcard set.</h2>
+          <p className={styles.mutedText}>Go to <Link className={styles.learnLink} to="/learn/revise">this page </Link>to learn how to effectively revise material.</p>
+          <button className={`${styles.moveOnButton} ${styles.restartButton}`} onClick={handleRestart}>Restart</button>
+          <button className={styles.moveOnButton} onClick={() => navigate(-1)}>Go Back</button>
+        </div>
       ) : cards.length > 0 ? (
-        renderFlashcards()
+        <div className={styles.flashcard}>
+          <Flashcard
+            key={cards[0].id}
+            flashcard={cards[0]}
+            isQuestionFirst={true}
+            size={{ width: "40vw", height: "24.72vw" }}
+          />
+          <div className={styles.confidenceLevel}>
+            <p>How confident are you with this card?</p>
+            <div> {[1, 2, 3, 4].map((level) => (
+              <button key={level} onClick={() => handleConfidence(level)} className={styles.confidenceButton}>
+                {level}
+              </button>
+            ))}</div>
+          </div>
+        </div>
       ) : (
         <p>No flashcards found.</p>
       )}

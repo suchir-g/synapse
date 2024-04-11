@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { db, auth } from "../../config/firebase";
 import { collection, addDoc, query, where, getDocs, serverTimestamp } from "firebase/firestore";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import Select from "react-select";
 import { parseQuizletData } from "../../quizletParser"
+
+import styles from "./ImportFlashcards.module.css"
 
 const ImportFlashcards = ({ isAuth }) => {
   const navigate = useNavigate();
@@ -109,45 +111,68 @@ const ImportFlashcards = ({ isAuth }) => {
   };
 
   return (
-    <div>
-      <form onSubmit={handleImportSet}>
-        {/* input fields for title, description, and tags */}
+    <div className={styles.mainContainer}>
+      <div className={styles.postFlashcardsContainer}>
+        <h1 className={styles.postFlashcards}>
+          Import Flashcards
+        </h1>
+        <p className={styles.mutedText}>Go to <Link className={styles.learnLink} to="/learn/revise">this page </Link>to learn how to effectively revise material.</p>
 
-        <input
-          type="text"
-          value={setTitle}
-          onChange={(e) => setSetTitle(e.target.value)}
-          placeholder="Set Title"
-          required
-        />
-        <textarea
-          value={setDescription}
-          onChange={(e) => setSetDescription(e.target.value)}
-          placeholder="Set Description"
-          required
-        />
+      </div>
+      <div className={styles.mainContent}>
+        <form onSubmit={handleImportSet}>
+          {/* input fields for title, description, and tags */}
 
-        <div>
-          <label>Select Tags:</label>
-          <Select
-            options={tagsOptions} // set options for react-select
-            isMulti
-            onChange={setSelectedTags} // update state when the user selects or unselects a tag
-            value={selectedTags} // control the current value
-            getOptionLabel={(option) => option.label} // defines how to display the option label
-            getOptionValue={(option) => option.value} // defines how to get the option value
+          <div className={styles.titleTagSection}>
+            <div className={styles.formGroup}>
+              <label className={styles.mutedText}>Title</label>
+              <input
+                type="text"
+                value={setTitle}
+                onChange={(e) => setSetTitle(e.target.value)}
+                placeholder="Set Title"
+                required
+                className={styles.setName}
+              />
+            </div>
+            <div className={styles.formGroup}>
+              <label className={styles.mutedText}>Select Tags:</label>
+              <Select
+                options={tagsOptions} // set options for react-select
+                isMulti
+                onChange={setSelectedTags} // update state when the user selects or unselects a tag
+                value={selectedTags} // control the current value
+                getOptionLabel={(option) => option.label} // defines how to display the option label
+                getOptionValue={(option) => option.value} // defines how to get the option value
+                className={styles.tagsSelect}
+              />
+            </div>
+          </div>
+          <div className={styles.formGroup}>
+            <label className={styles.mutedText}>
+              Description
+            </label>
+            <textarea
+              value={setDescription}
+              onChange={(e) => setSetDescription(e.target.value)}
+              placeholder="Set Description"
+              required
+              className={styles.descriptionInput}
+            />
+          </div>
+
+
+          <textarea
+            value={quizletData}
+            onChange={(e) => setQuizletData(e.target.value)}
+            placeholder="Paste your Quizlet flashcards here"
+            required
+            className={styles.quizletFlashcards}
           />
-        </div>
 
-        <textarea
-          value={quizletData}
-          onChange={(e) => setQuizletData(e.target.value)}
-          placeholder="Paste your Quizlet flashcards here"
-          required
-        />
-
-        <button type="submit">Import Set</button>
-      </form>
+          <button type="submit" className={`${styles.bottomButton} ${styles.createButton}`}>Import Set</button>
+        </form>
+      </div>
     </div>
   );
 };

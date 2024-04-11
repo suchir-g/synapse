@@ -1,0 +1,66 @@
+.mainContainer {
+    display: flex;
+    flex-direction: column;
+    width: 100vw;
+    height: 100vh;
+    justify-content: center;
+    align-items: center;
+}
+
+.flashcard {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.confidenceLevel {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.confidenceButton {
+    background-color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+    box-shadow: var(--lesser-shadow);
+    margin: 15px 10px;
+}
+
+.finishedText {
+    font-weight: 500;
+    font-size: 25px;
+}
+
+.moveOnButton {
+    background-color: white;
+    border: none;
+    border-radius: 5px; 
+    box-shadow: var(--lesser-shadow);
+    padding: 10px 15px;
+    margin: 10px;
+}
+
+.mutedText {
+    color: var(--muted);
+    margin: 10px 0px 10px 0px;
+}
+
+.learnLink {
+    color: var(--primary);
+}
+
+.finishedFlashcard {
+    background-color: white;
+    box-shadow: var(--shadow);
+    padding: 30px;
+    border-radius: 5px;
+}
+
+.restartButton {
+    background-color: var(--primary);
+    color: white;
+}

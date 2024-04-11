@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { db, auth } from "../../config/firebase";
-import { doc, getDoc, updateDoc, getDocs, collection, query, where } from "firebase/firestore";
+import { doc, getDoc, updateDoc, deleteDoc, getDocs, collection, query, where } from "firebase/firestore";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css"; // add quill styles
 import { useNavigate, useParams } from "react-router-dom";
 import Select from 'react-select';
 import { noteModule } from '../../config/quill';
+
+import styles from "./EditNotes.module.css"
+import LoadingComponent from "LoadingComponent";
+
 const EditNotes = ({ isAuth }) => {
   const navigate = useNavigate();
   const params = useParams();
@@ -55,7 +59,7 @@ const EditNotes = ({ isAuth }) => {
       }));
       setTagsOptions(fetchedTags);
 
-      // Set selected tags
+      // set selected tags
       const noteTags = fetchedTags.filter(tag => noteData.tags?.includes(tag.value));
       setSelectedTags(noteTags);
 
@@ -95,12 +99,26 @@ const EditNotes = ({ isAuth }) => {
     setSelectedTags(selectedOptions || []);
   };
 
+  const handleDeleteNote = async () => {
+    if (window.confirm("Are you sure you want to delete this note?")) {
+      try {
+        const noteDocRef = doc(db, "notes", noteID);
+        await deleteDoc(noteDocRef);
+        console.log("Note deleted with ID:", noteID);
+        navigate("/mystuff/notes"); // Redirect to a suitable location after deletion
+      } catch (error) {
+        console.error("Error deleting note:", error);
+      }
+    }
+  };
+
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <LoadingComponent />;
   }
 
   return (
-    <div>
+    <div className={styles.mainContainer}>
+      <div className={styles.flashcard}>
       <form onSubmit={handleUpdateNote}>
         <input
           type="text"
@@ -108,9 +126,10 @@ const EditNotes = ({ isAuth }) => {
           onChange={(e) => setNoteTitle(e.target.value)}
           placeholder="Note Title"
           required
+          className={styles.title}
         />
-        <div>
-          <label>Select Tags:</label>
+        <div className={styles.tagsSection}>
+          <label className={styles.tagsSelectText}>Select Tags:</label>
           <Select
             options={tagsOptions}
             isMulti
@@ -125,8 +144,10 @@ const EditNotes = ({ isAuth }) => {
           modules={noteModule}
           required
         />
-        <button type="submit">Update Note</button>
       </form>
+        <button type="submit" className={styles.editButton}>Update Note</button>
+      <button onClick={handleDeleteNote} className={`${styles.editButton} ${styles.deleteButton}`}>Delete Note</button>
+      </div>
     </div>
   );
 };

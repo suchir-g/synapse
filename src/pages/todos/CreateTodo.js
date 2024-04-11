@@ -14,14 +14,14 @@ const CreateTodoList = ({ isAuth }) => {
 
   const todoListsRef = collection(db, "todoLists");
 
-  const [listName, setListName] = useState(""); // State to hold the name of the todo list
+  const [listName, setListName] = useState(""); // state to hold the name of the todo list
   const [todoText, setTodoText] = useState("");
   const [todos, setTodos] = useState([]);
 
   const addTodo = () => {
     if (!todoText.trim()) return;
     setTodos([...todos, { text: todoText, completed: false }]);
-    setTodoText(""); // Clear input after adding
+    setTodoText(""); // clear input after adding
   };
 
   const handleCreateList = async (e) => {
@@ -39,11 +39,11 @@ const CreateTodoList = ({ isAuth }) => {
 
     try {
       await addDoc(todoListsRef, {
-        name: listName, // Add the list name here
+        name: listName, // add the list name here
         owner: auth.currentUser.uid,
         todos: todos,
         createdAt: serverTimestamp(),
-        main: true, // Set the "main" field to true for the new todo list
+        main: true, // set the "main" field to true for the new todo list
       });
 
       navigate("/todos");

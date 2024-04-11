@@ -3,6 +3,8 @@ import { db, auth } from "../../../config/firebase"; // Import from your firebas
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 
+import styles from "./CreateTimerConfig.module.css";
+
 const CreateTimerConfig = () => {
   const [examName, setExamName] = useState("");
   const [sections, setSections] = useState([]);
@@ -59,44 +61,54 @@ const CreateTimerConfig = () => {
   };
 
   return (
-    <div>
-      <h2>Create Exam Configuration</h2>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          value={examName}
-          onChange={(e) => setExamName(e.target.value)}
-          placeholder="Exam Name"
-          required
-        />
-        <div>
-          <h4>Sections</h4>
-          {sections.map((section, index) => (
-            <div key={index}>
-              <p>{`${section.title}: ${section.duration} minutes`}</p>
-              <button type="button" onClick={() => deleteSection(index)}>
-                Delete Section
-              </button>
-            </div>
-          ))}
+    <div className={styles.mainContainer}>
+      <div className={styles.flashcard}>
+        <h2 className={styles.mainText}>Create Exam Configuration</h2>
+        <form onSubmit={handleSubmit}>
           <input
             type="text"
-            value={sectionTitle}
-            onChange={(e) => setSectionTitle(e.target.value)}
-            placeholder="Section Title"
+            value={examName}
+            onChange={(e) => setExamName(e.target.value)}
+            placeholder="Exam Name"
+            required
+            className={`${styles.input}`}
           />
-          <input
-            type="number"
-            value={duration}
-            onChange={(e) => setDuration(e.target.value)}
-            placeholder="Duration (minutes)"
-          />
-          <button type="button" onClick={addSection}>
-            Add Section
-          </button>
-        </div>
-        <button type="submit">Create Exam Config</button>
-      </form>
+          <hr />
+          <div>
+            <h4 className={styles.sectionText}>Sections</h4>
+            {sections.map((section, index) => (
+              <div key={index}>
+                <p>{`${section.title}: ${section.duration} minutes`}</p>
+                <button type="button" onClick={() => deleteSection(index)}>
+                  Delete Section
+                </button>
+              </div>
+            ))}
+            <div className={styles.sectionSection}>
+              <span>
+              <input
+                type="text"
+                value={sectionTitle}
+                onChange={(e) => setSectionTitle(e.target.value)}
+                placeholder="Section Title"
+                className={`${styles.input}`}
+              />
+              <input
+                type="number"
+                value={duration}
+                onChange={(e) => setDuration(e.target.value)}
+                placeholder="Duration (minutes)"
+                className={`${styles.input}`}
+              />
+              </span>
+              <button type="button" onClick={addSection} className={`${styles.button} ${styles.addSection}`}>
+                Add Section
+              </button>
+            </div>
+          </div>
+          <button type="submit" className={`${styles.button} ${styles.createExamConfigButton}`}>Create Exam Config</button>
+        </form>
+      </div>
     </div>
   );
 };

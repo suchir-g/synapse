@@ -7,6 +7,8 @@ import { useNavigate, Link } from "react-router-dom";
 
 import { query, collection, where, getDocs, addDoc, serverTimestamp } from "firebase/firestore";
 
+import styles from "./Login.module.css"
+
 const Login = ({ setIsAuth }) => {
   const navigate = useNavigate();
 
@@ -33,30 +35,29 @@ const Login = ({ setIsAuth }) => {
       localStorage.setItem("isAuth", true);
       setIsAuth(true);
 
-      // Check if the user already exists in the database
+      // check if the user already exists in the database
       const userSnapshot = await getDocs(
         query(usersRef, where("userID", "==", user.uid))
       );
       if (userSnapshot.empty) {
-        // User does not exist, so create a new user document
+        // user does not exist, so create a new user document
         await addDoc(usersRef, {
-          username: user.displayName, // or you might want to split this into firstName and lastName
+          username: user.displayName,
           email: user.email,
           userID: user.uid,
-          // Set default values for first name, last name, and year group
-          firstName: "", // You would need to collect this info from the user
-          lastName: "", // You would need to collect this info from the user
-          yearGroup: "", // You would need to collect this info from the user
+          firstName: "",
+          lastName: "",
+          yearGroup: "",
           streak: 0,
-          lastRevisionDate: new Date(), // Set to the current date
+          lastRevisionDate: new Date(), // set to the current date
         });
 
         const todoListsRef = collection(db, "todoLists");
         await addDoc(todoListsRef, {
           owner: auth.currentUser.uid,
-            name: "Main",
-          todos: [], // Initialize with an empty array
-          main: true, // Indicates this is the primary todo list for the user
+          name: "Main",
+          todos: [], // initialize with an empty array
+          main: true, // indicates this is the primary todo list for the user
           createdAt: serverTimestamp(),
         });
       }
@@ -67,25 +68,36 @@ const Login = ({ setIsAuth }) => {
   };
 
   return (
-    <div>
-      <h1>LOGIN</h1>
+    <div className={styles.mainContainer}>
 
-      <input
-        type="text"
-        placeholder="Email..."
-        onChange={(e) => setEmail(e.target.value)}
-      />
-      <input
-        type="password"
-        placeholder="Password..."
-        onChange={(e) => setPassword(e.target.value)}
-      />
+      <div className={styles.postFlashcardsContainer}>
+        <h1 className={styles.postFlashcards}>
+          Login
+        </h1>
 
-      <button onClick={loginWithEmailAndPassword}>Login with email</button>
-      <button onClick={loginWithGoogle}>Login with Google</button>
+      </div>
 
-      <br />
-      <Link to="/register">Don't have an account? Sign up</Link>
+      <div className={styles.mainContent}>
+        <input
+          type="text"
+          placeholder="Email..."
+          onChange={(e) => setEmail(e.target.value)}
+          className={`${styles.input}`}
+        />
+        <input
+          type="password"
+          placeholder="Password..."
+          onChange={(e) => setPassword(e.target.value)}
+          className={`${styles.input}`}
+        />
+
+        <span>
+          <button onClick={loginWithEmailAndPassword} className={`${styles.button}`}>Login with email</button>
+          <button onClick={loginWithGoogle} className={`${styles.button}`}>Login with Google</button>
+        </span>
+
+        <Link to="/register" className={`${styles.registerButton} ${styles.button}`}>Don't have an account? Sign up</Link>
+      </div>
     </div>
   );
 };

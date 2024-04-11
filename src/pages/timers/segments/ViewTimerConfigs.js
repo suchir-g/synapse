@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { db, auth } from "../../../config/firebase";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { Link } from "react-router-dom";
+import styles from "./ViewTimerConfigs.module.css";
+import LoadingComponent from "LoadingComponent";
 
 const ViewTimerConfigs = () => {
   const [examConfigs, setExamConfigs] = useState([]);
@@ -38,33 +40,39 @@ const ViewTimerConfigs = () => {
     });// cleanup subscription on unmount
     return () => unsubscribe();
   }, []); // empty dependency array ensures this effect runs only once on mount
-  
+
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <LoadingComponent />;
   }
 
   return (
-    <div>
-      <h2>Timers</h2>
-      <Link to="/timers/pomodoro">Pomodoro timer</Link>
-      <br />
-      <Link to="/timers/basic">Basic timer</Link>
-      <h2>Exam Configurations</h2>
-      {examConfigs.length > 0 ? (
-        <ul>
-          {examConfigs.map((config) => (
-            <li key={config.id}>
-              {config.name} -&nbsp;
-              <Link to={`/timers/config/edit/${config.id}`}>Edit</Link>
-              <Link to="/timers/config">Set timer</Link>
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <p>No exam configurations found.</p>
-      )}
-      <Link to="/timers/config/post">Create config</Link>
+    <div className={styles.mainContainer}>
+      <div className={styles.flashcard}>
+        <h2 className={styles.titleText}>Timers</h2>
+        <div className={styles.presets}>
+          <Link to="/timers/pomodoro" className={`${styles.timerButton} ${styles.pomodoro}`}>Pomodoro timer</Link>
+          <Link to="/timers/basic" className={`${styles.timerButton} ${styles.basic}`}>Basic timer</Link>
+        </div>
+        <hr />
+        <h2 className={styles.examText}>Exam Configurations</h2>
+        <div className={styles.examConfigs}>{examConfigs.length > 0 ? (
+          <ul>
+            {examConfigs.map((config) => (
+              <li key={config.id} className={styles.timerSlot}>
+                <h2 className={styles.timerName}>{config.name}</h2>
+                <span>
+                  <Link to={`/timers/config/edit/${config.id}`} className={styles.extraButtons}>Edit</Link>
+                  <Link to="/timers/config" className={`${styles.extraButtons} ${styles.setTimer}`}>Set timer</Link>
+                </span>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p>No exam configurations found.</p>
+        )}</div>
+        <Link to="/timers/config/post" className={styles.createConfigButton}>Create config</Link>
+      </div>
     </div>
   );
 };

@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { db } from "../../../config/firebase";
 import { doc, getDoc, updateDoc, deleteDoc } from "firebase/firestore";
 import { useNavigate, useParams } from "react-router-dom";
+import styles from "./EditTimerConfig.module.css"
+import LoadingComponent from "LoadingComponent";
 
 const EditExamConfig = () => {
   const [examName, setExamName] = useState("");
@@ -103,53 +105,61 @@ const EditExamConfig = () => {
   };
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <LoadingComponent />;
   }
 
   return (
-    <div>
-      <h2>Edit Exam Configuration</h2>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          value={examName}
-          onChange={(e) => setExamName(e.target.value)}
-          placeholder="Exam Name"
-          required
-        />
-        <div>
-          <h4>Sections</h4>
-          {sections.map((section, index) => (
-            <div key={index}>
-              <p>{`${section.title}: ${section.duration} minutes`}</p>
-              <button type="button" onClick={() => deleteSection(index)}>
-                Delete Section
-              </button>
-            </div>
-          ))}
+    <div className={styles.mainContainer}>
+      <div className={styles.flashcard} >
+        <form onSubmit={handleSubmit}>
           <input
             type="text"
-            value={sectionTitle}
-            onChange={(e) => setSectionTitle(e.target.value)}
-            placeholder="Section Title"
+            value={examName}
+            onChange={(e) => setExamName(e.target.value)}
+            placeholder="Exam Name"
+            required
+            className={styles.title}
           />
-          <input
-            type="number"
-            value={duration}
-            onChange={(e) => setDuration(e.target.value)}
-            placeholder="Duration (minutes)"
-          />
-          <button type="button" onClick={addSection}>
-            Add Section
+          <div>
+            <h4 className={styles.sectionsText}>Sections</h4>
+            {sections.map((section, index) => (
+              <div key={index} className={styles.sectionTab}>
+                <p>{`${section.title}: ${section.duration} minutes`}</p>
+                <button type="button" onClick={() => deleteSection(index)} className={`${styles.deleteSectionButton} ${styles.button}`}>
+                  Delete Section
+                </button>
+              </div>
+            ))}
+            <div className={styles.addSection}>
+              <span>
+                <input
+                  type="text"
+                  value={sectionTitle}
+                  onChange={(e) => setSectionTitle(e.target.value)}
+                  placeholder="Section Title"
+                  className={`${styles.titleInput} ${styles.input}`}
+                />
+                <input
+                  type="number"
+                  value={duration}
+                  onChange={(e) => setDuration(e.target.value)}
+                  placeholder="Duration (minutes)"
+                  className={`${styles.durationInput} ${styles.input}`}
+                />
+              </span>
+              <button type="button" onClick={addSection} className={`${styles.addSectionButton} ${styles.button}`}>
+                Add Section
+              </button>
+            </div>
+          </div>
+          <button type="submit" className={`${styles.button} ${styles.updateButton}`}>
+            Update Exam Config
           </button>
-        </div>
-        <button type="submit" disabled={loading}>
-          Update Exam Config
-        </button>
-        <button type="button" onClick={handleDelete} disabled={loading}>
-          Delete Config
-        </button>
-      </form>
+          <button type="button" onClick={handleDelete} className={`${styles.button} ${styles.deleteButton}`}>
+            Delete Config
+          </button>
+        </form>
+      </div>
     </div>
   );
 };

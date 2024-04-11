@@ -5,6 +5,9 @@ import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { Link } from "react-router-dom";
 
 import DOMPurify from "dompurify";
+import LoadingComponent from "LoadingComponent";
+
+import styles from "./ShowNotes.module.css"
 
 const ShowNotes = () => {
   const [note, setNote] = useState(null);
@@ -70,36 +73,37 @@ const ShowNotes = () => {
   };
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <LoadingComponent />;
   }
 
   if (!note) {
-    return <div>Note not found</div>;
+    return <div>Note not found What the HELL you doing</div>;
   }
 
   return (
-    <div>
-      <h1>{note.title}</h1>
-      <div
-        dangerouslySetInnerHTML={{
-          __html: sanitizeHtml(note.content),
-        }}
-      />
-      {tags.length > 0 && (
-        <div>
-          <hr />
-          <strong>Tags: </strong>
-          {tags.map((tag, index) => (
-            <span key={index}>
-              <Link to={`/tags/${tag.id}`}>{tag.tagName}</Link>
-              {/* some short circuiting to make a list - i never knew how useful this is until now */}
-              {index < tags.length - 1 ? ", " : ""}
-            </span>
-          ))}
-          <hr />
-        </div>
-      )}
-      <button onClick={handleEdit}>Edit Note</button>
+    <div className={styles.mainContainer}>
+      <div className={styles.flashcard}>
+        <h1 className={styles.title}>{note.title}</h1>
+        {tags.length > 0 && (
+          <div className={styles.tags}>
+        <strong>Tags: </strong>
+        {tags.map((tag, index) => (
+          <span key={index} className={styles.tag}>
+            <Link to={`/tags/${tag.id}`} className={styles.tagLink}>
+              {tag.tagName}
+            </Link>
+          </span>
+        ))}
+      </div>
+        )}
+        <div
+          dangerouslySetInnerHTML={{
+            __html: sanitizeHtml(note.content),
+          }} 
+          className={styles.mainNote}
+        />
+        <button onClick={handleEdit} className={styles.editButton}>Edit Note</button>
+      </div>
     </div>
   );
 };

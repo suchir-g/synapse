@@ -1,0 +1,16 @@
+.mainContainer {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.flashcard {
+    border: none;
+    border-radius: 5px;
+    box-shadow: var(--shadow);
+    background-color: white;
+    padding: 50px;
+
+}

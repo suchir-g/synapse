@@ -10,10 +10,8 @@ import { db } from "./config/firebase";
 export const checkAndResetStreak = async (userID) => {
   if (!userID) {
     console.error("Invalid or undefined userID provided.");
-    return; // Exit the function early
+    return; // exit the function early
   }
-  console.log("hello")
-
   const usersCollectionRef = collection(db, "users");
   const q = query(usersCollectionRef, where("userID", "==", userID));
 
@@ -29,7 +27,7 @@ export const checkAndResetStreak = async (userID) => {
       );
 
       if (differenceInDays >= 2) {
-        // It's been 2 or more days since the last revision, reset the streak to 0
+        // it's been 2 or more days since the last revision, reset the streak to 0
         await updateDoc(userDoc.ref, {
           streak: 0,
         });
@@ -54,25 +52,25 @@ export const updateStreak = async (userID) => {
   try {
     const querySnapshot = await getDocs(q);
     if (!querySnapshot.empty) {
-      // Assuming userID is unique, there should only be one document.
+      // assuming userID is unique, there should only be one document.
       const userDoc = querySnapshot.docs[0];
       const userData = userDoc.data();
       const today = new Date();
-      const lastRevision = userData.lastRevisionDate.toDate(); // Convert Firestore Timestamp to Date
+      const lastRevision = userData.lastRevisionDate.toDate(); // convert Firestore Timestamp to Date
       const differenceInDays = Math.floor(
         (today - lastRevision) / (1000 * 60 * 60 * 24)
       );
       let newStreak = userData.streak;
 
       if (differenceInDays === 1) {
-        // User revised yesterday, so increment the streak
+        // user revised yesterday, so increment the streak
         newStreak++;
       } else if (differenceInDays > 1) {
-        // It's been more than one day since the last revision, so reset the streak
+        // it's been more than one day since the last revision, so reset the streak
         newStreak = 1;
       }
 
-      // Update the lastRevisionDate to today and streak in Firestore
+      // update the lastRevisionDate to today and streak in Firestore
       await updateDoc(userDoc.ref, {
         streak: newStreak,
         lastRevisionDate: today,

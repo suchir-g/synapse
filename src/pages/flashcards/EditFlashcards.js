@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 
 import { db, auth } from "../../config/firebase";
 
@@ -26,6 +26,8 @@ import ReactQuill from "react-quill";
 import "react-quill/dist/quill.bubble.css";
 
 import { flashcardModule } from "../../config/quill";
+import styles from "./CreateFlashcards.module.css"
+
 
 const EditFlashcards = ({ isAuth }) => {
   const { id } = useParams();
@@ -244,54 +246,56 @@ const EditFlashcards = ({ isAuth }) => {
   }
 
   return (
-    <div className="edit-flashcards-container">
-      <h2>EDIT</h2>
-      <form onSubmit={handleUpdateSet}>
-        <div className="form-group">
-          <label htmlFor="setTitle">Set Title</label>
-          <input
-            type="text"
-            id="setTitle"
-            value={setTitle}
-            onChange={(e) => setSetTitle(e.target.value)}
-            placeholder="Set Title"
-            required
-          />
-        </div>
+    <div className={styles.mainContainer}>
+      <div className={styles.postFlashcardsContainer}>
+        <h1 className={styles.postFlashcards}>
+          Edit Flashcards
+        </h1>
+        <p className={styles.mutedText}>Go to <Link className={styles.learnLink} to="/learn/revise">this page </Link>to learn how to effectively revise material.</p>
+      </div>
+      <div className={styles.mainContent}>
+        <form onSubmit={handleUpdateSet}>
+          <div className={styles.titleTagSection}>
+            <div className={styles.formGroup}>
+              <label htmlFor="setTitle" className={styles.mutedText}>Set Title</label>
+              <input
+                type="text"
+                id="setTitle"
+                value={setTitle}
+                onChange={(e) => setSetTitle(e.target.value)}
+                placeholder="Set Title"
+                required
+                className={styles.setName}
+              />
+            </div>
+            <div className={styles.formGroup}>
+              <label className={styles.mutedText}>Select Tags:</label>
+              <Select
+                options={tagsOptions}
+                isMulti
+                onChange={handleTagChange}
+                value={selectedTags}
+                getOptionLabel={(option) => option.label}
+                getOptionValue={(option) => option.value}
+                className={styles.tagsSelect}
+              />
+            </div>
+          </div>
 
-        <div className="form-group">
-          <label htmlFor="setDescription">Set Description</label>
-          <textarea
-            id="setDescription"
-            value={setDescription}
-            onChange={(e) => setSetDescription(e.target.value)}
-            placeholder="Set Description"
-            required
-          />
-        </div>
+          <div className={styles.formGroup}>
+            <label htmlFor="setDescription" className={styles.mutedText}>Set Description</label>
+            <textarea
+              id="setDescription"
+              value={setDescription}
+              onChange={(e) => setSetDescription(e.target.value)}
+              placeholder="Set Description"
+              required
+              className={styles.descriptionInput}
+            />
+          </div>
 
-        <hr />
-
-        {/* tags dropdown */}
-        <div>
-          <label>Select Tags:</label>
-          <Select
-            options={tagsOptions}
-            isMulti
-            onChange={handleTagChange}
-            value={selectedTags}
-            getOptionLabel={(option) => option.label}
-            getOptionValue={(option) => option.value}
-          />
-        </div>
-
-        <hr />
-
-        {/* dynamically rendered flashcards input */}
-        {shownCards.map((flashcard, index) => (
-          <div key={flashcard.id || index} className="flashcard-edit-group">
-            <div className="form-group">
-              <label htmlFor={`question-${index}`}>Question</label>
+          {shownCards.map((flashcard, index) => (
+            <div key={flashcard.id || index} className={styles.flashcardPair}>
               <ReactQuill
                 value={flashcard.question}
                 onChange={(content) =>
@@ -301,9 +305,6 @@ const EditFlashcards = ({ isAuth }) => {
                 theme="bubble"
                 modules={flashcardModule}
               />
-            </div>
-            <div className="form-group">
-              <label htmlFor={`answer-${index}`}>Answer</label>
               <ReactQuill
                 value={flashcard.answer}
                 onChange={(content) =>
@@ -313,23 +314,23 @@ const EditFlashcards = ({ isAuth }) => {
                 theme="bubble"
                 modules={flashcardModule}
               />
+              <button  className={styles.removeCard} type="button" onClick={() => removeFlashcard(index)}>
+                Remove
+              </button>
             </div>
-            <button type="button" onClick={() => removeFlashcard(index)}>
-              Remove
-            </button>
-          </div>
-        ))}
+          ))}
 
-        <button type="button" onClick={addFlashcard}>
-          Add Flashcard
-        </button>
+          <button type="button" onClick={addFlashcard} className={styles.bottomButton}>
+            Add Flashcard 
+          </button>
 
-        <button type="submit">Update Set</button>
-        <button type="button" onClick={deleteSet}>
-          Delete Set
-        </button>
-      </form>
-    </div>
+          <button type="submit" className={`${styles.bottomButton} ${styles.createButton}`} >Update Set</button>
+          <button type="button" onClick={deleteSet} className={`${styles.bottomButton} ${styles.deleteButton}`}>
+            Delete Set
+          </button>
+        </form>
+      </div>
+    </div >
   );
 };
 

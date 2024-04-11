@@ -1,0 +1,121 @@
+.quizTitle {
+    color: black;
+    font-size: 30px;
+    font-weight: 600;
+}
+
+.topSection {
+    position: absolute;
+    top: 16vh;
+    left: 25vw;
+    width: 50vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+
+.mainContainer, .mainContainerFinished {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+
+
+.quizEndButton {
+    width: fit-content;
+    padding: 10px 20px 10px 20px;
+    border-radius: 5px;
+    border: none;
+    background-color: var(--tertiary);
+    box-shadow: var(--lesser-shadow);
+    margin-top:10px;
+}
+
+
+
+.flashcard {
+    box-shadow: var(--shadow);
+    background-color: white;
+    width: calc(976px * 0.8);
+    height: calc(572px * 0.8);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 10px;
+    transition: cubic-bezier(0.19, 1, 0.22, 1) 2s ;
+}
+
+.mainSection {
+    padding: 50px 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: start;
+    box-shadow: 0 0px 23.6px #748e748a;
+}
+
+.currentQuestion {
+    font-size: 19px;
+    font-weight: 500;
+}
+
+.quizSection {
+    display: flex;
+    width: 60%;
+    justify-content: center;
+    align-items: left;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.userAnswer {
+    border: none;
+    border-radius: 5px;
+    box-shadow: var(--lesser-shadow);
+    padding: 10px 15px 10px 15px;
+}
+
+.handleSubmit,
+.toggleButton {
+    background-color: var(--tertiary);
+    border: none;
+    width: fit-content;
+    border-radius: 5px;
+    box-shadow: var(--lesser-shadow);
+    padding: 10px 25px 10px 25px;
+}
+
+.flashcard.green {
+    background-color: #aaffaa;
+}
+
+.flashcard.red {
+    background-color: #ffaaaa;
+}
+
+.mutedText {
+    color: var(--muted);
+}
+
+.learnLink {
+    color: var(--primary);
+}
+
+.mutedSection {
+    font-size: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.endButtons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}

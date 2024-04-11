@@ -1,0 +1,46 @@
+.mainContainer {
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin: 30px;
+}
+
+.mainContent {
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    width: 80%;
+    background-color: white;
+    border: none;
+    border-radius: 5px;
+    box-shadow: var(--shadow);
+}
+
+.mainText {
+    font-weight: 600;
+    font-size: 22px;
+}
+
+.selectDropdown {
+    border: 1px solid var(--muted);
+    padding: 10px 15px;
+    border-radius: 5px;
+    margin: 10px 0px 10px 0px;
+}
+
+.button {
+    padding: 10px 15px;
+    width: fit-content;
+    border: none;
+    border-radius: 5px;
+    box-shadow: var(--lesser-shadow);
+    margin: 10px 10px 10px 0px;
+    background-color: var(--secondary);
+}
+
+.nextSection {
+    background-color: var(--primary);
+    color: white;
+}

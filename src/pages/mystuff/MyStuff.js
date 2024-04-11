@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, useParams } from "react-router-dom";
 import { auth, db } from "../../config/firebase";
 import {
   collection,
@@ -18,14 +18,16 @@ import NotesGrid from "./grids/NotesGrid";
 import TagsGrid from "./grids/TagsGrid";
 import WhiteboardsGrid from "./grids/WhiteboardsGrid";
 import SearchResultsGrid from "./grids/SearchResultsGrid";
+import LoadingComponent from "LoadingComponent";
 
-const MyStuff = ({ isAuth }) => {
+const MyStuff = ({ isAuth  }) => {
   const navigate = useNavigate();
+  const {sectionName} = useParams();
 
   const [setsToReviseToday, setSetsToReviseToday] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [currentUserID, setCurrentUserID] = useState(null);
-  const [activeTab, setActiveTab] = useState("flashcards");
+  const [activeTab, setActiveTab] = useState(sectionName || "flashcards");
   const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
@@ -103,12 +105,8 @@ const MyStuff = ({ isAuth }) => {
     setActiveTab(tabName);
   };
 
-  const handleSearch = (query) => {
-    setSearchQuery(query);
-  };
-
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <LoadingComponent />;
   }
 
   return (
@@ -117,25 +115,22 @@ const MyStuff = ({ isAuth }) => {
       <div className={styles.header}>
         <div className={styles.tabs}>
           <button
-            className={`${styles.tab} ${
-              activeTab === "flashcards" ? styles.flashcardsActive : ""
-            }`}
+            className={`${styles.tab} ${activeTab === "flashcards" ? styles.flashcardsActive : ""
+              }`}
             onClick={() => handleTabClick("flashcards")}
           >
             Flashcards
           </button>
           <button
-            className={`${styles.tab} ${
-              activeTab === "notes" ? styles.notesActive : ""
-            }`}
+            className={`${styles.tab} ${activeTab === "notes" ? styles.notesActive : ""
+              }`}
             onClick={() => handleTabClick("notes")}
           >
             Notes
           </button>
           <button
-            className={`${styles.tab} ${
-              activeTab === "whiteboards" ? styles.whiteboardsActive : ""
-            }`}
+            className={`${styles.tab} ${activeTab === "whiteboards" ? styles.whiteboardsActive : ""
+              }`}
             onClick={() => handleTabClick("whiteboards")}
           >
             Whiteboards
@@ -156,7 +151,11 @@ const MyStuff = ({ isAuth }) => {
         searchQuery={searchQuery}
         currentUserID={currentUserID}
       />
+      <Link to="/post" className={styles.postButton}>
+        Post
+      </Link>
       <section className={styles.contentSection}>
+
         {activeTab === "flashcards" && !searchQuery && (
           <FlashcardGrid currentUserID={currentUserID} />
         )}

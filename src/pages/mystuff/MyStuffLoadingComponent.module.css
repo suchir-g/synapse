@@ -1,0 +1,41 @@
+.mainContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 72vh;
+    width: 100%;
+    gap: 30px;
+}
+
+.loadingIcon {
+    border: 6px solid #f3f3f3;
+    border-top: 6px solid #838383;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite;
+}
+
+.mainText {
+    font-weight: 600;
+    font-size: 22px566;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.fullHeight {
+    height: 72vh;
+}
+
+.partialHeight {
+    height: fit-content;
+}
