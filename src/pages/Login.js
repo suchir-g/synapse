@@ -33,30 +33,29 @@ const Login = ({ setIsAuth }) => {
       localStorage.setItem("isAuth", true);
       setIsAuth(true);
 
-      // Check if the user already exists in the database
+      // check if the user already exists in the database
       const userSnapshot = await getDocs(
         query(usersRef, where("userID", "==", user.uid))
       );
       if (userSnapshot.empty) {
-        // User does not exist, so create a new user document
+        // user does not exist, so create a new user document
         await addDoc(usersRef, {
-          username: user.displayName, // or you might want to split this into firstName and lastName
+          username: user.displayName, 
           email: user.email,
           userID: user.uid,
-          // Set default values for first name, last name, and year group
-          firstName: "", // You would need to collect this info from the user
-          lastName: "", // You would need to collect this info from the user
-          yearGroup: "", // You would need to collect this info from the user
+          firstName: "", 
+          lastName: "", 
+          yearGroup: "", 
           streak: 0,
-          lastRevisionDate: new Date(), // Set to the current date
+          lastRevisionDate: new Date(), // set to the current date
         });
 
         const todoListsRef = collection(db, "todoLists");
         await addDoc(todoListsRef, {
           owner: auth.currentUser.uid,
             name: "Main",
-          todos: [], // Initialize with an empty array
-          main: true, // Indicates this is the primary todo list for the user
+          todos: [], // initialize with an empty array
+          main: true, // indicates this is the primary todo list for the user
           createdAt: serverTimestamp(),
         });
       }

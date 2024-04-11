@@ -1,5 +1,133 @@
+.mainContainer {
+    width: 100vw;
+    height: min(100vh, fit-content);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
 .importButton {
-    background-color: var(--muted-background);
+    background-color: var(--primary-variant);
+    color: white;
+    font-weight: 500;
     padding: 10px 15px;
     margin: 10px;
+    border: none;
+    border-radius: 5px;
+    box-shadow: var(--lesser-shadow);
+}
+
+.mainContent {
+    background-color: white;
+    width: 80%;
+    height: fit-content;
+    box-shadow: var(--shadow);
+    padding: 40px;
+    margin: 30px 0px 30px 0px;
+    border-radius: 5px;
+}
+
+
+.importContainer {
+    width: 80%;
+}
+
+.setName {
+    padding: 10px 15px;
+    border-radius: 5px;
+    border: none;
+    box-shadow: var(--lesser-shadow);
+    border: 1px solid #cccccc;
+    height: 38px;
+}
+
+.tagsSelect {
+    background-color: aliceblue;
+    width: 100%;
+    display: inline-block;
+    border: none;
+    box-shadow: var(--lesser-shadow);
+    border: none;
+}
+
+.formGroup {
+    display: inline-flex;
+    flex-direction: column;
+    width: 100%;
+    margin: 10px 0px;
+}
+
+.titleTagSection {
+    width: 100%;
+    display: flex;
+    gap: 30px;
+}
+
+.mutedText {
+    color: var(--muted);
+    font-size: 13px;
+    margin-bottom: 5px;
+}
+
+.descriptionInput {
+    padding: 10px 15px;
+    box-shadow: var(--lesser-shadow);
+    border: 1px solid #cccccc;
+    border-radius: 5px;
+}
+
+.flashcardPair {
+    border: 1px solid #cccccc;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px;
+    box-shadow: var(--lesser-shadow);
+    margin-bottom: 15px;
+}
+
+.removeCard, .bottomButton {
+    background-color: var(--secondary);
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    width: fit-content;
+    margin: 10px 10px 0px 0px;
+}
+
+.bottomButton {
+    margin-top: 20px;
+}
+
+.createButton {
+    background-color: var(--primary);
+    color: white;
+}
+
+.deleteButton {
+    background-color: var(--danger);
+    color: white;
+}
+
+
+.postFlashcards {
+    font-size: 32px;
+    margin: 30px 0px 20px 0px;
+    font-weight: 500;
+}
+
+.postFlashcardsContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.mutedText {
+    color: var(--muted);
+}
+
+.learnLink {
+    color: var(--primary);
 }

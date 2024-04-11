@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 
+import styles from "./Pomodoro.module.css"
+
 const PomodoroTimer = () => {
   const workDuration = 25 * 60; // 25 minutes
   const breakDuration = 5 * 60; // 5 minutes
@@ -63,13 +65,17 @@ const PomodoroTimer = () => {
   }, [secondsLeft, isWorkTime]);
 
   return (
-    <div>
-      <h2>Pomodoro Timer</h2>
-      <p>
-        {isWorkTime ? "Work Time" : "Break Time"}: {formatTime(secondsLeft)}
-      </p>
-      <button onClick={toggleIsActive}>{isActive ? "Pause" : "Start"}</button>
-      <button onClick={reset}>Reset</button>
+    <div className={styles.mainContainer}>
+      <div className={styles.mainContent}>
+        <h2 className={styles.mainText}>Pomodoro Timer</h2>
+        <p className={styles.timeLeft}>
+          {isWorkTime ? "Work Time" : "Break Time"}: {formatTime(secondsLeft)}
+        </p>
+        <span>
+          <button onClick={toggleIsActive} className={styles.button}>{isActive ? "Pause" : "Start"}</button>
+          <button onClick={reset} className={styles.button}>Reset</button>
+        </span>
+      </div>
     </div>
   );
 };

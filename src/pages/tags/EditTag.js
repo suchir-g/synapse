@@ -74,14 +74,14 @@ const EditTag = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // Update tag document
+      // update tag document
       const tagDocRef = doc(tagsRef, tagID);
       await updateDoc(tagDocRef, {
         tagName: tagName, // assuming title is the field name
         description: tagDescription
       });
 
-      // Batch update for flashcards and notes
+      // watch update for flashcards and notes
       const batch = db.batch();
 
       selectedFlashcards.forEach(fc => {

@@ -11,6 +11,7 @@ import {
 import styles from "./FlashcardGrid.module.css"
 
 import { db } from "../../../config/firebase";
+import MyStuffLoadingComponent from "../MyStuffLoadingComponent";
 export const FlashcardGrid = ({ currentUserID }) => {
   const [allSets, setAllSets] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -41,7 +42,7 @@ export const FlashcardGrid = ({ currentUserID }) => {
   }, [currentUserID]);
 
   if (isLoading) {
-    return <div>Loading flashcards...</div>;
+    return <MyStuffLoadingComponent />;
   }
 
   return (

@@ -14,7 +14,7 @@ import Select from "react-select";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.bubble.css"; // Import the Bubble theme CSS
 import styles from "./CreateFlashcards.module.css"
-
+import "./Ql-editor.css"
 import { flashcardModule } from "../../config/quill";
 
 const CreateFlashcards = ({ isAuth }) => {
@@ -143,67 +143,92 @@ const CreateFlashcards = ({ isAuth }) => {
   };
 
   return (
-    <div>
-      <Link to="/sets/import" className={styles.importButton}>Import flashcards</Link>
-      <form onSubmit={handleCreateSet}>
-        <input
-          type="text"
-          value={setTitle}
-          onChange={(e) => setSetTitle(e.target.value)}
-          placeholder="Set Title"
-          required
-        />
-        <textarea
-          value={setDescription}
-          onChange={(e) => setSetDescription(e.target.value)}
-          placeholder="Set Description"
-          required
-        />
+    <div className={styles.mainContainer}>
+      <div className={styles.postFlashcardsContainer}>
+        <h1 className={styles.postFlashcards}>
+          Post Flashcards
+        </h1>
+        <p className={styles.mutedText}>Go to <Link className={styles.learnLink} to="/learn/revise">this page </Link>to learn how to effectively revise material.</p>
 
-        {/* dynamically rendered flashcards input */}
-        {flashcards.map((flashcard, index) => (
-          <div key={index}>
-            <ReactQuill
-              value={flashcard.question}
-              onChange={(content) =>
-                handleFlashcardChange(index, "question", content)
-              }
-              placeholder="Question"
-              theme="bubble" // 2et the theme to bubble
-              modules={flashcardModule}
-            />
-            <ReactQuill
-              value={flashcard.answer}
-              onChange={(content) =>
-                handleFlashcardChange(index, "answer", content)
-              }
-              placeholder="Answer"
-              theme="bubble" // Set the theme to bubble
-              modules={flashcardModule}
-            />
-            <button type="button" onClick={() => removeFlashcard(index)}>
-              Remove
-            </button>
+      </div>
+
+      <div className={styles.mainContent}>
+        <form onSubmit={handleCreateSet}>
+          <div className={styles.titleTagSection}>
+            <div className={styles.formGroup}>
+              <label className={styles.mutedText}>Title</label>
+              <input
+                type="text"
+                value={setTitle}
+                onChange={(e) => setSetTitle(e.target.value)}
+                placeholder="Set Title"
+                required
+                className={styles.setName}
+              />
+            </div>
+            <div className={styles.formGroup}>
+              <label className={styles.mutedText}>Select Tags:</label>
+              <Select
+                options={tagsOptions} // set options for react-select
+                isMulti
+                onChange={setSelectedTags} // update state when the user selects or unselects a tag
+                value={selectedTags} // control the current value
+                getOptionLabel={(option) => option.label} // defines how to display the option label
+                getOptionValue={(option) => option.value} // defines how to get the option value
+                className={styles.tagsSelect}
+              />
+            </div>
           </div>
-        ))}
-        <div>
-          <label>Select Tags:</label>
-          <Select
-            options={tagsOptions} // set options for react-select
-            isMulti
-            onChange={setSelectedTags} // update state when the user selects or unselects a tag
-            value={selectedTags} // control the current value
-            getOptionLabel={(option) => option.label} // defines how to display the option label
-            getOptionValue={(option) => option.value} // defines how to get the option value
-          />
-        </div>
+          <div className={styles.formGroup}>
+            <label className={styles.mutedText}>
+              Description
+            </label>
+            <textarea
+              value={setDescription}
+              onChange={(e) => setSetDescription(e.target.value)}
+              placeholder="Set Description"
+              required
+              className={styles.descriptionInput}
+            />
+          </div>
 
-        <button type="button" onClick={addFlashcard}>
-          Add Flashcard
-        </button>
+          {/* dynamically rendered flashcards input */}
+          {flashcards.map((flashcard, index) => (
+            <div key={index} className={styles.flashcardPair}>
+              <ReactQuill
+                value={flashcard.question}
+                onChange={(content) =>
+                  handleFlashcardChange(index, "question", content)
+                }
+                placeholder="Question"
+                theme="bubble" // set the theme to bubble
+                modules={flashcardModule}
+                className={styles.quillComponent}
+              />
+              <ReactQuill
+                value={flashcard.answer}
+                onChange={(content) =>
+                  handleFlashcardChange(index, "answer", content)
+                }
+                placeholder="Answer"
+                theme="bubble" // Set the theme to bubble
+                modules={flashcardModule}
+                className={styles.quillComponent}
+              />
+              <button className={styles.removeCard} type="button" onClick={() => removeFlashcard(index)}>
+                Remove
+              </button>
+            </div>
+          ))}
 
-        <button type="submit">Create Set</button>
-      </form>
+
+          <button type="button" onClick={addFlashcard} className={styles.bottomButton}>
+            Add Flashcard
+          </button>
+
+          <button type="submit" className={`${styles.bottomButton} ${styles.createButton}`}>Create Set</button>
+        </form>
+      </div>
     </div>
   );
 };

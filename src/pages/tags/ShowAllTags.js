@@ -3,6 +3,8 @@ import { useNavigate, Link } from 'react-router-dom';
 import { db, auth } from "../../config/firebase";
 import { collection, query, where, getDocs } from "firebase/firestore";
 
+import styles from "./ShowAllTags.module.css"
+
 const ShowAllTags = () => {
   const [tags, setTags] = useState([]);
 
@@ -54,17 +56,22 @@ const ShowAllTags = () => {
     return <div>Loading tags...</div>;
   }
   return (
-    <div>
-      <h1>All Tags</h1>
-      <ul>
-        {tags.map(tag => (
-          <li key={tag.id}>
-            <strong>{tag.tagName}</strong> - 
-            <Link to={`/tags/${tag.id}`}>View</Link> | 
-            <Link to={`/tags/${tag.id}/edit`}>Edit</Link> 
-          </li>
-        ))}
-      </ul>
+    <div className={styles.mainContainer}>
+      <div className={styles.mainContent}>
+        <h1 className={styles.mainText}>All Tags</h1>
+        <ul className={styles.tags}>
+          {tags.map(tag => (
+            <li key={tag.id} className={styles.tag}>
+              <strong className={styles.tagName}>{tag.tagName}</strong>
+              <span>
+                <Link to={`/tags/${tag.id}`} className={`${styles.button} ${styles.view}`}>View</Link>
+                <Link to={`/tags/${tag.id}/edit`} className={`${styles.button} ${styles.edit}`}>Edit</Link>
+              </span>
+            </li>
+          ))}
+        </ul>
+        <Link to="/tags/post">Post</Link>
+      </div>
     </div>
   );
 };

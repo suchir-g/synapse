@@ -13,6 +13,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import { updateRevisionDates } from "../interleaving/updateFlashcards";
 import { updateStreak } from "../../../UpdateStreak";
 
+import styles from "./SimpleDisplay.module.css"
+
 const SimpleDisplay = () => {
   const history = useNavigate();
   const { setID } = useParams();
@@ -111,7 +113,7 @@ const SimpleDisplay = () => {
 
   const restartFlashcards = () => {
     setCurrentCardIndex(0);
-    setIsCompleted(false); // Reset the completion status
+    setIsCompleted(false); // reset the completion status
   };
 
   const toggleFlipMode = () => {
@@ -138,31 +140,41 @@ const SimpleDisplay = () => {
 
   if (isCompleted) {
     return (
-      <div>
-        <div>Well done! You've reached the end of the set.</div>
-        <button onClick={handlePrev}>{"<"}</button>
-        <button onClick={restartFlashcards}>Start Again</button>
-        <button onClick={navigateToSet}>Back to set</button>
+      <div className={styles.endContainer}>
+        <button onClick={handlePrev} className={styles.arrowButton}>{"<"}</button>
+        <div className={styles.flashcard}>
+          <div>Well done! You've reached the end of the set.</div>
+          <button onClick={restartFlashcards} className={styles.toggleButton}>Start Again</button>
+          <button onClick={navigateToSet} className={styles.toggleButton}>Back to set</button>
+        </div>
+        <div className={styles.dummy}>
+
+        </div>
       </div>
     );
   }
 
   return (
-    <div>
-      {flashcards.length > 0 && (
-        <Flashcard
-          key={flashcards[currentCardIndex].id}
-          flashcard={flashcards[currentCardIndex]}
-          isQuestionFirst={isQuestionFirst}
-        />
-      )}
-      <button onClick={handlePrev}>{"<"}</button>
-      <button onClick={handleNext}>{">"}</button>
-      <button onClick={toggleFlipMode}>Toggle Flip Mode</button>
-      <button onClick={toggleMode}>
-        {isRandomMode ? "Ordered Mode" : "Random Mode"}
-      </button>
-      <div>Progress: {progress.toFixed(0)}%</div>
+    <div className={styles.mainContainer}>
+      <div className={styles.progressText}>Progress: {progress.toFixed(0)}%</div>
+      <div className={styles.mainSection}>
+        <button onClick={handlePrev} className={styles.arrowButton}>{"<"}</button>
+        {flashcards.length > 0 && (
+          <Flashcard
+            key={flashcards[currentCardIndex].id}
+            flashcard={flashcards[currentCardIndex]}
+            isQuestionFirst={isQuestionFirst}
+            size={{ width: "1000px", height: "600px" }}
+          />
+        )}
+        <button onClick={handleNext} className={styles.arrowButton}>{">"}</button>
+      </div>
+      <div className={styles.bottomSection}>
+        <button onClick={toggleFlipMode} className={styles.toggleButton}>Toggle Flip Mode</button>
+        <button onClick={toggleMode} className={styles.toggleButton}>
+          {isRandomMode ? "Ordered Mode" : "Random Mode"}
+        </button>
+      </div>
     </div>
   );
 };

@@ -20,7 +20,7 @@ const ShowTag = ({isAuth}) => {
   useEffect(() => {
     const fetchTagData = async () => {
       try {
-        // Get the tag document by ID
+        // get the tag document by ID
         const tagDocRef = doc(db, "tags", tagID);
         const tagDocSnap = await getDoc(tagDocRef);
 

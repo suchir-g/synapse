@@ -3,22 +3,25 @@
 :root {
     --navbar-color: #ffffff;
     --background-color: #ffffff;
+    --footer-color: #303338;
     --muted-background: #F3F3F3; 
-    --dots-color: #D2D6DB;
+    --dots-color: #a8abae;
     
     --text-color: black;
     --text-muted-color:#414141;
 
     --primary: #3A86FF;
-    --secondary: #D2D6DB;
-    --tertiary: #D9D9D9;
+    --secondary: #b9bbbe;
+    --tertiary: #f1f1f1;
     --success: #5DC133;
     --danger: #FD2B3B;
     --primary-variant: #000080;
+    --quizlet-color: #4255ff;
 
     --flashcards-color: #8338ec;
 
     --muted: #797979;
+    --muted-link-color: #274c77;
 
     --light-button: #e9e9e9;
     --light-button-hover: #d2d2d2;

@@ -8,6 +8,8 @@ import {
   getDocs,
   orderBy,
   limit,
+  doc,
+  getDoc
 } from "firebase/firestore";
 import { sanitizeAndTruncateHtml } from "../utilities";
 import { checkAndResetStreak } from "../UpdateStreak";
@@ -19,6 +21,7 @@ import ExamCountdown from "./exams/ExamCountdown";
 import StreakDisplay from "./StreakDisplay";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
+import LoadingComponent from "LoadingComponent";
 
 const Dashboard = ({ isAuth }) => {
   const navigate = useNavigate();
@@ -28,12 +31,14 @@ const Dashboard = ({ isAuth }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [hasRevisedToday, setHasRevisedToday] = useState(false);
   const [mainTodoListId, setMainTodoListId] = useState(null);
+  const [setsToReviseToday, setSetsToReviseToday] = useState([])
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(async (user) => {
       if (user) {
         await loadData(user.uid);
         checkAndResetStreak(user.uid);
+        fetchRevisionSchedules(user.uid)
       } else {
         navigate("/login");
       }
@@ -42,9 +47,57 @@ const Dashboard = ({ isAuth }) => {
     return () => unsubscribe();
   }, []);
 
+  const fetchRevisionSchedules = async (currentUserID) => {
+    const todayStr = new Date().toISOString().split("T")[0]; // format today's date as YYYY-MM-DD
+
+    const revisionScheduleDocRef = doc(
+      db,
+      "revisionSchedules",
+      currentUserID
+    );
+    const revisionScheduleSnapshot = await getDoc(
+      revisionScheduleDocRef
+    );
+
+    if (revisionScheduleSnapshot.exists()) {
+      const revisionSchedules =
+        revisionScheduleSnapshot.data().revisionSchedule;
+
+      const setsToCheck = revisionSchedules
+        .filter(
+          (schedule) => schedule.revisionDates.includes(todayStr) // check if the schedule includes today
+        )
+        .map((schedule) => schedule.flashcardId);
+
+      const setsToRevisePromises = setsToCheck.map(async (setId) => {
+        const setDocRef = doc(db, "flashcardSets", setId);
+        const setDocSnap = await getDoc(setDocRef);
+        if (setDocSnap.exists()) {
+          const setData = setDocSnap.data();
+          // check if the set hasn't been revised today
+          console.log(setData)
+          if (setData.revised !== todayStr) {
+            const viewedDate = setData.revised;
+            const formattedViewedDate = viewedDate.split("-").reverse().join("/")
+            return { id: doc.id, ...setData, lastRevised: formattedViewedDate };
+          }
+
+        }
+        return null;
+      });
+
+      const setsToReviseData = (
+        await Promise.all(setsToRevisePromises)
+      ).filter(Boolean);
+      setSetsToReviseToday(setsToReviseData);
+    } else {
+      console.log("No revision schedule found for the user.");
+    }
+  };
+
   const checkRevisionStatus = (lastRevised) => {
     if (!lastRevised) return;
-    const lastRevisedDate = lastRevised.toDate(); // Assuming lastRevised is a Firestore Timestamp
+    const lastRevisedDate = lastRevised.toDate(); // assuming lastRevised is a Firestore Timestamp
     const today = new Date();
     const revisedToday =
       lastRevisedDate.setHours(0, 0, 0, 0) === today.setHours(0, 0, 0, 0);
@@ -115,7 +168,7 @@ const Dashboard = ({ isAuth }) => {
   };
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <LoadingComponent />;
   }
   return (
     <div className={`${styles.dashboardContainer} container text-center`}>
@@ -131,7 +184,34 @@ const Dashboard = ({ isAuth }) => {
               </h3>
             </div>
             <section className={styles.contentSection}>
-              <div className={styles.latestFlashcards}>
+              {(setsToReviseToday.length > 0) && <div className={styles.flashcardsToReviseToday}>
+                <h2 className={styles.latestText}>Flashcard Sets to Revise Today</h2>
+                <div className={styles.gridContainer}>
+                  {setsToReviseToday.map((set) => (
+                    <div key={set.id} className={styles.card}>
+                      <div className={styles.cardBody}>
+                        <Link
+                          to={`/sets/${set.id}`}
+                          className={styles.cardLink}
+                        >
+                          <h3>{set.title}</h3>
+                        </Link>
+                        <p className={styles.cardDescription}>
+                          {set.description}
+                        </p>
+                      </div>
+                      <div className={styles.cardFooter}>
+                        <span className={styles.lastRevised}>
+                          Last revised: {set.lastRevised}
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>}
+
+
+              {latestSets ? <div className={styles.latestFlashcards}>
                 <h2 className={styles.latestText}>Latest Flashcard Sets</h2>
                 <div className={styles.gridContainer}>
                   {latestSets.map((set) => (
@@ -154,9 +234,11 @@ const Dashboard = ({ isAuth }) => {
                       </div>
                     </div>
                   ))}
-                  <FontAwesomeIcon icon={faChevronRight} color="grey" />
+                  <Link to="/mystuff/flashcards"><FontAwesomeIcon icon={faChevronRight} color="grey" /></Link>
                 </div>
-              </div>
+              </div> : <div>
+                Post
+              </div>}
 
               <div className={styles.latestNotes}>
                 <h2 className={styles.latestText}>Latest Notes</h2>
@@ -184,7 +266,7 @@ const Dashboard = ({ isAuth }) => {
                       </div>
                     </div>
                   ))}
-                  <FontAwesomeIcon icon={faChevronRight} color="grey" />
+                  <Link to="/mystuff/notes"><FontAwesomeIcon icon={faChevronRight} color="grey" /></Link>
                 </div>
               </div>
             </section>
@@ -194,6 +276,9 @@ const Dashboard = ({ isAuth }) => {
           </div>
         </div>
         <div className={`${styles.sidebar} col-3`}>
+          <div className={styles.examCountdown}>
+            <ExamCountdown />
+          </div>
           <div className={styles.todoList}>
             <CompactTodoList todoID={mainTodoListId} />
           </div>
@@ -207,16 +292,7 @@ const Dashboard = ({ isAuth }) => {
             />
           </div>
 
-          <div className={styles.examCountdown}>
-            <ExamCountdown />
-          </div>
         </div>
-      </div>
-
-      <div>
-        <button className={styles.button} onClick={() => navigate("/mystuff")}>
-          Go to My Stuff
-        </button>
       </div>
     </div>
   );

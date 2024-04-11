@@ -1,0 +1,18 @@
+.mainContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.mainText {
+    font-size: 128px;
+    font-weight: 600;
+}
+
+.muted {
+    color: var(--muted);
+    margin-top: 15px;
+    font-size: 18px;
+}

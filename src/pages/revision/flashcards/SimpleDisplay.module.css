@@ -1,0 +1,69 @@
+.mainContainer {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly; 
+    align-items: center;
+}
+
+.endContainer {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly; 
+    align-items: center;
+}
+
+
+.mainSection {
+    display: flex;
+    flex-direction: row;
+    width: 85%;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.arrowButton {
+    height: 40px;
+    width: 40px;
+    border: transparent;
+    border-radius: 5px;
+}
+
+.bottomSection {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.toggleButton {
+    width: 150px;
+    height: fit-content;
+    display: block;
+    margin: 5px 0px 5px 0px;
+    border: transparent;
+    border-radius: 5px;
+    padding: 15px 10px;
+}
+
+.progressText {
+    color: var(--muted);
+}
+
+.flashcard {
+    width: 1000px;
+    height: 600px;
+    border-radius: 10px;
+    overflow: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    box-shadow: var(--lesser-shadow);
+    font-size: 19px;
+    background-color: white;
+}

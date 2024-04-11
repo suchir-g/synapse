@@ -13,11 +13,11 @@ const Timer = ({
   const [timeLeft, setTimeLeft] = useState(duration * 60);
 
   useEffect(() => {
-    // This effect resets the timer when the duration changes.
+    // this effect resets the timer when the duration changes.
     setTimeLeft(duration * 60);
     setEndTime(null);
     setIsActive(isTimerRunning);
-    // If the timer is supposed to be running, restart it with the new duration.
+    // if the timer is supposed to be running, restart it with the new duration.
     if (isTimerRunning) {
       setEndTime(Date.now() + duration * 60 * 1000);
     }
@@ -48,9 +48,8 @@ const Timer = ({
     const minutes = Math.floor(timeLeft / 60);
     const seconds = timeLeft % 60;
     if (title) {
-      document.title = `${title} - ${minutes}:${
-        seconds < 10 ? `0${seconds}` : seconds
-      }`;
+      document.title = `${title} - ${minutes}:${seconds < 10 ? `0${seconds}` : seconds
+        }`;
     }
   }, [timeLeft, title]);
 
@@ -62,7 +61,7 @@ const Timer = ({
 
   const pauseTimer = () => {
     setIsActive(false);
-    setEndTime(null); // Save the remaining time to start from there later
+    setEndTime(null); // save the remaining time to start from there later
   };
 
   const resetTimer = () => {
@@ -72,28 +71,29 @@ const Timer = ({
   };
 
   return (
-    <div>
+    <div className={styles.mainContainer}>
       {title && <h3 className={styles.title}>{title}</h3>}
-      <div className={styles.timeLeft}>{`${Math.floor(timeLeft / 60)}:${
-        timeLeft % 60 < 10 ? `0${timeLeft % 60}` : timeLeft % 60
-      }`}</div>
-      <button
-        onClick={startTimer}
-        disabled={isActive}
-        className={styles.button}
-      >
-        Start
-      </button>
-      <button
-        onClick={pauseTimer}
-        disabled={!isActive}
-        className={styles.button}
-      >
-        Pause
-      </button>
-      <button onClick={resetTimer} className={styles.button}>
-        Reset
-      </button>
+      <div className={styles.timeLeft}>{`${Math.floor(timeLeft / 60)}:${timeLeft % 60 < 10 ? `0${timeLeft % 60}` : timeLeft % 60
+        }`}</div>
+      <span>
+        <button
+          onClick={startTimer}
+          disabled={isActive}
+          className={styles.button}
+        >
+          Start
+        </button>
+        <button
+          onClick={pauseTimer}
+          disabled={!isActive}
+          className={styles.button}
+        >
+          Pause
+        </button>
+        <button onClick={resetTimer} className={styles.button}>
+          Reset
+        </button>
+      </span>
     </div>
   );
 };

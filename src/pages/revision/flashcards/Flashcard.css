@@ -11,7 +11,6 @@
   position: relative; /* Changed from absolute to relative */
   transition: transform 0.6s; /* change to adjust the flip speed */
   transform-style: preserve-3d; /* This is important for flipping */
-
 }
 
 .card .front,
@@ -26,6 +25,8 @@
   justify-content: center;
   align-items: center;
   box-shadow: var(--lesser-shadow);
+  font-size: 19px;
+  padding: 20px
 }
 
 /* Hide scrollbar for Chrome, Safari and Opera */

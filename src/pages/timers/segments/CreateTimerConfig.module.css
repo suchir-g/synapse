@@ -1,0 +1,52 @@
+.mainContainer {
+    display: flex;
+    justify-content: center;
+align-items: center;
+padding: 30px
+}
+
+.flashcard {
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    width: 80%;
+    background-color: white;
+    border: none;
+    border-radius: 5px;
+    box-shadow: var(--shadow);
+}
+
+.mainText {
+    font-weight: 600;
+    font-size: 22px;
+}
+
+.input {
+    border: 1px var(--muted) solid;
+    border-radius: 5px;
+    padding: 10px 15px;
+    margin: 20px 10px 10px 0px;
+}
+
+.button {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    background-color: var(--muted);
+    color: white;
+    margin: 15px 0px
+}
+
+.sectionSection {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.createExamConfigButton {
+    background-color: var(--primary);
+}
+
+.sectionText {
+    color: var(--muted);
+}

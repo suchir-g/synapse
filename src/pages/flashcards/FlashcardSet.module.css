@@ -8,7 +8,13 @@
   box-shadow: var(--lesser-shadow);
 }
 
-/* Typography */
+.tag {
+  background-color: var(--muted-background);
+  padding: 5px 10px;
+  border: transparent;
+  border-radius: 5px;
+}
+
 .title, .description, .owner, .tag, .link {
   color: #333; /* Darker text for better readability */
 }
@@ -54,12 +60,11 @@
 }
 
 .editButton {
-  background-color: var(--muted); /* Different color tint for the edit button */
-  color: white;
+  color: var(--muted);
   border: none;
   border-radius: 5px;
+  height: 36px;
   padding: 10px 15px;
-  margin-top: 20px;
   font-size: 1.2rem; /* Adjust size as needed */
   cursor: pointer;
   transition: background-color 0.2s;
@@ -121,4 +126,15 @@
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
+  margin: 10px 0px 10px 0px
+}
+
+.shareButton {
+  color: var(--muted);
+  border: none;
+  border-radius: 5px;
+  padding: 10px 15px;
+  font-weight: 500;
+  height: 36px;
+  margin-left: 10px
 }

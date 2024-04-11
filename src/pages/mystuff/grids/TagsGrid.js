@@ -3,13 +3,10 @@ import { Link } from "react-router-dom";
 import { collection, query, getDocs, where } from "firebase/firestore";
 import { db, auth } from "../../../config/firebase";
 
-// Assuming you don't need to sanitize HTML for tags, but if you do, import the necessary utility function
-// import { sanitizeAndTruncateHtml } from "../../../utilities";
-
 const TagsGrid = () => {
   const [tags, setTags] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [authLoaded, setAuthLoaded] = useState(false); // Keep track of auth loading
+  const [authLoaded, setAuthLoaded] = useState(false); // keep track of auth loading
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {

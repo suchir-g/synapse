@@ -9,7 +9,10 @@ import {
   getDoc,
 } from "firebase/firestore";
 import Timer from "../Timer"; // Your Timer component
-import { Link } from "react-router-dom";
+import MyStuffLoadingComponent from "../../mystuff/MyStuffLoadingComponent"
+
+import styles from "./ExamTimers.module.css"
+import LoadingComponent from "LoadingComponent";
 
 const ExamTimers = () => {
   const [examConfigs, setExamConfigs] = useState([]);
@@ -111,7 +114,7 @@ const ExamTimers = () => {
           key={`${selectedConfigId}-${index}`} // use a combination of config ID and index as key
           duration={section.duration}
           title={section.title}
-          onTimerFinish={() => {}}
+          onTimerFinish={() => { }}
           isTimerRunning={isTimerRunning}
           onTimerStart={startTimer}
         />
@@ -150,52 +153,52 @@ const ExamTimers = () => {
     setAutoStart(!autoStart);
   };
 
+  if (loading) {
+    return <LoadingComponent />
+  }
+
   return (
-    <div>
-      <h2>Select an Exam Configuration</h2>
+    <div className={styles.mainContainer}>
+      <div className={styles.mainContent}>
+        <h2 className={styles.mainText}>Select an Exam Configuration</h2>
 
-      {loading ? (
-        <p>Loading configurations...</p>
-      ) : (
-        <select value={selectedConfigId} onChange={handleConfigChange}>
-          {/* disabled default option here */}
-          <option value="" disabled>
-            Select config here
-          </option>
-          {examConfigs.map((config) => (
-            <option key={config.id} value={config.id}>
-              {config.name}
+        {loading ? (
+          <p>Loading configurations...</p>
+        ) : (
+          <select value={selectedConfigId} onChange={handleConfigChange} className={styles.selectDropdown}>
+            {/* disabled default option here */}
+            <option value="" disabled>
+              Select config here
             </option>
-          ))}
-        </select>
-      )}
-      <br />
+            {examConfigs.map((config) => (
+              <option key={config.id} value={config.id}>
+                {config.name}
+              </option>
+            ))}
+          </select>
+        )}
+        <br />
 
-      <button onClick={toggleMode}>
-        Switch to {mode === "sequential" ? "Segmented" : "Sequential"} Mode
-      </button>
-      <button onClick={toggleAutoStart}>
-        {autoStart ? "Disable" : "Enable"} Auto-Start Next Timer
-      </button>
+        <button onClick={toggleMode} className={styles.button}>
+          Switch to {mode === "sequential" ? "Segmented" : "Sequential"} Mode
+        </button>
+        <button onClick={toggleAutoStart} className={styles.button}>
+          {autoStart ? "Disable" : "Enable"} Auto-Start Next Timer
+        </button>
 
-      {loading && <p>Loading configuration...</p>}
+        {loading && <MyStuffLoadingComponent flexSize={true}/>}
 
-      {selectedConfig && (
-        <div>
-          <h1>{selectedConfig.name} Exam Timers</h1>
-          {renderTimers()}
-          {/* allow manual progression in segmented mode or if timer isn't running */}
-          {mode === "sequential" &&
-            !isTimerRunning &&
-            currentSectionIndex < selectedConfig.sections.length - 1 && (
-              <button onClick={moveToNextSection}>Next Section</button>
-            )}
-        </div>
-      )}
-      <hr />
-      <Link to="/timers/config/post" className="post-exam-config-link">
-        Post Exam Config
-      </Link>
+        {selectedConfig && (
+          <div>
+            {renderTimers()}
+            {mode === "sequential" &&
+              !isTimerRunning &&
+              currentSectionIndex < selectedConfig.sections.length - 1 && (
+                <button onClick={moveToNextSection} className={`${styles.button} ${styles.nextSection}`}>Next Section</button>
+              )}
+          </div>
+        )}
+      </div>
     </div>
   );
 };

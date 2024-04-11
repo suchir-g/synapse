@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { auth, db } from "../../config/firebase";
 import { collection, query, where, getDocs } from "firebase/firestore";
-import { Link, useNavigate } from "react-router-dom"; // Assuming you're using react-router for navigation
+import { Link, useNavigate } from "react-router-dom"; 
 import { onAuthStateChanged } from "firebase/auth";
 
 const WhiteboardsPage = () => {
@@ -26,11 +26,11 @@ const WhiteboardsPage = () => {
         fetchWhiteboards();
       } else {
         console.log("User is not authenticated");
-        setWhiteboards([]); // Clear whiteboards if no user is authenticated
+        setWhiteboards([]); // clear whiteboards if no user is authenticated
       }
     });
 
-    // Cleanup subscription on unmount
+    // cleanup subscription on unmount
     return () => unsubscribe();
   }, []);
 

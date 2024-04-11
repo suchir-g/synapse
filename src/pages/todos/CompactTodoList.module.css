@@ -6,18 +6,6 @@
   box-shadow: var(--shadow);
 }
 
-.todoItem {
-  background-color: blue;
-  border: 1px solid #ddd;
-  height: 56px;
-  margin-bottom: 10px;
-  border-radius: 6px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
 .todoItem:not(:last-child) {
   margin-bottom: 15px;
 }
@@ -27,15 +15,6 @@
   flex-grow: 1;
 }
 
-.button {
-  background-color: var(--color-primary);
-  color: var(--color-secondary);
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-  margin-left: 10px;
-}
 .addTodo {
   background-color: var(--muted);
   width: 95px;

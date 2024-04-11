@@ -4,6 +4,7 @@ import { collection, query, getDocs, where } from "firebase/firestore";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth, db } from "../../../config/firebase";
 import styles from "./CompactWhiteboardGrid.module.css"; // Path to the new CSS file
+import LoadingComponent from "LoadingComponent";
 
 const CompactWhiteboardGrid = () => {
   const [whiteboards, setWhiteboards] = useState([]);
@@ -43,7 +44,7 @@ const CompactWhiteboardGrid = () => {
   }, []);
 
   if (isLoading) {
-    return <div>Loading whiteboards...</div>;
+    return <LoadingComponent />;
   }
 
   return (

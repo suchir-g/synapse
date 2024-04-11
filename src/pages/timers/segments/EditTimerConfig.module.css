@@ -1,0 +1,87 @@
+.mainContainer {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 30px;
+}
+
+.flashcard {
+    background-color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 30px;
+    width: 80%;
+}
+
+.mainText {
+    font-size: 26px;
+    font-weight: 600;
+}
+
+.title {
+    font-weight: 600;
+    font-size: 32px;
+    border: none;
+    margin: 10px 0px 10px 0px;
+}
+
+.sectionText {
+    margin: 10px 0px 10px 0px;
+    color: var(--text-muted-color);
+}
+
+.sectionTab {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    margin: 10px 0px 10px 0px;
+}
+
+.button {
+    border: none;
+    border-radius: 5px;
+    box-shadow: var(--shadow);
+    padding: 10px 15px;
+    margin-right: 10px;
+}
+
+.addSection {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+
+}
+
+.addSectionButton {
+    color: white;
+    background-color: var(--success);
+}
+
+.deleteSectionButton {
+    background-color: var(--muted);
+    color: white;
+}
+
+.input {
+    padding: 10px 15px;
+    border-radius: 5px;
+    border: 1px var(--muted) solid;
+    margin: 5px 10px 5px 0px;
+}
+
+.updateButton {
+    background-color: var(--primary);
+    color: white;
+    margin-top: 10px;
+}
+
+.deleteButton {
+    background-color: var(--danger);
+    color: white;
+    margin-top: 10px;
+}

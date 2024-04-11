@@ -1,0 +1,62 @@
+.mainContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+}
+
+.flashcard {
+    padding: 30px;
+    margin: 20px;
+    border-radius: 5px;
+    border: none;
+    box-shadow: var(--shadow);
+    width: 80%;
+    background-color: white;
+}
+
+.title {
+    font-weight: 600;
+    font-size: 32px;
+    border: none;
+    margin: 10px 0px 10px 0px;
+}
+
+.tag {
+    background-color: var(--muted-background);
+    padding: 5px 10px;
+    border: transparent;
+    border-radius: 5px;
+}
+
+.tags {
+    margin: 15px 0px 15px 0px;
+}
+
+.mainNote {
+    line-height: 140%;
+}
+
+.editButton {
+    background-color: var(--primary);
+    border: none;
+    border-radius: 5px;
+    padding: 10px 15px;
+    color: white;
+    margin: 10px 20px 10px 0px;
+}
+
+.deleteButton {
+    background-color: var(--danger);
+}
+
+.tagsSection {
+    margin: 10px 0px 10px 0px;
+}
+
+.tagsSelectText {
+    color: var(--text-muted-color);
+    font-size: 16px;
+    margin-bottom: 5px; 
+}

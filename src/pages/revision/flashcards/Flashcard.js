@@ -1,20 +1,20 @@
 import React, { useState } from "react";
 import { sanitizeHTML } from "../../../utilities";
-import "./Flashcard.css"; // import CSS for styling
+import "./Flashcard.css"; 
 
 const Flashcard = ({ flashcard, isQuestionFirst, size }) => {
   const [isFlipped, setIsFlipped] = useState(false);
-  const defaultSize = { width: "300px", height: "200px" }; // Default size
+  const defaultSize = { width: "300px", height: "200px" }; // default size
 
   const flipCard = () => {
     setIsFlipped(!isFlipped);
   };
 
-  // Calculate the card size
+  // calculate the card size
   const cardStyle = {
     width: size && size.width ? size.width : defaultSize.width,
     height: size && size.height ? size.height : defaultSize.height,
-    // Add other styles if necessary
+    // add other styles if necessary
   };
 
   return (

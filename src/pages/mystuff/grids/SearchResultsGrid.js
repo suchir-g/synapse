@@ -80,7 +80,7 @@ const SearchResultsGrid = ({ searchQuery, currentUserID }) => {
       location: 0,
       distance: 100,
       minMatchCharLength: 2,
-      keys: ["title", "tagName", "description"], // Assuming description is a key you want to search through as well
+      keys: ["title", "tagName", "description"], 
     };
 
     const searchInCategory = (items) =>

@@ -22,6 +22,10 @@
     margin: 0 auto; /* Center the fire image/icon */
 }
 
+.fireInactive {
+    color: #333;
+}
+
 .streakCountActive,
 .streakCountInactive {
     position: absolute;

@@ -9,12 +9,12 @@ const CompactTodoList = ({ todoID }) => {
   const [completedTodos, setCompletedTodos] = useState([]);
   const [uncompletedTodos, setUncompletedTodos] = useState([]);
   const [todoTitle, setTodoTitle] = useState("");
-  const [newTodoText, setNewTodoText] = useState(""); // State for new todo input
+  const [newTodoText, setNewTodoText] = useState(""); // state for new todo input
   const [isEditing, setIsEditing] = useState(null);
   const [editText, setEditText] = useState("");
 
   useEffect(() => {
-    // Define fetchTodos inside useEffect to ensure it's defined
+    // define fetchTodos inside useEffect to ensure it's defined
     const fetchTodos = async () => {
       const docRef = doc(db, "todoLists", todoID);
       const docSnap = await getDoc(docRef);
@@ -43,9 +43,9 @@ const CompactTodoList = ({ todoID }) => {
   const addNewTodo = async () => {
     if (!newTodoText.trim()) return;
     const newTodo = { text: newTodoText, completed: false };
-    // Update the state directly instead of re-fetching from the database
+    // update the state directly instead of re-fetching from the database
     setUncompletedTodos((prevTodos) => [...prevTodos, newTodo]);
-    setNewTodoText(""); // Clear the input after adding
+    setNewTodoText(""); // clear the input after adding
     await updateDoc(doc(db, "todoLists", todoID), {
       todos: [...uncompletedTodos, newTodo, ...completedTodos],
     });
@@ -83,8 +83,6 @@ const CompactTodoList = ({ todoID }) => {
     setIsEditing(null);
     setEditText("");
   };
-
-  if (!uncompletedTodos.length) return <div>No uncompleted tasks</div>;
 
   return (
     <div className={styles.container}>

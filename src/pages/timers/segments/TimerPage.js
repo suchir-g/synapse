@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Timer from "../Timer"; // adjust the import path as necessary
+import styles from "./TimerPage.module.css"
 
 const TimerPage = () => {
   const [title, setTitle] = useState("My Timer");
@@ -35,26 +36,32 @@ const TimerPage = () => {
   };
 
   return (
-    <div>
-      <h2>Set Timer</h2>
-      <label>
-        Title:
-        <input type="text" value={title} onChange={handleTitleChange} />
-      </label>
-      <br />
-      <label>
-        Duration (minutes):
-        <input type="number" value={duration} onChange={handleDurationChange} />
-      </label>
-      <br />
-      <Timer
-        key={duration} // using duration as a key to remount Timer when it changes
-        title={title}
-        duration={duration}
-        isTimerRunning={isTimerRunning}
-        onTimerStart={handleTimerStart}
-        onTimerFinish={handleTimerFinish}
-      />
+    <div className={styles.mainContainer}>
+      <div className={styles.mainSection}>
+        <h2 className={styles.setTimerText}>Set Timer</h2>
+        <div className={styles.formGroup}>
+          <label className={styles.muted}>
+            Title:
+          </label>
+          <input type="text" value={title} onChange={handleTitleChange} className={`${styles.input}`} />
+        </div>
+        <br />
+        <div className={styles.formGroup}>
+          <label className={styles.muted}>
+            Duration (minutes):
+          </label>
+          <input type="number" value={duration} onChange={handleDurationChange} className={`${styles.input}`} />
+        </div>
+        <br />
+        <Timer
+          key={duration} // using duration as a key to remount Timer when it changes
+          title={title}
+          duration={duration}
+          isTimerRunning={isTimerRunning}
+          onTimerStart={handleTimerStart}
+          onTimerFinish={handleTimerFinish}
+        />
+      </div>
     </div>
   );
 };

@@ -1,0 +1,43 @@
+.mainContainer {
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin: 30px;
+}
+
+.mainContent {
+    padding: 30px;
+    height: 70vh;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    flex-direction: column;
+    width: 80%;
+    background-color: white;
+    border: none;
+    border-radius: 5px;
+    box-shadow: var(--shadow);
+}
+
+.button {
+    padding: 10px 15px;
+    width: fit-content;
+    border: none;
+    border-radius: 5px;
+    box-shadow: var(--lesser-shadow);
+    margin: 10px 10px 10px 0px;
+    background-color: var(--secondary);
+}
+
+.mainText {
+    font-weight: 600;
+    font-size: 22px;
+}
+
+.timeLeft {
+    font-weight: 700;
+    font-size: 48px;
+    margin: 20px auto;
+}

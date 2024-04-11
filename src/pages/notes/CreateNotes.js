@@ -6,19 +6,21 @@ import 'react-quill/dist/quill.snow.css'; // Add quill styles
 import { useNavigate } from 'react-router-dom';
 import Select from 'react-select';
 import { noteModule } from '../../config/quill';
+import styles from "./CreateNotes.module.css";
+
 const CreateNotes = ({ isAuth }) => {
   const navigate = useNavigate();
-  
+
   const notesRef = collection(db, "notes");
   const tagsRef = collection(db, "tags");
-  
+
   const [noteTitle, setNoteTitle] = useState("");
   const [noteContent, setNoteContent] = useState("");
 
   const [tags, setTags] = useState([]); // Options for react-select
   const [selectedTags, setSelectedTags] = useState([]); // Selected tags
 
-  if (!isAuth) {navigate("/")}
+  if (!isAuth) { navigate("/") }
 
   useEffect(() => {
     // like the other files, this just populates the tags field with the actual tags so that we can query by them later 
@@ -68,33 +70,39 @@ const CreateNotes = ({ isAuth }) => {
   };
 
   return (
-    <div>
-      <form onSubmit={handleCreateNote}>
-        <input
-          type="text"
-          value={noteTitle}
-          onChange={(e) => setNoteTitle(e.target.value)}
-          placeholder="Note Title"
-          required
-        />
+    <div className={styles.mainContainer}>
+      <div className={styles.flashcard}>
+        <form onSubmit={handleCreateNote}>
+          <input
+            type="text"
+            value={noteTitle}
+            onChange={(e) => setNoteTitle(e.target.value)}
+            placeholder="Note Title"
+            required
+            className={styles.title}
+          />
 
-        <Select
-          options={tags}
-          isMulti
-          onChange={setSelectedTags}
-          value={selectedTags}
-          placeholder="Select tags"
-        />
+          <div className={styles.tagsSection}>
+            <label className={styles.tagsSelectText}>Select Tags:</label>
+            <Select
+              options={tags}
+              isMulti
+              onChange={setSelectedTags}
+              value={selectedTags}
+              placeholder="Select tags"
+            />
+          </div>
 
-        <ReactQuill
-          value={noteContent}
-          onChange={setNoteContent}
-          placeholder="Write here!"
-          required
-          modules={noteModule}
-        />
-        <button type="submit">Save Note</button>
-      </form>
+          <ReactQuill
+            value={noteContent}
+            onChange={setNoteContent}
+            placeholder="Write here!"
+            required
+            modules={noteModule}
+          />
+          <button type="submit" className={styles.editButton}>Save Note</button>
+        </form>
+      </div>
     </div>
   );
 };

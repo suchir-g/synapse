@@ -28,7 +28,7 @@ const ExamCountdown = () => {
         fetchUserDocument(user.uid);
       } else {
         console.log("User is not signed in");
-        navigate("/login"); // Redirect to login if not signed in
+        navigate("/login"); // redirect to login if not signed in
       }
     });
 
@@ -44,7 +44,6 @@ const ExamCountdown = () => {
     try {
       const querySnapshot = await getDocs(q);
       if (!querySnapshot.empty) {
-        // Assuming each UID corresponds to exactly one user document
         const userDoc = querySnapshot.docs[0];
         console.log("User document found:", userDoc.id);
         fetchNextExam(userDoc.id);
@@ -99,14 +98,14 @@ const ExamCountdown = () => {
   };
 
   const getShadowColor = () => {
-    if (daysUntilNextExam === "") return ""; // No data yet
+    if (daysUntilNextExam === "") return ""; // no data yet
     const days = parseInt(daysUntilNextExam);
     if (days <= 10) {
-      return "rgba(255, 0, 0, 0.7)"; // Red shadow for 10 days or less
+      return "rgba(255, 0, 0, 0.7)"; // red shadow for 10 days or less
     } else if (days <= 30) {
-      return "rgba(255, 165, 0, 0.7)"; // Orange shadow for 30 days or less
+      return "rgba(255, 165, 0, 0.7)"; // orange shadow for 30 days or less
     } else {
-      return "transparent"; // No shadow otherwise
+      return "transparent"; // no shadow otherwise
     }
   };
 
@@ -126,7 +125,6 @@ const ExamCountdown = () => {
         <button className={styles.button} onClick={() => navigate("/exams")}>
           Edit Exams
         </button>
-        {/* Add more buttons here if needed */}
       </div>
     </div>
   );

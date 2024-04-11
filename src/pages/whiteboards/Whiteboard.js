@@ -19,8 +19,13 @@ import {
 } from "firebase/storage";
 import { useNavigate } from "react-router-dom";
 import { Text } from "react-konva";
+import LoadingComponent from "LoadingComponent";
+
+import styles from "./Whiteboard.module.css"
+
 
 const Whiteboard = ({ whiteboardID }) => {
+  const [isLoading, setIsLoading] = useState(true);
   const [tool, setTool] = useState("pen"); // 'pen', 'eraser', 'pencil'
   const [lines, setLines] = useState([]);
   const [history, setHistory] = useState([]);
@@ -36,7 +41,7 @@ const Whiteboard = ({ whiteboardID }) => {
   const [editText, setEditText] = useState("");
   const [backgroundType, setBackgroundType] = useState("plain");
   const [backgroundShapes, setBackgroundShapes] = useState([]);
-  const [opacity, setOpacity] = useState(1); // Opacity range between 0 (transparent) and 1 (opaque)
+  const [opacity, setOpacity] = useState(1); // opacity range between 0 (transparent) and 1 (opaque)
 
   const stageRef = useRef();
   const navigate = useNavigate();
@@ -51,20 +56,19 @@ const Whiteboard = ({ whiteboardID }) => {
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [lines, history]); // Depend on lines and history to ensure they are up-to-date
+  }, [lines, history]); // depend on lines and history to ensure they are up-to-date
 
   useEffect(() => {
     const img = new Image();
-    img.crossOrigin = "anonymous"; // Set the crossOrigin attribute
+    img.crossOrigin = "anonymous"; // set the crossOrigin attribute
     img.onload = () => setImage(img);
-    img.src = backgroundImage; // The URL of the image
-  }, [backgroundImage]); // Depend on backgroundImage to re-run effect
+    img.src = backgroundImage; // the URL of the image
+  }, [backgroundImage]); // depend on backgroundImage to re-run effect
 
   useEffect(() => {
     // auth state listener
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
-        // user is signed in, you can now use `user` object to perform actions
         console.log("User is signed in", user);
       } else {
         // user is signed out
@@ -77,7 +81,7 @@ const Whiteboard = ({ whiteboardID }) => {
   }, []);
 
   useEffect(() => {
-    // Define an async function to load the whiteboard data
+    // async function to load the whiteboard data
     const loadWhiteboard = async () => {
       if (!whiteboardID) return;
       const docRef = doc(db, "whiteboards", whiteboardID);
@@ -88,22 +92,19 @@ const Whiteboard = ({ whiteboardID }) => {
 
         setTitle(whiteboardData.title);
         setBackgroundImage(whiteboardData.downloadURL);
+        setIsLoading(false);  
         console.log(image);
         console.log("No such whiteboard!");
       }
     };
 
-    // Call the loadWhiteboard function defined above
     loadWhiteboard();
 
-    // The useEffect hook's dependency array includes whiteboardID,
-    // which means this hook will rerun if the whiteboardID prop changes,
-    // ensuring that the component can respond to changes in the whiteboardID prop dynamically.
-  }, [whiteboardID]); // Dependency array with whiteboardID
+  }, [whiteboardID]);
 
   useEffect(() => {
     updateBackgroundShapes();
-  }, [backgroundType]); // Depend on backgroundType to re-generate shapes
+  }, [backgroundType]); // depend on backgroundType to re-generate shapes
 
   const handleMouseDown = (e) => {
     isDrawing.current = true;
@@ -143,7 +144,7 @@ const Whiteboard = ({ whiteboardID }) => {
   const updateBackgroundShapes = () => {
     const width = window.innerWidth - 100;
     const height = window.innerHeight;
-    const lineSpacing = 50; // Adjust as needed
+    const lineSpacing = 50; // adjust as needed
 
     let shapes = [];
 
@@ -235,7 +236,7 @@ const Whiteboard = ({ whiteboardID }) => {
       return;
     }
 
-    const storage = getStorage(); // Ensure you have initialized Firebase Storage
+    const storage = getStorage(); // ensure you have initialized Firebase Storage
     const filePath = `drawings/${auth.currentUser.uid}/${whiteboardID}.png`;
     const storageRef = firebaseStorageRef(storage, filePath);
     console.log("Deleting file at path:", filePath);
@@ -280,18 +281,22 @@ const Whiteboard = ({ whiteboardID }) => {
 
   const addTextBox = () => {
     const newText = {
-      x: 50, // Default position
-      y: 50, // Default position
+      x: 50, // default position
+      y: 50, // default position
       text: "New Text",
       fontSize: 20,
       color: "#000000",
-      id: textBoxes.length + 1, // Simple ID assignment
+      id: textBoxes.length + 1, // simple ID assignment
     };
     setTextBoxes([...textBoxes, newText]);
   };
 
   const lineSpacing = 50;
-  const stageWidth = window.innerWidth - 100; // Match the container width
+  const stageWidth = window.innerWidth - 100; // match the container width
+
+  if (isLoading) {
+    return <LoadingComponent />
+  }
 
   return (
     <div style={{ display: "flex" }}>
@@ -300,27 +305,26 @@ const Whiteboard = ({ whiteboardID }) => {
           type="text"
           placeholder="Enter drawing title"
           value={title}
-          onChange={(e) => setTitle(e.target.value)} // Update title state when input changes
+          onChange={(e) => setTitle(e.target.value)} // update title state when input changes
         />
         <div>
-          {/* Background selection UI */}
-          <button onClick={() => setBackgroundType("plain")}>
+          {/* background selection UI */}
+          <button className={`${styles.button}`} onClick={() => setBackgroundType("plain")}>
             Plain Background
           </button>
-          <button onClick={() => setBackgroundType("lined")}>
+          <button className={`${styles.button}`} onClick={() => setBackgroundType("lined")}>
             Lined Background
           </button>
-          <button onClick={() => setBackgroundType("squared")}>
+          <button className={`${styles.button}`} onClick={() => setBackgroundType("squared")}>
             Squared Background
           </button>
         </div>
-        <button onClick={() => setTool("pen")}>Pen</button>
-        <button onClick={() => setTool("pencil")}>Pencil</button>
-        <button onClick={() => setTool("eraser")}>Eraser</button>
-        <button onClick={addTextBox}>Add Text Box</button>
+        <button className={`${styles.button}`} onClick={() => setTool("pen")}>Pen</button>
+        <button className={`${styles.button}`} onClick={() => setTool("pencil")}>Pencil</button>
+        <button className={`${styles.button}`} onClick={() => setTool("eraser")}>Eraser</button>
+        <button className={`${styles.button}`} onClick={addTextBox}>Add Text Box</button>
         <br />
         <button onClick={resetDrawing}>Reset</button>{" "}
-        {/* Add the reset button here */}
         <br />
         <input
           type="color"
@@ -368,15 +372,15 @@ const Whiteboard = ({ whiteboardID }) => {
       </div>
       <div
         style={{
-          backgroundSize: "cover", // Cover the entire area of the div
-          backgroundPosition: "center", // Center the background image
-          width: window.innerWidth - 100, // Adjust width as needed
-          height: window.innerHeight, // Adjust height as needed
+          backgroundSize: "cover", 
+          backgroundPosition: "center", 
+          width: window.innerWidth - 100, 
+          height: window.innerHeight, 
         }}
       >
         <Stage
-          width={window.innerWidth - 100} // Match the container width
-          height={window.innerHeight} // Match the container height
+          width={window.innerWidth - 100} 
+          height={window.innerHeight} //
           onMouseDown={handleMouseDown}
           onMousemove={handleMouseMove}
           onMouseup={handleMouseUp}
@@ -441,7 +445,7 @@ const Whiteboard = ({ whiteboardID }) => {
                 fill={box.color}
                 draggable
                 onDragEnd={(e) => {
-                  // Update position in the state
+                  // update position in the state
                   const updatedTextBoxes = textBoxes.slice();
                   updatedTextBoxes[i] = {
                     ...box,

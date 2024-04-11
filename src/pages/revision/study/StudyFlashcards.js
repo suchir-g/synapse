@@ -4,6 +4,8 @@ import { DynamicDisplay } from "./DynamicDisplay";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../../../config/firebase";
 
+import styles from "./StudyFlashcards.module.css"
+
 export const StudyFlashcards = () => {
   const { setID } = useParams();
 
@@ -147,16 +149,17 @@ export const StudyFlashcards = () => {
   }
 
   return (
-    <div>
-      <h1>Study Flashcards</h1>
-      {flashcards.length > 0 && currentCardIndex < flashcards.length && (
-        <DynamicDisplay
-          flashcard={flashcards[currentCardIndex]}
-          onAnswerSubmit={handleAnswerSubmit}
-          onNext={goToNextFlashcard}
-          otherFlashcards={flashcards}
-        />
-      )}
+    <div className={styles.mainContainer}>
+      <div className={styles.flashcard}>
+        {flashcards.length > 0 && currentCardIndex < flashcards.length && (
+          <DynamicDisplay
+            flashcard={flashcards[currentCardIndex]}
+            onAnswerSubmit={handleAnswerSubmit}
+            onNext={goToNextFlashcard}
+            otherFlashcards={flashcards}
+          />
+        )}
+      </div>
     </div>
   );
 };
