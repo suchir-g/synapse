@@ -4,6 +4,8 @@ import { db } from "../../config/firebase";
 import { collection, query, getDocs, where, doc, getDoc } from "firebase/firestore";
 import { sanitizeAndTruncateHtml } from '../../utilities';
 
+
+
 const ShowTag = ({isAuth}) => {
 
   const navigate = useNavigate();

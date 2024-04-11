@@ -55,3 +55,12 @@
     background-color: var(--secondary);
     color: black;
 }
+.postButton {
+    padding: 10px 15px;
+    background-color: var(--primary);
+    border: none;
+    border-radius: 5px;
+    box-shadow: var(--lesser-shadow);
+    width: fit-content;
+    color: white;
+}

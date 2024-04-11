@@ -59,7 +59,7 @@ const ShowAllTags = () => {
     <div className={styles.mainContainer}>
       <div className={styles.mainContent}>
         <h1 className={styles.mainText}>All Tags</h1>
-        <ul className={styles.tags}>
+        {tags.length > 0 ? <ul className={styles.tags}>
           {tags.map(tag => (
             <li key={tag.id} className={styles.tag}>
               <strong className={styles.tagName}>{tag.tagName}</strong>
@@ -69,8 +69,10 @@ const ShowAllTags = () => {
               </span>
             </li>
           ))}
-        </ul>
-        <Link to="/tags/post">Post</Link>
+        </ul> : <div>
+          <p className={styles.mainText}>No tags!</p>
+        </div>}
+        <Link to="/tags/post" className={styles.postButton}>Post</Link>
       </div>
     </div>
   );
