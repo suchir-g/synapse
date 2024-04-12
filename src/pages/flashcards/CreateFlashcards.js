@@ -17,6 +17,8 @@ import styles from "./CreateFlashcards.module.css"
 import "./Ql-editor.css"
 import { flashcardModule } from "../../config/quill";
 
+
+
 const CreateFlashcards = ({ isAuth }) => {
   const navigate = useNavigate();
   if (!isAuth) {

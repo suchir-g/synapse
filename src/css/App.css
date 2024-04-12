@@ -38,7 +38,7 @@
     background-image: radial-gradient(var(--dots-color) 1px, transparent 0);
     background-size: 40px 40px;
     color: var(--text-color);
-    height: 100vh;
+    height: fit-content;
     width: 100vw;
     font-family: var(--font);
 }
