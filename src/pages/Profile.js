@@ -4,6 +4,9 @@ import { signOut } from "firebase/auth";
 import { auth, db } from "../config/firebase";
 import { useNavigate } from "react-router-dom";
 import { collection, query, getDocs, where } from "firebase/firestore";
+
+import styles from "./Profile.module.css"
+
 const Profile = ({ setIsAuth }) => {
   const navigate = useNavigate();
 
@@ -49,9 +52,18 @@ const Profile = ({ setIsAuth }) => {
   };
 
   return (
-    <div>
-      <h1>PROFILE</h1>
-      <button onClick={logOut}> Sign out</button>
+    <div className={styles.mainContainer}>
+      <div className={styles.postFlashcardsContainer}>
+        <h1 className={styles.postFlashcards}>
+          Profile
+        </h1>
+      </div>
+      <div className={styles.mainContent}>
+
+        <h1 className={styles.username}>{userData.username}</h1>
+        <p className={styles.firstLastName}>{userData.firstName} {userData.lastName}</p>
+        <button onClick={logOut} className={styles.button}> Sign out</button>
+      </div>
     </div>
   );
 };

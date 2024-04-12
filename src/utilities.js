@@ -39,7 +39,7 @@ export const emailFromUserID = async (usersRef, userID) => {
     const userDoc = querySnapshot.docs[0];
     return userDoc.data().email; // returns the user's email
   } else {
-    return null; // returns null if no user is found
+    return null; // returns null if no user is found - true
   }
 };
 
