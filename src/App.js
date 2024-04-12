@@ -1,3 +1,4 @@
+import React from "react"
 
 import "./css/App.css";
 import "./css/Reset.css";
@@ -41,7 +42,6 @@ import TimerPage from "./pages/timers/segments/TimerPage";
 
 import ViewWhiteboard from "./pages/whiteboards/ViewWhiteboard";
 import PostWhiteboard from "./pages/whiteboards/PostWhiteboard";
-import WhiteboardPage from "./pages/whiteboards/ShowWhiteboards";
 
 import CreateTodoList from "pages/todos/CreateTodo";
 import ShowTodos from "pages/todos/ShowTodos";
@@ -69,7 +69,7 @@ function App() {
   return (
     <div className="mainContainer">
       <Router>
-        <Navbar />
+        <Navbar setIsAuth={setIsAuth} isAuth={isAuth}/>
         <Routes>
           <Route path="/" element={<Home isAuth={isAuth} />} />
           <Route path="/profile" element={<Profile setIsAuth={setIsAuth} />} />
@@ -147,13 +147,12 @@ function App() {
 
           {/* whiteboards */}
 
+          <Route path="/whiteboards/post" element={<PostWhiteboard />} />
           <Route
             path="/whiteboards/:whiteboardID"
             element={<ViewWhiteboard />}
           />
-          <Route path="/whiteboards/post" element={<PostWhiteboard />} />
-          <Route path="/whiteboards" element={<WhiteboardPage />} />
-
+          
           {/* todos */}
 
           <Route

@@ -1,5 +1,6 @@
 import styles from "./TopTips.module.css"
 import Flashcard from "pages/revision/flashcards/Flashcard"
+import React from "react"
 
 const TopTips = () => {
 

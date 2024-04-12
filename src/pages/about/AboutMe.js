@@ -1,4 +1,5 @@
 import styles from "./AboutMe.module.css"
+import React from "react"
 
 const AboutMe = () => {
     return (

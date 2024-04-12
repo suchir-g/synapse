@@ -1,12 +1,22 @@
 import { Link, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styles from "./Navbar.module.css";
+import React from "react"
 
-function Navbar() {
+function Navbar({isAuth, setIsAuth}) {
   const navigate = useNavigate();
-  const [isAuth, setIsAuth] = useState(localStorage.getItem("isAuth"));
   const [showDropdown, setShowDropdown] = useState(false);
   let timeoutId;
+
+  useEffect(() => {
+    const handleAuthChange = () => {
+      setIsAuth(localStorage.getItem("isAuth") === "true");
+    };
+
+    window.addEventListener("storage", handleAuthChange);
+
+    return () => window.removeEventListener("storage", handleAuthChange);
+  }, []);
 
   const handleMouseEnter = () => {
     clearTimeout(timeoutId);

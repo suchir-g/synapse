@@ -74,7 +74,6 @@ const Login = ({ setIsAuth }) => {
         <h1 className={styles.postFlashcards}>
           Login
         </h1>
-
       </div>
 
       <div className={styles.mainContent}>

@@ -21,8 +21,7 @@ import { useNavigate } from "react-router-dom";
 import { Text } from "react-konva";
 import LoadingComponent from "LoadingComponent";
 
-import styles from "./Whiteboard.module.css"
-
+import styles from "./Whiteboard.module.css";
 
 const Whiteboard = ({ whiteboardID }) => {
   const [isLoading, setIsLoading] = useState(true);
@@ -82,8 +81,14 @@ const Whiteboard = ({ whiteboardID }) => {
 
   useEffect(() => {
     // async function to load the whiteboard data
-    const loadWhiteboard = async () => {
-      if (!whiteboardID) return;
+    const loadWhiteboard = async (whiteboardID) => {
+      if (!whiteboardID) {
+        setTitle(""); // No title for a new/empty whiteboard
+        setBackgroundImage(null); // No background image
+        setIsLoading(false);
+        return
+      }
+
       const docRef = doc(db, "whiteboards", whiteboardID);
       const docSnap = await getDoc(docRef);
 
@@ -92,14 +97,11 @@ const Whiteboard = ({ whiteboardID }) => {
 
         setTitle(whiteboardData.title);
         setBackgroundImage(whiteboardData.downloadURL);
-        setIsLoading(false);  
-        console.log(image);
-        console.log("No such whiteboard!");
+        setIsLoading(false);
       }
     };
 
     loadWhiteboard();
-
   }, [whiteboardID]);
 
   useEffect(() => {
@@ -276,7 +278,7 @@ const Whiteboard = ({ whiteboardID }) => {
     setLines([]);
     setHistory([]);
     setBackgroundImage(null);
-    navigate("/whiteboards");
+    navigate("/mystuff/whiteboards");
   };
 
   const addTextBox = () => {
@@ -295,7 +297,7 @@ const Whiteboard = ({ whiteboardID }) => {
   const stageWidth = window.innerWidth - 100; // match the container width
 
   if (isLoading) {
-    return <LoadingComponent />
+    return <LoadingComponent />;
   }
 
   return (
@@ -309,23 +311,45 @@ const Whiteboard = ({ whiteboardID }) => {
         />
         <div>
           {/* background selection UI */}
-          <button className={`${styles.button}`} onClick={() => setBackgroundType("plain")}>
+          <button
+            className={`${styles.button}`}
+            onClick={() => setBackgroundType("plain")}
+          >
             Plain Background
           </button>
-          <button className={`${styles.button}`} onClick={() => setBackgroundType("lined")}>
+          <button
+            className={`${styles.button}`}
+            onClick={() => setBackgroundType("lined")}
+          >
             Lined Background
           </button>
-          <button className={`${styles.button}`} onClick={() => setBackgroundType("squared")}>
+          <button
+            className={`${styles.button}`}
+            onClick={() => setBackgroundType("squared")}
+          >
             Squared Background
           </button>
         </div>
-        <button className={`${styles.button}`} onClick={() => setTool("pen")}>Pen</button>
-        <button className={`${styles.button}`} onClick={() => setTool("pencil")}>Pencil</button>
-        <button className={`${styles.button}`} onClick={() => setTool("eraser")}>Eraser</button>
-        <button className={`${styles.button}`} onClick={addTextBox}>Add Text Box</button>
+        <button className={`${styles.button}`} onClick={() => setTool("pen")}>
+          Pen
+        </button>
+        <button
+          className={`${styles.button}`}
+          onClick={() => setTool("pencil")}
+        >
+          Pencil
+        </button>
+        <button
+          className={`${styles.button}`}
+          onClick={() => setTool("eraser")}
+        >
+          Eraser
+        </button>
+        <button className={`${styles.button}`} onClick={addTextBox}>
+          Add Text Box
+        </button>
         <br />
-        <button onClick={resetDrawing}>Reset</button>{" "}
-        <br />
+        <button onClick={resetDrawing}>Reset</button> <br />
         <input
           type="color"
           value={color}
@@ -372,14 +396,14 @@ const Whiteboard = ({ whiteboardID }) => {
       </div>
       <div
         style={{
-          backgroundSize: "cover", 
-          backgroundPosition: "center", 
-          width: window.innerWidth - 100, 
-          height: window.innerHeight, 
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          width: window.innerWidth - 100,
+          height: window.innerHeight,
         }}
       >
         <Stage
-          width={window.innerWidth - 100} 
+          width={window.innerWidth - 100}
           height={window.innerHeight} //
           onMouseDown={handleMouseDown}
           onMousemove={handleMouseMove}
