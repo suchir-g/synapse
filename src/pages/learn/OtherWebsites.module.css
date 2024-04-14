@@ -1,0 +1,30 @@
+.mainContainer {
+    min-height: 95vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.flashcard {
+    padding: 30px;
+    margin: 20px;
+    border-radius: 5px;
+    border: none;
+    box-shadow: var(--shadow);
+    width: 50%;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.mainText {
+    font-size: 26px;
+    font-weight: 500;
+}
+
+.link  {
+    font-weight: 600;
+    color: var(--primary);
+    display: inline;
+}

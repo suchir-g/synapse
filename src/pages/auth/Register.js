@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import { auth, googleAuthProvider, db } from "../config/firebase";
+import { auth, googleAuthProvider, db } from "../../config/firebase";
 import { createUserWithEmailAndPassword, signInWithPopup } from "firebase/auth";
-
+import { useNavigate } from "react-router-dom";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
-import styles from "./Login.module.css" 
+import styles from "./Login.module.css";
 const Register = ({ setIsAuth }) => {
-  // states for user's email, password, and other details
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
@@ -41,6 +41,7 @@ const Register = ({ setIsAuth }) => {
             main: true, // indicates this is the primary todo list for the user
             createdAt: serverTimestamp(),
           });
+          navigate("/");
         }
       );
     } catch (e) {
@@ -71,6 +72,7 @@ const Register = ({ setIsAuth }) => {
           main: true, // indicates this is the primary todo list for the user
           createdAt: serverTimestamp(),
         });
+        navigate("/");
       });
     } catch (e) {
       console.log(e); // improve error handling
@@ -83,7 +85,7 @@ const Register = ({ setIsAuth }) => {
         <h1 className={styles.postFlashcards}>Register</h1>
       </div>
       <div className={styles.mainContent}>
-      <input
+        <input
           type="text"
           placeholder="Email"
           onChange={(e) => setEmail(e.target.value)}
@@ -103,18 +105,18 @@ const Register = ({ setIsAuth }) => {
           className={`${styles.input}`}
         />
         <span className={styles.inputGroup}>
-        <input
-          type="text"
-          placeholder="First Name"
-          onChange={(e) => setFirstName(e.target.value)}
-          className={`${styles.input} ${styles.halfSize}`}
-        />
-        <input
-          type="text"
-          placeholder="Last Name"
-          onChange={(e) => setLastName(e.target.value)}
-          className={`${styles.input} ${styles.halfSize}`}
-        />
+          <input
+            type="text"
+            placeholder="First Name"
+            onChange={(e) => setFirstName(e.target.value)}
+            className={`${styles.input} ${styles.halfSize}`}
+          />
+          <input
+            type="text"
+            placeholder="Last Name"
+            onChange={(e) => setLastName(e.target.value)}
+            className={`${styles.input} ${styles.halfSize}`}
+          />
         </span>
         <input
           type="text"
@@ -124,8 +126,15 @@ const Register = ({ setIsAuth }) => {
         />
 
         <span>
-          <button onClick={register} className={`${styles.registerButton} ${styles.button}`}>Register</button>
-          <button onClick={registerGoogle} className={`${styles.button}`}>Sign in with Google</button>
+          <button
+            onClick={register}
+            className={`${styles.registerButton} ${styles.button}`}
+          >
+            Register
+          </button>
+          <button onClick={registerGoogle} className={`${styles.button}`}>
+            Sign in with Google
+          </button>
         </span>
       </div>
     </div>

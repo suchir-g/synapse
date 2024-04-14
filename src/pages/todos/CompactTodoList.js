@@ -40,6 +40,8 @@ const CompactTodoList = ({ todoID }) => {
     setCompletedTodos(newCompletedTodos);
   };
 
+  
+
   const addNewTodo = async () => {
     if (!newTodoText.trim()) return;
     const newTodo = { text: newTodoText, completed: false };
@@ -118,7 +120,6 @@ const CompactTodoList = ({ todoID }) => {
             saveTodoEdit={() => saveTodoEdit(index)}
             cancelEditing={cancelEditing}
             setEditText={setEditText}
-            editText={isEditing === index ? editText : ""}
           />
         ))}
       </ul>

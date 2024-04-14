@@ -118,7 +118,7 @@ const SearchResultsGrid = ({ searchQuery, currentUserID }) => {
                   <div className={styles.cards_grid}>
                     {items.map((item) => (
                       <Link
-                        to={`/${categoryName}/${item.id}`}
+                        to={`/${categoryName != "flashcards" ? categoryName : "sets"}/${item.id}`}
                         key={item.id}
                         className={styles.card_link}
                       >

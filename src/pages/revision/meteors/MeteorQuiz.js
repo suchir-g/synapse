@@ -5,7 +5,7 @@ import { doc, getDoc, collection, getDocs } from "firebase/firestore";
 import { db } from "../../../config/firebase";
 import { sanitizeAndTruncateHtml } from "../../../utilities";
 
-import styles from "./MeteorQuiz.module.css"
+import styles from "./MeteorQuiz.module.css";
 
 class MyScene extends Phaser.Scene {
   constructor() {
@@ -31,14 +31,21 @@ class MyScene extends Phaser.Scene {
 
       const randomFlashcard =
         this.flashcards[Phaser.Math.Between(0, this.flashcards.length - 1)];
-      meteor.flashcardQuestion = sanitizeAndTruncateHtml(randomFlashcard.question);
+      meteor.flashcardQuestion = sanitizeAndTruncateHtml(
+        randomFlashcard.question
+      );
       meteor.flashcardAnswer = randomFlashcard.answer;
 
       // create a text object for the meteor
-      const text = this.add.text(x, -50, sanitizeAndTruncateHtml(randomFlashcard.question), {
-        font: "18px Inter",
-        fill: "#ffffff",
-      });
+      const text = this.add.text(
+        x,
+        -50,
+        sanitizeAndTruncateHtml(randomFlashcard.question),
+        {
+          font: "18px Inter",
+          fill: "#ffffff",
+        }
+      );
       meteor.setData("text", text);
 
       const verticalVelocity = Phaser.Math.Between(20, 50); // adjusted for more noticeable vertical movement
@@ -223,11 +230,11 @@ const MeteorQuiz = () => {
       if (userAnswer.toLowerCase() === plainAnswer.toLowerCase()) {
         // correct answer
         meteor.setTint(0x00ff00); // green tint for correct answer
-        meteor.destroy(); // destroy the meteor
         const text = meteor.getData("text");
         if (text) {
-          text.destroy(); // also destroy the associated text
+          text.destroy(); // destroy the associated text
         }
+        meteor.destroy(); // destroy the meteor
         answeredCorrectly = true;
         setScore((prevScore) => prevScore + 1); // increment score
         setUserAnswer(""); // reset user input
@@ -262,11 +269,27 @@ const MeteorQuiz = () => {
       <div className={styles.mainContainer}>
         <span className={styles.flashcard}>
           <h1 className={styles.finishedText}>It's over</h1>
-          <p className={styles.mutedText}>Thanks for playing - if you want more info on how this game works visit <Link className={styles.learnLink}>this page</Link></p>
+          <p className={styles.mutedText}>
+            Thanks for playing - if you want more info on how this game works
+            visit <Link className={styles.learnLink}>this page</Link>
+          </p>
           <p>Score: {score}</p>
           <div>
-            <button className={`${styles.restartButton} ${styles.afterButton}`} onClick={() => { navigate(0) }}> Restart</button>
-            <button className={`${styles.backButton} ${styles.afterButton}`} onClick={() => navigate(-1)}>Back</button>
+            <button
+              className={`${styles.restartButton} ${styles.afterButton}`}
+              onClick={() => {
+                navigate(0);
+              }}
+            >
+              {" "}
+              Restart
+            </button>
+            <button
+              className={`${styles.backButton} ${styles.afterButton}`}
+              onClick={() => navigate(-1)}
+            >
+              Back
+            </button>
           </div>
         </span>
       </div>
@@ -289,7 +312,9 @@ const MeteorQuiz = () => {
           className={styles.answerInput}
           placeholder="Answer"
         />
-        <button onClick={handleAnswerSubmit} className={styles.submitButton}>Submit Answer</button>
+        <button onClick={handleAnswerSubmit} className={styles.submitButton}>
+          Submit Answer
+        </button>
         <div>Lives: {lives}</div>
       </div>
     );

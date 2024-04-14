@@ -1,6 +1,8 @@
 .todoItem {
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  width: 100%;
   background-color: var(--muted-background);
   margin-bottom: 10px;
   padding: 10px 15px;
@@ -22,28 +24,50 @@
 
 .CheckboxInput {
   appearance: none;
-  -webkit-appearance: none;
-  height: 37px;
+    height: 37px;
   width: 37px;
   background-color: var(--tertiary);
   border: 1px #7272721a solid;
   border-radius: 5px;
   margin-right: 10px;
-  position: relative;
 }
 
 .CheckboxLabel {
   cursor: pointer;
 }
 
-.CheckboxInput:checked + .CheckboxLabel::before {
-  content: "✓";
-  position: absolute;
-  left: 5px;
-  color: white;
-}
-
 .long {
   flex-direction: column;
   align-items: start;
+}
+
+.button {
+  width: fit-content;
+  padding: 10px;
+  border: none;
+  font-size: smaller;
+  border-radius: 5px;
+  color: white;
+  text-wrap: nowrap;
+}
+
+.remove {
+  background-color: var(--secondary);
+}
+
+.edit {
+  background-color: var(--muted);
+}
+
+.buttons {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
+
+.todoText {
+  white-space: nowrap; /* Prevents the text from wrapping */
+  overflow: hidden; /* Hides the overflow text */
+  text-overflow: ellipsis; /* Adds an ellipsis at the end of the truncated text */
+  max-width: 40%; /* You may need to adjust this value to fit the container's width */
 }

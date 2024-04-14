@@ -1,31 +1,30 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCheck } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCheck,
+  faTrash,
+  faPencilAlt,
+} from "@fortawesome/free-solid-svg-icons";
 import styles from "./Todo.module.css";
-import React from "react"
+import React from "react";
 
 const TodoItem = ({
   todo,
   isEditing,
-  index,
   toggleTodoCompletion,
   startEditing,
   saveTodoEdit,
   cancelEditing,
   setEditText,
   editText,
-  isEditingToggle,
+  deleteTodo,
 }) => {
-  const todoItemClass = isEditingToggle
-    ? `${styles.todoItem} ${styles.long}`
-    : styles.todoItem;
-
   const handleCheckboxChange = () => {
-    toggleTodoCompletion(index);
+    toggleTodoCompletion(todo, !todo.completed);
   };
 
   return (
-    <li className={todoItemClass}>
-      {isEditing === index ? (
+    <li className={styles.todoItem}>
+      {isEditing === todo ? (
         <>
           <input
             type="text"
@@ -33,25 +32,41 @@ const TodoItem = ({
             onChange={(e) => setEditText(e.target.value)}
             className={styles.editText}
           />
-          <button onClick={() => saveTodoEdit(index)}>Save</button>
+          <button onClick={() => saveTodoEdit(todo, todo.completed)}>
+            Save
+          </button>
           <button onClick={cancelEditing}>Cancel</button>
+          <button onClick={() => deleteTodo(todo)}>
+            <FontAwesomeIcon icon={faTrash} />{" "}
+            {/* Use the trash icon for delete */}
+          </button>
         </>
       ) : (
         <>
           <input
-            id={`checkbox-${index}`}
+            id={`checkbox-${todo.text}`}
             type="checkbox"
             checked={todo.completed}
             onChange={handleCheckboxChange}
             className={styles.CheckboxInput}
           />
-          <label htmlFor={`checkbox-${index}`} className={styles.CheckboxLabel}>
-            {todo.completed && <FontAwesomeIcon icon={faCheck} />}
-          </label>
-          {todo.text}
-          {isEditingToggle && (
-            <button onClick={() => startEditing(index)}>Edit</button>
-          )}
+          <p className={styles.todoText}>{todo.text}</p>
+          <span className={styles.buttons}>
+            {editText && <button
+              onClick={() => startEditing(todo)}
+              className={`${styles.button} ${styles.edit}`}
+            >
+              <FontAwesomeIcon icon={faPencilAlt} />{" "}
+            </button>}
+            {deleteTodo && (
+              <button
+                onClick={() => deleteTodo(todo)}
+                className={`${styles.button} ${styles.remove}`}
+              >
+                <FontAwesomeIcon icon={faTrash} />{" "}
+              </button>
+            )}
+          </span>
         </>
       )}
     </li>

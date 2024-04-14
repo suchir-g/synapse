@@ -1,12 +1,13 @@
 .whiteboards_grid_container {
   margin: 20px;
-  height: max(auto, 90vh);
+  min-height: 75vh;
 }
 
 .whiteboards_grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   gap: 20px;
+  min-height: 75vh;
 }
 
 .whiteboard_card {
@@ -16,6 +17,7 @@
   border-radius: 10px;
   padding: 16px;
   transition: box-shadow 0.3s ease-in-out;
+  height: fit-content;
 }
 
 .whiteboard_card:hover {

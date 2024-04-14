@@ -25,6 +25,11 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  transition: var(--transition025);
+}
+
+.myStuffLink:hover {
+  background-color: var(--primary-hover);
 }
 
 .card {
@@ -35,7 +40,7 @@
   border-radius: 8px;
   box-shadow: var(--shadow);
   margin-bottom: 20px;
-  transition: box-shadow 0.3s ease-in-out;
+  transition: 0.3s ease-in-out;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -47,7 +52,8 @@
 }
 
 .card:hover {
-  box-shadow: var(--shadow);
+  box-shadow: var(--greater-shadow);
+  transform: scale(1.01);
 }
 
 .card h3 {

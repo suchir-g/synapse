@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { db } from "../../config/firebase";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import TodoItem from "./Todo";
@@ -32,6 +32,13 @@ const ViewTodo = () => {
 
     fetchTodoList();
   }, [todoID]);
+
+  const deleteTodo = async (todo) => {
+    const updatedTodos = [...uncompletedTodos, ...completedTodos].filter(
+      (t) => t !== todo
+    );
+    await updateTodos(updatedTodos);
+  };
 
   const updateTodos = async (todos) => {
     await updateDoc(doc(db, "todoLists", todoID), { todos });
@@ -83,54 +90,66 @@ const ViewTodo = () => {
   if (!todoTitle) return <div>Loading...</div>;
 
   return (
-    <div className={styles.container}>
-      <h2 className={styles.title}>{todoTitle}</h2>
-      <h3>Uncompleted Todos</h3>
-      <ul>
-        {uncompletedTodos.map((todo, index) => (
-          <TodoItem
-            key={index}
-            todo={todo}
-            isEditing={isEditing === todo}
-            index={index}
-            toggleTodoCompletion={() => toggleTodoCompletion(todo, false)}
-            startEditing={() => startEditing(todo)}
-            saveTodoEdit={() => saveTodoEdit(todo, false)}
-            cancelEditing={cancelEditing}
-            setEditText={setEditText}
-            editText={editText}
+    <div className={styles.mainContainer}>
+      <div className={styles.postFlashcardsContainer}>
+        <h1 className={styles.postFlashcards}>{todoTitle}</h1>
+        <p className={styles.mutedText}>
+          Go to <Link className={styles.learnLink} to="/learn/revise">this page</Link> to learn how to effectively organise material.
+        </p>
+      </div>
+      <div className={styles.mainContent}>
+        <h3>Uncompleted Todos</h3>
+        <ul>
+          {uncompletedTodos.map((todo, index) => (
+            <TodoItem
+              key={index}
+              todo={todo}
+              isEditing={isEditing === todo}
+              index={index}
+              toggleTodoCompletion={() => toggleTodoCompletion(todo, false)}
+              startEditing={() => startEditing(todo)}
+              saveTodoEdit={() => saveTodoEdit(todo, false)}
+              cancelEditing={cancelEditing}
+              setEditText={setEditText}
+              editText={editText}
+              deleteTodo={() => deleteTodo(todo)}
+            />
+          ))}
+        </ul>
+        <div className={styles.addTodoSection}>
+          <input
+            type="text"
+            value={newTodoText}
+            onChange={(e) => setNewTodoText(e.target.value)}
+            placeholder="Todo text"
+            className={styles.input}
           />
-        ))}
-      </ul>
-
-      <h3>Completed Todos</h3>
-      <ul>
-        {completedTodos.map((todo, index) => (
-          <TodoItem
-            key={index}
-            todo={todo}
-            isEditing={isEditing === todo}
-            index={index}
-            toggleTodoCompletion={() => toggleTodoCompletion(todo, true)}
-            startEditing={() => startEditing(todo)}
-            saveTodoEdit={() => saveTodoEdit(todo, true)}
-            cancelEditing={cancelEditing}
-            setEditText={setEditText}
-            editText={editText}
-          />
-        ))}
-      </ul>
-
-      <button className={styles.button}>Add Todo</button>
-      <input
-        type="text"
-        value={newTodoText}
-        onChange={(e) => setNewTodoText(e.target.value)}
-        placeholder="Todo text"
-      />
-      <button onClick={addTodo}>Add Todo</button>
+          <button onClick={addTodo} className={styles.addTodoButton}>
+            Add Todo
+          </button>
+        </div>
+        <h3>Completed Todos</h3>
+        <ul>
+          {completedTodos.map((todo, index) => (
+            <TodoItem
+              key={index}
+              todo={todo}
+              isEditing={isEditing === todo}
+              index={index}
+              toggleTodoCompletion={() => toggleTodoCompletion(todo, true)}
+              startEditing={() => startEditing(todo)}
+              saveTodoEdit={() => saveTodoEdit(todo, true)}
+              cancelEditing={cancelEditing}
+              setEditText={setEditText}
+              editText={editText}
+              deleteTodo={() => deleteTodo(todo)}
+            />
+          ))}
+        </ul>
+      </div>
     </div>
   );
+  
 };
 
 export default ViewTodo;

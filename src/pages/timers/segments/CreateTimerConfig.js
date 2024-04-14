@@ -77,7 +77,7 @@ const CreateTimerConfig = () => {
           <div>
             <h4 className={styles.sectionText}>Sections</h4>
             {sections.map((section, index) => (
-              <div key={index}>
+              <div key={index} className={styles.pair}>
                 <p>{`${section.title}: ${section.duration} minutes`}</p>
                 <button type="button" onClick={() => deleteSection(index)}>
                   Delete Section

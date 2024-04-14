@@ -1,31 +1,35 @@
 import React, { useState } from "react";
-
-import { db, auth, googleAuthProvider } from "../config/firebase";
 import { signInWithPopup, signInWithEmailAndPassword } from "firebase/auth";
-
 import { useNavigate, Link } from "react-router-dom";
-
-import { query, collection, where, getDocs, addDoc, serverTimestamp } from "firebase/firestore";
-
-import styles from "./Login.module.css"
+import {
+  query,
+  collection,
+  where,
+  getDocs,
+  addDoc,
+  serverTimestamp,
+} from "firebase/firestore";
+import { db, auth, googleAuthProvider } from "../../config/firebase";
+import { getFirebaseErrorMessage } from "../../firebaseErrors"; // Import the error handling utility
+import styles from "./Login.module.css";
 
 const Login = ({ setIsAuth }) => {
   const navigate = useNavigate();
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState(""); // State to manage error messages
   const usersRef = collection(db, "users");
 
   const loginWithEmailAndPassword = async () => {
-    await signInWithEmailAndPassword(auth, email, password)
-      .then(() => {
-        localStorage.setItem("isAuth", true);
-        setIsAuth(true);
-        navigate("/");
-      })
-      .catch((err) => {
-        console.error(err); // make this better in the future
-      });
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+      localStorage.setItem("isAuth", true);
+      setIsAuth(true);
+      navigate("/");
+    } catch (err) {
+      setError(getFirebaseErrorMessage(err.code)); // Use the utility function to get a user-friendly error message
+      console.error(err);
+    }
   };
 
   const loginWithGoogle = async () => {
@@ -49,31 +53,29 @@ const Login = ({ setIsAuth }) => {
           lastName: "",
           yearGroup: "",
           streak: 0,
-          lastRevisionDate: new Date(), // set to the current date
+          lastRevisionDate: new Date(),
         });
 
         const todoListsRef = collection(db, "todoLists");
         await addDoc(todoListsRef, {
           owner: auth.currentUser.uid,
           name: "Main",
-          todos: [], // initialize with an empty array
-          main: true, // indicates this is the primary todo list for the user
+          todos: [],
+          main: true,
           createdAt: serverTimestamp(),
         });
       }
       navigate("/");
     } catch (err) {
+      setError(getFirebaseErrorMessage(err.code)); // Use the utility function to get a user-friendly error message
       console.error(err);
     }
   };
 
   return (
     <div className={styles.mainContainer}>
-
       <div className={styles.postFlashcardsContainer}>
-        <h1 className={styles.postFlashcards}>
-          Login
-        </h1>
+        <h1 className={styles.postFlashcards}>Login</h1>
       </div>
 
       <div className={styles.mainContent}>
@@ -81,21 +83,29 @@ const Login = ({ setIsAuth }) => {
           type="text"
           placeholder="Email..."
           onChange={(e) => setEmail(e.target.value)}
-          className={`${styles.input}`}
+          className={styles.input}
         />
         <input
           type="password"
           placeholder="Password..."
           onChange={(e) => setPassword(e.target.value)}
-          className={`${styles.input}`}
+          className={styles.input}
         />
-
+        {error && <div className={styles.errorMessage}>{error}</div>}
         <span>
-          <button onClick={loginWithEmailAndPassword} className={`${styles.button}`}>Login with email</button>
-          <button onClick={loginWithGoogle} className={`${styles.button}`}>Login with Google</button>
+          <button onClick={loginWithEmailAndPassword} className={styles.button}>
+            Login with email
+          </button>
+          <button onClick={loginWithGoogle} className={styles.button}>
+            Login with Google
+          </button>
         </span>
-
-        <Link to="/register" className={`${styles.registerButton} ${styles.button}`}>Don't have an account? Sign up</Link>
+        <Link
+          to="/register"
+          className={`${styles.registerButton} ${styles.button}`}
+        >
+          Don't have an account? Sign up
+        </Link>
       </div>
     </div>
   );

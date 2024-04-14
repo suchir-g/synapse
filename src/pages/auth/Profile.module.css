@@ -1,0 +1,73 @@
+.mainContainer {
+    width: 100vw;
+    height: 95vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.mainContent {
+    padding: 30px;
+    margin: 20px;
+    border-radius: 5px;
+    border: none;
+    box-shadow: var(--shadow);
+    width: 50%;
+    background-color: white;
+    display: flex;
+    justify-content: space-around;
+    flex-direction: column;
+    gap: 10px;
+    height: 40vh;
+}
+
+.postFlashcards {
+    font-size: 32px;
+    margin: 30px 0px 20px 0px;
+    font-weight: 500;
+}
+
+.postFlashcardsContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.mutedText {
+    color: var(--muted);
+}
+
+.learnLink {
+    color: var(--primary);
+}
+
+.button {
+    width: max-content;
+    box-shadow: var(--lesser-shadow);
+    background-color: var(--danger);
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    margin-right: 20px;
+}
+
+.username {
+    font-size: 26px;
+    font-weight: 500;
+}
+
+.firstLastName {
+    color: var(--text-muted-color);
+}
+
+.updatePassword {
+    background-color: var(--muted);
+}
+
+.buttonGroup {
+    display: flex;
+    flex-direction: row;
+}
