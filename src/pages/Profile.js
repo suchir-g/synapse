@@ -61,8 +61,8 @@ const Profile = ({ setIsAuth }) => {
       <div className={styles.mainContent}>
 
         <h1 className={styles.username}>{userData.username}</h1>
-        <p className={styles.firstLastName}>{userData.firstName} {userData.lastName}</p>
-        <button onClick={logOut} className={styles.button}> Sign out</button>
+        <p className={styles.firstLastName}>{userData.firstName} {userData.lastName}  </p>
+        <button onClick={logOut} className={`${styles.button} ${styles.signOut}`}> Sign out</button>
       </div>
     </div>
   );
