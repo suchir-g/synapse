@@ -1,17 +1,16 @@
 import React, { useEffect, useState } from "react";
 
-import { signOut } from "firebase/auth";
-import { auth, db } from "../config/firebase";
+import { signOut, deleteUser } from "firebase/auth";
+import { auth, db } from "../../config/firebase";
 import { useNavigate } from "react-router-dom";
-import { collection, query, getDocs, where } from "firebase/firestore";
-
-import styles from "./Profile.module.css"
+import { collection, query, getDocs, where, doc, deleteDoc } from "firebase/firestore";
+import styles from "./Profile.module.css";
 
 const Profile = ({ setIsAuth }) => {
   const navigate = useNavigate();
 
   const [userData, setUserData] = useState({});
-
+  const [error, setError] = useState("");
   const loadData = async (userId) => {
     const usersQuery = query(
       collection(db, "users"),
@@ -50,19 +49,38 @@ const Profile = ({ setIsAuth }) => {
       console.log(e);
     }
   };
+  
 
   return (
     <div className={styles.mainContainer}>
       <div className={styles.postFlashcardsContainer}>
-        <h1 className={styles.postFlashcards}>
-          Profile
-        </h1>
+        <h1 className={styles.postFlashcards}>Profile</h1>
       </div>
       <div className={styles.mainContent}>
-
         <h1 className={styles.username}>{userData.username}</h1>
-        <p className={styles.firstLastName}>{userData.firstName} {userData.lastName}  </p>
-        <button onClick={logOut} className={`${styles.button} ${styles.signOut}`}> Sign out</button>
+        <p className={styles.firstLastName}>
+          {userData.firstName} {userData.lastName}
+        </p>
+        <p className={`${styles.streak} ${styles.firstLastName}`}>
+          Streak: {userData.streak}
+        </p>
+        <p className={styles.firstLastName}>User ID: {userData.userID}</p>
+        <span className={styles.buttonGroup}>
+          <button
+            onClick={() => {
+              navigate("/updatepassword");
+            }}
+            className={`${styles.button} ${styles.updatePassword}`}
+          >
+            Update Password
+          </button>
+          <button onClick={logOut} className={styles.button}>
+            Sign out
+          </button>
+          <button onClick={() => navigate("/deleteAccount")} className={styles.button}>
+            Delete Account
+          </button>
+        </span>
       </div>
     </div>
   );

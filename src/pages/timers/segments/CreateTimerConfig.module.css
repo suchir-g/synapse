@@ -50,3 +50,17 @@ padding: 30px
 .sectionText {
     color: var(--muted);
 }
+
+.pair {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    width: 100%;
+    font-weight: 500;
+    background-color: white;
+    box-shadow: var(--lesser-shadow);
+    padding: 10px 15px;
+    border-radius: 5px;
+    align-items: center;
+    margin-top: 10px;
+}

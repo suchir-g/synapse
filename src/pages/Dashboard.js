@@ -9,7 +9,7 @@ import {
   orderBy,
   limit,
   doc,
-  getDoc
+  getDoc,
 } from "firebase/firestore";
 import { sanitizeAndTruncateHtml } from "../utilities";
 import { checkAndResetStreak } from "../UpdateStreak";
@@ -31,14 +31,14 @@ const Dashboard = ({ isAuth }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [hasRevisedToday, setHasRevisedToday] = useState(false);
   const [mainTodoListId, setMainTodoListId] = useState(null);
-  const [setsToReviseToday, setSetsToReviseToday] = useState([])
+  const [setsToReviseToday, setSetsToReviseToday] = useState([]);
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(async (user) => {
       if (user) {
         await loadData(user.uid);
         checkAndResetStreak(user.uid);
-        fetchRevisionSchedules(user.uid)
+        fetchRevisionSchedules(user.uid);
       } else {
         navigate("/login");
       }
@@ -50,14 +50,8 @@ const Dashboard = ({ isAuth }) => {
   const fetchRevisionSchedules = async (currentUserID) => {
     const todayStr = new Date().toISOString().split("T")[0]; // format today's date as YYYY-MM-DD
 
-    const revisionScheduleDocRef = doc(
-      db,
-      "revisionSchedules",
-      currentUserID
-    );
-    const revisionScheduleSnapshot = await getDoc(
-      revisionScheduleDocRef
-    );
+    const revisionScheduleDocRef = doc(db, "revisionSchedules", currentUserID);
+    const revisionScheduleSnapshot = await getDoc(revisionScheduleDocRef);
 
     if (revisionScheduleSnapshot.exists()) {
       const revisionSchedules =
@@ -75,20 +69,22 @@ const Dashboard = ({ isAuth }) => {
         if (setDocSnap.exists()) {
           const setData = setDocSnap.data();
           // check if the set hasn't been revised today
-          console.log(setData)
+          console.log(setData);
           if (setData.revised !== todayStr) {
             const viewedDate = setData.revised;
-            const formattedViewedDate = viewedDate.split("-").reverse().join("/")
-            return { id: doc.id, ...setData, lastRevised: formattedViewedDate };
+            const formattedViewedDate = viewedDate
+              .split("-")
+              .reverse()
+              .join("/");
+            return { id: setId, ...setData, lastRevised: formattedViewedDate };
           }
-
         }
         return null;
       });
 
-      const setsToReviseData = (
-        await Promise.all(setsToRevisePromises)
-      ).filter(Boolean);
+      const setsToReviseData = (await Promise.all(setsToRevisePromises)).filter(
+        Boolean
+      );
       setSetsToReviseToday(setsToReviseData);
     } else {
       console.log("No revision schedule found for the user.");
@@ -119,6 +115,7 @@ const Dashboard = ({ isAuth }) => {
         setUserData(userData);
         checkRevisionStatus(userData.lastRevisionDate);
       }
+
       const setsQuery = query(
         collection(db, "flashcardSets"),
         where("owners", "array-contains", userId),
@@ -161,10 +158,12 @@ const Dashboard = ({ isAuth }) => {
       if (!todoListsSnapshot.empty) {
         setMainTodoListId(todoListsSnapshot.docs[0].id);
       }
+
+      setIsLoading(false); // Consider setting this false only when all data is fetched successfully
     } catch (error) {
       console.error("Error loading dashboard data:", error);
+      setIsLoading(true);
     }
-    setIsLoading(false);
   };
 
   if (isLoading) {
@@ -184,89 +183,89 @@ const Dashboard = ({ isAuth }) => {
               </h3>
             </div>
             <section className={styles.contentSection}>
-              {(setsToReviseToday.length > 0) && <div className={styles.flashcardsToReviseToday}>
-                <h2 className={styles.latestText}>Flashcard Sets to Revise Today</h2>
-                <div className={styles.gridContainer}>
-                  {setsToReviseToday.map((set) => (
-                    <div key={set.id} className={styles.card}>
-                      <div className={styles.cardBody}>
-                        <Link
-                          to={`/sets/${set.id}`}
-                          className={styles.cardLink}
-                        >
-                          <h3>{set.title}</h3>
-                        </Link>
-                        <p className={styles.cardDescription}>
-                          {set.description}
-                        </p>
-                      </div>
-                      <div className={styles.cardFooter}>
-                        <span className={styles.lastRevised}>
-                          Last revised: {set.lastRevised}
-                        </span>
-                      </div>
-                    </div>
-                  ))}
+              {setsToReviseToday.length > 0 && (
+                <div className={styles.flashcardsToReviseToday}>
+                  <h2 className={styles.latestText}>
+                    Flashcard Sets to Revise Today
+                  </h2>
+                  <div className={styles.gridContainer}>
+                    {setsToReviseToday.map((set) => (
+                      <Link to={`/sets/${set.id}`}>
+                        <div key={set.id} className={styles.card}>
+                          <div className={styles.cardBody}>
+                            <h3 className={styles.cardLink}>{set.title}</h3>
+                            <p className={styles.cardDescription}>
+                              {set.description}
+                            </p>
+                          </div>
+                          <div className={styles.cardFooter}>
+                            <span className={styles.lastRevised}>
+                              Last revised: {set.lastRevised}
+                            </span>
+                          </div>
+                        </div>
+                      </Link>
+                    ))}
+                  </div>
                 </div>
-              </div>}
+              )}
 
-
-              {latestSets ? <div className={styles.latestFlashcards}>
-                <h2 className={styles.latestText}>Latest Flashcard Sets</h2>
-                <div className={styles.gridContainer}>
-                  {latestSets.map((set) => (
-                    <div key={set.id} className={styles.card}>
-                      <div className={styles.cardBody}>
-                        <Link
-                          to={`/sets/${set.id}`}
-                          className={styles.cardLink}
-                        >
-                          <h3>{set.title}</h3>
-                        </Link>
-                        <p className={styles.cardDescription}>
-                          {set.description}
-                        </p>
-                      </div>
-                      <div className={styles.cardFooter}>
-                        <span className={styles.lastRevised}>
-                          Last revised: {set.lastRevised}
-                        </span>
-                      </div>
-                    </div>
-                  ))}
-                  <Link to="/mystuff/flashcards"><FontAwesomeIcon icon={faChevronRight} color="grey" /></Link>
+              {latestSets ? (
+                <div className={styles.latestFlashcards}>
+                  <h2 className={styles.latestText}>Latest Flashcard Sets</h2>
+                  <div className={styles.gridContainer}>
+                    {latestSets.map((set) => (
+                      <Link to={`/sets/${set.id}`}>
+                        <div key={set.id} className={styles.card}>
+                          <div className={styles.cardBody}>
+                            <h3 className={styles.cardLink}>{set.title}</h3>
+                            <p className={styles.cardDescription}>
+                              {set.description}
+                            </p>
+                          </div>
+                          <div className={styles.cardFooter}>
+                            <span className={styles.lastRevised}>
+                              Last revised: {set.lastRevised}
+                            </span>
+                          </div>
+                        </div>
+                      </Link>
+                    ))}
+                    <Link to="/mystuff/flashcards">
+                      <FontAwesomeIcon icon={faChevronRight} color="grey" />
+                    </Link>
+                  </div>
                 </div>
-              </div> : <div>
-                Post
-              </div>}
+              ) : (
+                <div>Post</div>
+              )}
 
               <div className={styles.latestNotes}>
                 <h2 className={styles.latestText}>Latest Notes</h2>
                 <div className={styles.gridContainer}>
                   {latestNotes.map((note) => (
-                    <div key={note.id} className={styles.card}>
-                      <div className={styles.cardBody}>
-                        <Link
-                          to={`/notes/${note.id}`}
-                          className={styles.cardLink}
-                        >
-                          <h3>{note.title}</h3>
-                        </Link>
-                        <div
-                          className={`${styles.cardContent}`}
-                          dangerouslySetInnerHTML={{
-                            __html: sanitizeAndTruncateHtml(note.content, 20),
-                          }}
-                        />
+                    <Link to={`/notes/${note.id}`}>
+                      <div key={note.id} className={styles.card}>
+                        <div className={styles.cardBody}>
+                          <h3 className={styles.cardLink}>{note.title}</h3>
+                          <div
+                            className={`${styles.cardContent}`}
+                            dangerouslySetInnerHTML={{
+                              __html: sanitizeAndTruncateHtml(note.content, 20),
+                            }}
+                          />
+                        </div>
+                        <div className={styles.cardFooter}>
+                          <span className={styles.lastRevised}>
+                            Last revised: {note.viewed}
+                          </span>
+                        </div>
                       </div>
-                      <div className={styles.cardFooter}>
-                        <span className={styles.lastRevised}>
-                          Last revised: {note.viewed}
-                        </span>
-                      </div>
-                    </div>
+                    </Link>
                   ))}
-                  <Link to="/mystuff/notes"><FontAwesomeIcon icon={faChevronRight} color="grey" /></Link>
+                  <Link to="/mystuff/notes">
+                    <FontAwesomeIcon icon={faChevronRight} color="grey" />
+                  </Link>
                 </div>
               </div>
             </section>
@@ -291,7 +290,6 @@ const Dashboard = ({ isAuth }) => {
               hasRevisedToday={hasRevisedToday}
             />
           </div>
-
         </div>
       </div>
     </div>

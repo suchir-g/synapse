@@ -1,12 +1,11 @@
 import React, { useState } from "react";
-import { auth, googleAuthProvider, db } from "../config/firebase";
+import { auth, googleAuthProvider, db } from "../../config/firebase";
 import { createUserWithEmailAndPassword, signInWithPopup } from "firebase/auth";
-
+import { useNavigate } from "react-router-dom";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
-import streakFire from '../assets/streak-fire.gif';
-
+import styles from "./Login.module.css";
 const Register = ({ setIsAuth }) => {
-  // states for user's email, password, and other details
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
@@ -42,6 +41,7 @@ const Register = ({ setIsAuth }) => {
             main: true, // indicates this is the primary todo list for the user
             createdAt: serverTimestamp(),
           });
+          navigate("/");
         }
       );
     } catch (e) {
@@ -72,6 +72,7 @@ const Register = ({ setIsAuth }) => {
           main: true, // indicates this is the primary todo list for the user
           createdAt: serverTimestamp(),
         });
+        navigate("/");
       });
     } catch (e) {
       console.log(e); // improve error handling
@@ -79,40 +80,63 @@ const Register = ({ setIsAuth }) => {
   };
 
   return (
-    <div>
-      <h1>REGISTER</h1>
-      <input
-        type="text"
-        placeholder="Username..."
-        onChange={(e) => setUsername(e.target.value)}
-      />
-      <input
-        type="text"
-        placeholder="First Name..."
-        onChange={(e) => setFirstName(e.target.value)}
-      />
-      <input
-        type="text"
-        placeholder="Last Name..."
-        onChange={(e) => setLastName(e.target.value)}
-      />
-      <input
-        type="text"
-        placeholder="Year Group..."
-        onChange={(e) => setYearGroup(e.target.value)}
-      />
-      <input
-        type="text"
-        placeholder="Email..."
-        onChange={(e) => setEmail(e.target.value)}
-      />
-      <input
-        type="password"
-        placeholder="Password..."
-        onChange={(e) => setPassword(e.target.value)}
-      />
-      <button onClick={register}>Register</button>
-      <button onClick={registerGoogle}>Sign in with Google</button>
+    <div className={styles.mainContainer}>
+      <div className={styles.postFlashcardsContainer}>
+        <h1 className={styles.postFlashcards}>Register</h1>
+      </div>
+      <div className={styles.mainContent}>
+        <input
+          type="text"
+          placeholder="Email"
+          onChange={(e) => setEmail(e.target.value)}
+          className={`${styles.input}`}
+        />
+        <input
+          type="password"
+          placeholder="Password"
+          onChange={(e) => setPassword(e.target.value)}
+          className={`${styles.input}`}
+        />
+        <hr></hr>
+        <input
+          type="text"
+          placeholder="Username..."
+          onChange={(e) => setUsername(e.target.value)}
+          className={`${styles.input}`}
+        />
+        <span className={styles.inputGroup}>
+          <input
+            type="text"
+            placeholder="First Name"
+            onChange={(e) => setFirstName(e.target.value)}
+            className={`${styles.input} ${styles.halfSize}`}
+          />
+          <input
+            type="text"
+            placeholder="Last Name"
+            onChange={(e) => setLastName(e.target.value)}
+            className={`${styles.input} ${styles.halfSize}`}
+          />
+        </span>
+        <input
+          type="text"
+          placeholder="Year Group"
+          onChange={(e) => setYearGroup(e.target.value)}
+          className={`${styles.input}`}
+        />
+
+        <span>
+          <button
+            onClick={register}
+            className={`${styles.registerButton} ${styles.button}`}
+          >
+            Register
+          </button>
+          <button onClick={registerGoogle} className={`${styles.button}`}>
+            Sign in with Google
+          </button>
+        </span>
+      </div>
     </div>
   );
 };

@@ -1,12 +1,22 @@
 import { Link, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styles from "./Navbar.module.css";
+import React from "react";
 
-function Navbar() {
+function Navbar({ isAuth, setIsAuth }) {
   const navigate = useNavigate();
-  const [isAuth, setIsAuth] = useState(localStorage.getItem("isAuth"));
   const [showDropdown, setShowDropdown] = useState(false);
   let timeoutId;
+
+  useEffect(() => {
+    const handleAuthChange = () => {
+      setIsAuth(localStorage.getItem("isAuth") === "true");
+    };
+
+    window.addEventListener("storage", handleAuthChange);
+
+    return () => window.removeEventListener("storage", handleAuthChange);
+  }, []);
 
   const handleMouseEnter = () => {
     clearTimeout(timeoutId);
@@ -56,27 +66,51 @@ function Navbar() {
                 >
                   <ul>
                     <li className={styles.dropdownTab}>
-                      <Link className={styles.dropdownItem} to="/mystuff/flashcards">Flashcards</Link>
+                      <Link
+                        className={styles.dropdownItem}
+                        to="/mystuff/flashcards"
+                      >
+                        Flashcards
+                      </Link>
                     </li>
                     <li className={styles.dropdownTab}>
-                      <Link className={styles.dropdownItem} to="/mystuff/notes">Notes</Link>
+                      <Link className={styles.dropdownItem} to="/mystuff/notes">
+                        Notes
+                      </Link>
                     </li>
                     <li className={styles.dropdownTab}>
-                      <Link className={styles.dropdownItem} to="/mystuff/whiteboards">Whiteboards</Link>
+                      <Link
+                        className={styles.dropdownItem}
+                        to="/mystuff/whiteboards"
+                      >
+                        Whiteboards
+                      </Link>
                     </li>
                     <li className={styles.dropdownTab}>
-                      <Link className={styles.dropdownItem} to="/tags">Tags</Link>
+                      <Link className={styles.dropdownItem} to="/tags">
+                        Tags
+                      </Link>
                     </li>
                     <li className={styles.dropdownTab}>
-                      <Link className={styles.dropdownItem} to="/timers">Timers</Link>
+                      <Link className={styles.dropdownItem} to="/timers">
+                        Timers
+                      </Link>
                     </li>
                     <li className={styles.dropdownTab}>
-                      <Link className={styles.dropdownItem} to="/todos">Todos</Link>
-                    </li>                  </ul>
+                      <Link className={styles.dropdownItem} to="/todos">
+                        Todos
+                      </Link>
+                    </li>{" "}
+                  </ul>
                 </div>
               )}
             </li>
-            <button onClick={() => {navigate("/post")}} className={styles.postButton}>
+            <button
+              onClick={() => {
+                navigate("/post");
+              }}
+              className={styles.postButton}
+            >
               Post
             </button>
             <li>
@@ -87,12 +121,12 @@ function Navbar() {
           </>
         ) : (
           <>
-            <li className={styles.loginButton}>
-              <Link to="/login">Login</Link>
-            </li>
-            <li className={styles.registerButton}>
-              <Link to="/register">Sign Up</Link>
-            </li>
+            <Link to="/login">
+              <li className={styles.loginButton}>Login</li>
+            </Link>
+            <Link to="/register">
+              <li className={styles.registerButton}>Sign Up</li>
+            </Link>
           </>
         )}
       </ul>

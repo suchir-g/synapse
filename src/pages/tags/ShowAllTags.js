@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { db, auth } from "../../config/firebase";
 import { collection, query, where, getDocs } from "firebase/firestore";
+import React from "react"
 
 import styles from "./ShowAllTags.module.css"
 

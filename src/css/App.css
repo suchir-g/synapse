@@ -11,17 +11,30 @@
     --text-muted-color:#414141;
 
     --primary: #3A86FF;
+    --primary-hover: #2168d9;
     --secondary: #b9bbbe;
+    --secondary-hover: #9d9fa4;
     --tertiary: #f1f1f1;
+    --tertiary-hover: #c5c0c0;
     --success: #5DC133;
+    --success-hover: #519d31;
     --danger: #FD2B3B;
-    --primary-variant: #000080;
+    --danger-hover: #bd1d2a;
     --quizlet-color: #4255ff;
+    --quizlet-color-hover: #2636c5;
 
     --flashcards-color: #8338ec;
+    --flashcards-color-hover: #5b1bb4;
+
+    --primary-variant: #000080;
+    --primary-variant-hover: #07075d;
+    
 
     --muted: #797979;
+    --muted-hover: #5f5a5a;
+
     --muted-link-color: #274c77;
+    --muted-link-color-hover: #203955;
 
     --light-button: #e9e9e9;
     --light-button-hover: #d2d2d2;
@@ -29,8 +42,11 @@
     --font: "Inter", sans-serif; 
     
     --shadow: 0 0px 23.6px rgba(0, 0, 0, 0.25);
+    --greater-shadow: 0 0px 23.6px rgba(0, 0, 0, 0.35);
     --lesser-shadow: 0 0px 10px rgba(0, 0, 0, 0.17);
-
+    --transition1: 1s cubic-bezier(0.47, 0, 0.745, 0.715);
+    --transition05: 0.5s cubic-bezier(0.47, 0, 0.745, 0.715);
+    --transition025: 0.25s cubic-bezier(0.47, 0, 0.745, 0.715);
 }
 
 .mainContainer {

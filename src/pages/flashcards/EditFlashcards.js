@@ -28,7 +28,6 @@ import "react-quill/dist/quill.bubble.css";
 import { flashcardModule } from "../../config/quill";
 import styles from "./CreateFlashcards.module.css"
 
-
 const EditFlashcards = ({ isAuth }) => {
   const { id } = useParams();
 

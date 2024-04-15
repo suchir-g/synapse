@@ -3,9 +3,9 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 72vh;
     width: 100%;
     gap: 30px;
+    min-height: 75vh;
 }
 
 .loadingIcon {

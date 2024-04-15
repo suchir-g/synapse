@@ -1,0 +1,51 @@
+.mainContainer {
+    width: 100vw;
+    height: 95vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.mainContent {
+    padding: 30px;
+    margin: 20px;
+    border-radius: 5px;
+    border: none;
+    box-shadow: var(--shadow);
+    width: 50%;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.input {
+    width: 100%;
+    padding: 15px;
+    border: none;
+    box-shadow: var(--lesser-shadow);
+    border-radius: 5px;
+}
+
+.button {
+    width: max-content;
+    box-shadow: var(--lesser-shadow);
+    background-color: var(--danger);
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    margin-right: 20px;
+    transition: var(--transition025);
+}
+
+.error {
+    color: var(--danger);
+    font-weight: 500;
+}
+
+.mainText {
+    font-weight: 600;
+    font-size: 24px;
+}

@@ -2,12 +2,12 @@
   background: #f9f9f9;
   padding: 20px;
   border-radius: 10px;
-  
 }
 
 .cards_grid {
   display: flex;
   flex-direction: column;
+  min-height: 75vh;
 }
 
 .card {

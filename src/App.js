@@ -1,14 +1,18 @@
+import React from "react";
 
 import "./css/App.css";
 import "./css/Reset.css";
 
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 
-import Register from "./pages/Register";
+import Register from "./pages/auth/Register";
 import Home from "./pages/Home";
-import Login from "./pages/Login";
-import Profile from "./pages/Profile";
 import Post from "./pages/Post";
+
+import Login from "./pages/auth/Login";
+import Profile from "./pages/auth/Profile";
+import UpdatePassword from "pages/auth/UpdatePassword";
+import DeleteAccount from "pages/auth/DeleteAccount";
 
 import MyStuff from "./pages/mystuff/MyStuff";
 
@@ -41,7 +45,6 @@ import TimerPage from "./pages/timers/segments/TimerPage";
 
 import ViewWhiteboard from "./pages/whiteboards/ViewWhiteboard";
 import PostWhiteboard from "./pages/whiteboards/PostWhiteboard";
-import WhiteboardPage from "./pages/whiteboards/ShowWhiteboards";
 
 import CreateTodoList from "pages/todos/CreateTodo";
 import ShowTodos from "pages/todos/ShowTodos";
@@ -55,31 +58,39 @@ import PageNotFound from "pages/PageNotFound";
 
 import AboutMe from "pages/about/AboutMe";
 import AboutSynapse from "pages/about/AboutSynapse";
+import TopTips from "pages/learn/TopTips";
+import OtherWebsites from "pages/learn/OtherWebsites";
 
 import { useState } from "react";
 import { Footer } from "footer/Footer";
-import TopTips from "pages/learn/TopTips";
 
 function App() {
   const [isAuth, setIsAuth] = useState(localStorage.getItem("isAuth"));
   // this will act as a sitewise marker which tells us if we are logged in or not
 
-  console.log("helo")
+  console.log("helo");
 
   return (
     <div className="mainContainer">
       <Router>
-        <Navbar />
+        <Navbar setIsAuth={setIsAuth} isAuth={isAuth} />
         <Routes>
           <Route path="/" element={<Home isAuth={isAuth} />} />
           <Route path="/profile" element={<Profile setIsAuth={setIsAuth} />} />
+
           <Route
             path="/register"
             element={<Register setIsAuth={setIsAuth} />}
           />
           <Route path="/login" element={<Login setIsAuth={setIsAuth} />} />
+          <Route path="/updatePassword" element={<UpdatePassword />} />
+          <Route path="/deleteAccount" element={<DeleteAccount setIsAuth={setIsAuth}/>} />
+
           <Route path="/mystuff" element={<MyStuff isAuth={isAuth} />} />
-          <Route path="/mystuff/:sectionName" element={<MyStuff isAuth={isAuth} />} />
+          <Route
+            path="/mystuff/:sectionName"
+            element={<MyStuff isAuth={isAuth} />}
+          />
 
           <Route path="/post" element={<Post isAuth={isAuth} />} />
 
@@ -147,12 +158,11 @@ function App() {
 
           {/* whiteboards */}
 
+          <Route path="/whiteboards/post" element={<PostWhiteboard />} />
           <Route
             path="/whiteboards/:whiteboardID"
             element={<ViewWhiteboard />}
           />
-          <Route path="/whiteboards/post" element={<PostWhiteboard />} />
-          <Route path="/whiteboards" element={<WhiteboardPage />} />
 
           {/* todos */}
 
@@ -175,11 +185,9 @@ function App() {
           {/* Learn */}
 
           <Route path="/toptips" element={<TopTips />} />
-
           <Route path="/learn/flashcards" element />
-
-          <Route path="/research" element={<AboutMe />} /> 
-
+          <Route path="/research" element={<AboutMe />} />
+          <Route path="/othertools" element={<OtherWebsites />}/>
 
           {/* Credits */}
 

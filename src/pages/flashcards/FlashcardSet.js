@@ -24,8 +24,6 @@ const FlashcardSet = ({ isAuth }) => {
   const [isLoading, setIsLoading] = useState(true);
 
   const [tags, setTags] = useState([]);
-  const [copySuccess, setCopySuccess] = useState("");
-
   const [isCurrentUserOwner, setIsCurrentUserOwner] = useState(false);
 
   useEffect(() => {
