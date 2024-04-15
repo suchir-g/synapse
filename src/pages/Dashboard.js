@@ -32,7 +32,7 @@ const Dashboard = ({ isAuth }) => {
   const [hasRevisedToday, setHasRevisedToday] = useState(false);
   const [mainTodoListId, setMainTodoListId] = useState(null);
   const [setsToReviseToday, setSetsToReviseToday] = useState([]);
-
+  const [greetingMessage, setGreetingMessage] = useState("Nice to have you back.")
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(async (user) => {
       if (user) {
@@ -46,6 +46,21 @@ const Dashboard = ({ isAuth }) => {
 
     return () => unsubscribe();
   }, []);
+
+  useEffect(() => {
+    const date = new Date();
+    const hours = date.getHours();
+
+    let timeOfDay = 2
+    if (hours < 12) {
+      timeOfDay = 'morning';
+    } else if (hours >= 12 && hours < 17) {
+      timeOfDay = 'afternoon';
+    } else {
+      timeOfDay = 'night';
+    }
+    setGreetingMessage(`Good ${timeOfDay}`)
+  })
 
   const fetchRevisionSchedules = async (currentUserID) => {
     const todayStr = new Date().toISOString().split("T")[0]; // format today's date as YYYY-MM-DD
@@ -169,6 +184,7 @@ const Dashboard = ({ isAuth }) => {
   if (isLoading) {
     return <LoadingComponent />;
   }
+
   return (
     <div className={`${styles.dashboardContainer} container text-center`}>
       <div className="row justify-content-md-center py-5 mx-0">
@@ -176,13 +192,21 @@ const Dashboard = ({ isAuth }) => {
           <div className={styles.mainSection}>
             <div className={styles.greetingSection}>
               <h1 className={styles.welcomeText}>
-                Welcome, {userData ? userData.firstName : "there"}
+                {greetingMessage}, {userData ? userData.firstName : "there"}
               </h1>
               <h3 className={styles.welcomeTextSubtitle}>
-                Nice to have you back.
+                Welcome back!
               </h3>
             </div>
             <section className={styles.contentSection}>
+
+              {(setsToReviseToday.length == 0 && latestSets.length == 0 && latestNotes.length == 0) && <section className={styles.nothingSection}>
+                <h1 className={styles.nothingText}>Welcome To Synapse!</h1>
+                It looks like your dashboard is currently empty. To get started, you can create a new post by clicking on the 'New Post' button or explore our existing content by navigating through the menu.
+                <Link to="/howtouse"><div className={styles.tourContainer}><div className={styles.tourButton}>Take a tour</div></div>
+                </Link>
+              </section>}
+
               {setsToReviseToday.length > 0 && (
                 <div className={styles.flashcardsToReviseToday}>
                   <h2 className={styles.latestText}>
@@ -210,7 +234,7 @@ const Dashboard = ({ isAuth }) => {
                 </div>
               )}
 
-              {latestSets ? (
+              {latestSets.length > 0 ? (
                 <div className={styles.latestFlashcards}>
                   <h2 className={styles.latestText}>Latest Flashcard Sets</h2>
                   <div className={styles.gridContainer}>
@@ -240,7 +264,7 @@ const Dashboard = ({ isAuth }) => {
                 <div>Post</div>
               )}
 
-              <div className={styles.latestNotes}>
+              {latestNotes.length > 0 ? <div className={styles.latestNotes}>
                 <h2 className={styles.latestText}>Latest Notes</h2>
                 <div className={styles.gridContainer}>
                   {latestNotes.map((note) => (
@@ -267,7 +291,8 @@ const Dashboard = ({ isAuth }) => {
                     <FontAwesomeIcon icon={faChevronRight} color="grey" />
                   </Link>
                 </div>
-              </div>
+              </div> : <div>
+                post</div>}
             </section>
             <Link className={styles.myStuffLink} to="/mystuff">
               My stuff

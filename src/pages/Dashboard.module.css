@@ -6,7 +6,9 @@
   text-align: left;
 }
 .welcomeTextSubtitle {
-  font-size: 24px;
+  margin-top: 10px;
+  margin-left: 5px;
+  font-size: 26px;
   font-weight: 400;
   text-align: left;
 }
@@ -114,4 +116,47 @@
   color: #666;
   margin-top: 4px;
 
+}
+
+
+.nothingSection {
+  width: 100%;
+  height: max-content;
+  background-color: white;
+  border: 1px solid rgb(189, 189, 189); 
+  border-radius: 5px;
+  box-shadow: inset 0px 0px 50px #3A86FF1f, var(--shadow);
+  display: flex;
+  justify-content: left;
+  align-items: start;
+  text-align: left;
+  flex-direction: column;
+  padding: 30px;
+}
+
+.nothingText {
+  font-weight: 600;
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.tourContainer {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: end;
+  align-items: end;
+  margin: 20px 0px 0px 0px;
+}
+
+.tourButton {
+  width: fit-content;
+  font-weight: 500;
+  background-color: var(--notes-color);
+  border: none;
+  border-radius: 5px;
+  padding: 10px 15px;
+  color: white;
+  font-weight: 600;
+  box-shadow: var(--lesser-shadow);
 }

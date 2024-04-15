@@ -1,8 +1,9 @@
 .mainContainer {
     width: 100vw;
-    height: min(100vh, fit-content);
+    min-height: 95vh;
     display: flex;
     flex-direction: column;
+    justify-content: center;
     align-items: center;
 }
 

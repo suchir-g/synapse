@@ -31,7 +31,7 @@
 }
 
 .createWhiteboardButton {
-  background-color: #e51022;
+  background-color: var(--whiteboards-color);
   color: white;
   padding: 15px 15px;
   border: transparent;

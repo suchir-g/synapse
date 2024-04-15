@@ -4,6 +4,7 @@ import { db } from "../../config/firebase";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import TodoItem from "./Todo";
 import styles from "./ViewTodo.module.css";
+import LoadingComponent from "LoadingComponent";
 
 const ViewTodo = () => {
   const { todoID } = useParams();
@@ -87,7 +88,7 @@ const ViewTodo = () => {
     setEditText("");
   };
 
-  if (!todoTitle) return <div>Loading...</div>;
+  if (!todoTitle) return <LoadingComponent />;
 
   return (
     <div className={styles.mainContainer}>

@@ -25,6 +25,11 @@
 
     --flashcards-color: #8338ec;
     --flashcards-color-hover: #5b1bb4;
+    --whiteboards-color: #e51022;
+    --whiteboards-color-hover: #d51323;
+    --notes-color: #fb5607;
+    --notes-color-hover: #db5010;
+
 
     --primary-variant: #000080;
     --primary-variant-hover: #07075d;
@@ -47,6 +52,8 @@
     --transition1: 1s cubic-bezier(0.47, 0, 0.745, 0.715);
     --transition05: 0.5s cubic-bezier(0.47, 0, 0.745, 0.715);
     --transition025: 0.25s cubic-bezier(0.47, 0, 0.745, 0.715);
+
+    --spinner-bezier: cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
 
 .mainContainer {
