@@ -29,41 +29,41 @@
 }
 
 .flashcardsActive {
-    background-color: #8338ec;
+    background-color: var(--flashcards-color);
     color: white;
     text-shadow: 0px 0px 10px rgba(255, 255, 255, 0.3);
 
 }
 
 .flashcardsActive:hover {
-    background-color: #6825c5;
+    background-color: var(--flashcards-color-hover);
     color: white;
     text-shadow: 0px 0px 10px rgba(255, 255, 255, 0.3);
 
 }
 
 .notesActive {
-    background-color: #fb5607;
+    background-color: var(--notes-color);
     color: white;
     text-shadow: 0px 0px 10px rgba(255, 255, 255, 0.3);
 
 }
 .notesActive:hover {
-    background-color: #db5010;
+    background-color: var(--notes-color-hover);
     color: white;
     text-shadow: 0px 0px 10px rgba(255, 255, 255, 0.3);
 
 }
 
 .whiteboardsActive {
-    background-color: #e51022;
+    background-color: var(--whiteboards-color);
     color: white;
     text-shadow: 0px 0px 10px rgba(255, 255, 255, 0.3);
 
 }
 
 .whiteboardsActive:hover {
-    background-color: #d51323;
+    background-color: var(--whiteboards-color-hover);
     color: white;
     text-shadow: 0px 0px 10px rgba(255, 255, 255, 0.3);
 

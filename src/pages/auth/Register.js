@@ -4,6 +4,7 @@ import { createUserWithEmailAndPassword, signInWithPopup } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import styles from "./Login.module.css";
+import LoadingComponent from "LoadingComponent";
 const Register = ({ setIsAuth }) => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
@@ -12,7 +13,7 @@ const Register = ({ setIsAuth }) => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [yearGroup, setYearGroup] = useState("");
-
+  const [loadingRegister, setLoadingRegister] = useState(false)
   const usersCollectionRef = collection(db, "users");
 
   const register = async () => {
@@ -21,9 +22,9 @@ const Register = ({ setIsAuth }) => {
         async () => {
           localStorage.setItem("isAuth", true);
           setIsAuth(true);
-
+          setLoadingRegister(true);
           // update to include first name, last name, and year group
-          addDoc(usersCollectionRef, {
+          await addDoc(usersCollectionRef, {
             username,
             email,
             firstName,
@@ -41,6 +42,7 @@ const Register = ({ setIsAuth }) => {
             main: true, // indicates this is the primary todo list for the user
             createdAt: serverTimestamp(),
           });
+          setLoadingRegister(false)
           navigate("/");
         }
       );
@@ -54,7 +56,8 @@ const Register = ({ setIsAuth }) => {
       await signInWithPopup(auth, googleAuthProvider).then(async () => {
         // Using displayName to infer first and last name
         const names = auth.currentUser.displayName.split(" ");
-        addDoc(usersCollectionRef, {
+        setLoadingRegister(true)
+        await addDoc(usersCollectionRef, {
           username: auth.currentUser.displayName,
           firstName: names[0],
           lastName: names.length > 1 ? names[names.length - 1] : "",
@@ -72,12 +75,17 @@ const Register = ({ setIsAuth }) => {
           main: true, // indicates this is the primary todo list for the user
           createdAt: serverTimestamp(),
         });
+        setLoadingRegister(false)
         navigate("/");
       });
     } catch (e) {
       console.log(e); // improve error handling
     }
   };
+
+  if (loadingRegister) {
+    return <LoadingComponent />
+  }
 
   return (
     <div className={styles.mainContainer}>

@@ -58,8 +58,10 @@ import PageNotFound from "pages/PageNotFound";
 
 import AboutMe from "pages/about/AboutMe";
 import AboutSynapse from "pages/about/AboutSynapse";
+
 import TopTips from "pages/learn/TopTips";
 import OtherWebsites from "pages/learn/OtherWebsites";
+import HowToUse from "pages/about/HowToUse";
 
 import { useState } from "react";
 import { Footer } from "footer/Footer";
@@ -192,6 +194,7 @@ function App() {
           {/* Credits */}
 
           <Route path="/credits" element={<AboutMe />} />
+          <Route path="/howtouse" element={<HowToUse />} />
 
           {/* 404 */}
           <Route path="*" element={<PageNotFound />} />

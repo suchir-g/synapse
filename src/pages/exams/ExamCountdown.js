@@ -69,7 +69,7 @@ const ExamCountdown = () => {
       console.log(examSnapshot);
       if (examSnapshot.empty) {
         console.log("No upcoming exams found");
-        setDaysUntilNextExam("No upcoming exams");
+        setDaysUntilNextExam("N/A");
         return;
       }
 
@@ -118,9 +118,11 @@ const ExamCountdown = () => {
       <h3 className={styles.title}>
         Days until {nextExamTitle || "Next Exam"}:
       </h3>
-      <div className={styles.timerDisplay}>
-        {daysUntilNextExam !== "" ? daysUntilNextExam : "Loading..."}
-      </div>
+      {daysUntilNextExam !== "" ? <div className={styles.timerDisplay}>
+        {daysUntilNextExam}
+      </div> : <div className={styles.loadingIcon}></div>}
+
+
       <div className={styles.buttons}>
         <button className={styles.button} onClick={() => navigate("/exams")}>
           Edit Exams

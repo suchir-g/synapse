@@ -1,0 +1,48 @@
+.mainContainer {
+    display: flex;
+    width: 100%;
+    min-height: 95vh;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+.mainContent {
+    background-color: white;
+    border-radius: 5px;
+    border: none;
+    box-shadow: var(--shadow);
+    padding: 30px;
+    width: 80%;
+}
+
+.postFlashcards {
+    font-size: 32px;
+    margin: 30px 0px 20px 0px;
+    font-weight: 500;
+}
+
+.postFlashcardsContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.question {
+    width: 100%;
+    box-shadow: var(--lesser-shadow);
+    margin: 10px;
+    padding: 10px 15px;
+}
+
+.questionPart {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    font-weight: 500;
+    font-size: 20px;
+}
+
+.answer {
+    margin-top: 10px;
+}
