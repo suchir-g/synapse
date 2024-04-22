@@ -9,7 +9,7 @@
 
 .endContainer {
     width: 100%;
-    min-height: 95vh;
+    height: 100%;
     display: flex;
     flex-direction: row;
     justify-content: space-evenly; 
@@ -67,22 +67,6 @@
     font-size: 19px;
     background-color: white;
 }
-
-.endButton {
-    color: white;
-    background-color: var(--muted);
-    border: none;
-    border-radius: 5px;
-    padding: 10px 15px;
-    margin: 10px;
-    display: inline;
-    transition: var(--transition025);
-
-    &:hover {
-        background-color: var(--muted-hover);
-    }
-}
-
 .finished {
     display: flex;
     justify-content: center;

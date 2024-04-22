@@ -7,8 +7,7 @@ const AboutSynapse = () => {
     return (
         <div className={styles.mainContainer}>
             <div className={styles.leftSection}>
-                <img src="./me .jpg" alt="" className={styles.image}/>
-                <p>^ Me in our school's integration bee</p>
+                {/* <img></img> */}
             </div>
             <div className={styles.rightSection}>
                 <h1 className={styles.mainText}>
@@ -31,7 +30,7 @@ const AboutSynapse = () => {
                     If you want to see all the research we have done (and the ways we have incorporated it into the website), check <Link to="/research" className={styles.learnLink}>this link</Link>
                     <br />
                     <br />
-                    Synapse was built by me (a solo project) as part of an EPQ (extended project qualification) over the course of 4 months.
+                    Synapse was built by only me as part of an EPQ (extended project qualification). However, many people helped out and they are all credited <Link to="/credits" className={styles.learnLink}>here</Link>.
                 </p>
             </div>
         </div>

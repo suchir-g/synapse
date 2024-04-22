@@ -119,28 +119,3 @@
     flex-direction: column;
     gap: 10px;
 }
-
-@media (max-width: 768px) {
-    .topSection {display: none;}
-
-    .flashcard {
-        width: 100%;
-        padding: 10px
-    }
-
-    .quizSection {
-        width: 100%;
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-    }
-    .mainContainer {
-        padding: 30px;
-    }
-
-    .bottomText {
-        text-align: center;
-    }
-}

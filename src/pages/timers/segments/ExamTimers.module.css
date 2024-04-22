@@ -4,8 +4,7 @@
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    margin: 30px 0px;
-    min-height: 95vh;
+    margin: 30px;
 }
 
 .mainContent {

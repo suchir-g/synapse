@@ -5,7 +5,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    margin: 30px 0px;
+    margin: 30px;
 }
 
 .postFlashcards {
@@ -24,7 +24,6 @@
 
 .mutedText {
     color: var(--muted);
-    text-align: center;
 }
 
 .learnLink {
@@ -67,32 +66,4 @@
 .addTodoSection {
     display: flex;
     width: 100%;
-}
-
-.allTodos {
-    position: absolute;
-    top: 6vh;
-    left: 10px;
-    background-color: var(--muted);
-    padding: 10px 15px;
-    border: none;
-    border-radius: 5px;
-    box-shadow: var(--lesser-shadow);
-    width: fit-content;
-    color: white;
-}
-
-@media (max-width: 768px) {
-    .mainContainer {
-        padding: 30px;
-    }
-    
-    .allTodos {
-        top: 10vh;
-    left: 10px;
-    }
-
-    .mainContent {
-        width: 100%;
-    }
 }

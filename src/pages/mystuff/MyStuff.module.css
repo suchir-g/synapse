@@ -14,18 +14,14 @@
     margin-bottom: 20px;
 }
 
-.tabs {
-    gap: 10px;
-}
-
 .tab {
     background-color: var(--light-button);
     border: transparent;
     padding: 15px;
     border-radius: 5px;
+    margin-right: 10px;
     margin-bottom: 10px;
     font-weight: 500;
-    margin-right: 10px;
 }
 
 .tab:hover {
@@ -100,33 +96,4 @@
     top: 85%;
     left: 85%;
 
-}
-@media (max-width: 768px) {
-    .pageTitle {
-        text-align: center;
-    }
-    .searchWrapper {
-        display: none;
-    }
-
-    .container {
-        padding: 20px
-    }
-
-
-    .tabs {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 100%;
-    }
-
-    .tab {
-        font-size: 16px;
-        margin-right: 0;
-    }
-
-    .postButton {
-        display: none;
-    }
 }

@@ -11,7 +11,7 @@
 }
 
 .todoItem:hover {
-  background-color: var(--tertiary);
+  background-color: #f9f9f9;
 }
 
 .editText {
@@ -70,16 +70,4 @@
   overflow: hidden; /* Hides the overflow text */
   text-overflow: ellipsis; /* Adds an ellipsis at the end of the truncated text */
   max-width: 40%; /* You may need to adjust this value to fit the container's width */
-}
-.completed {
-  text-decoration: line-through;
-}
-.completedInput {
-  background-color: var(--muted);
-  color: white;
-}
-
-.completedInput:hover {
-  background-color: var(--muted-hover);
-  color: white;
 }

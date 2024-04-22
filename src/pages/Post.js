@@ -15,7 +15,7 @@ const Post = ({ isAuth }) => {
         <h3>Create your own revision material</h3>
         <p>
           Go to{" "}
-          <Link className={styles.learnLink} to="/toptips">
+          <Link className={styles.learnLink} to="/learn/flashcards">
             this page{" "}
           </Link>
           to learn how to effectively make flashcards/notes.
@@ -27,9 +27,6 @@ const Post = ({ isAuth }) => {
         </Link>
         <Link to="/notes/post">
           <div className={styles.flashcard}>Notes</div>
-        </Link>
-        <Link to="/whiteboards/post">
-          <div className={styles.flashcard}>Whiteboards</div>
         </Link>
       </div>
       <div className={styles.importContainer}>

@@ -13,7 +13,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { updateRevisionDates } from "../interleaving/updateFlashcards";
 import { updateStreak } from "../../../UpdateStreak";
 
-import styles from "./SimpleDisplay.module.css";
+import styles from "./SimpleDisplay.module.css"
 
 const SimpleDisplay = () => {
   const history = useNavigate();
@@ -141,34 +141,24 @@ const SimpleDisplay = () => {
   if (isCompleted) {
     return (
       <div className={styles.endContainer}>
-        <button onClick={handlePrev} className={styles.arrowButton}>
-          {"<"}
-        </button>
-        <div className={`${styles.flashcard} ${styles.finished}`}>
+        <button onClick={handlePrev} className={styles.arrowButton}>{"<"}</button>
+        <div className={styles.flashcard}>
           <div>Well done! You've reached the end of the set.</div>
-          <span>
-            <button onClick={restartFlashcards} className={styles.endButton}>
-              Start Again
-            </button>
-            <button onClick={navigateToSet} className={styles.endButton}>
-              Back to set
-            </button>
-          </span>
+          <button onClick={restartFlashcards} className={styles.toggleButton}>Start Again</button>
+          <button onClick={navigateToSet} className={styles.toggleButton}>Back to set</button>
         </div>
-        <div className={styles.dummy}></div>
+        <div className={styles.dummy}>
+
+        </div>
       </div>
     );
   }
 
   return (
     <div className={styles.mainContainer}>
-      <div className={styles.progressText}>
-        Progress: {progress.toFixed(0)}%
-      </div>
+      <div className={styles.progressText}>Progress: {progress.toFixed(0)}%</div>
       <div className={styles.mainSection}>
-        <button onClick={handlePrev} className={styles.arrowButton}>
-          {"<"}
-        </button>
+        <button onClick={handlePrev} className={styles.arrowButton}>{"<"}</button>
         {flashcards.length > 0 && (
           <Flashcard
             key={flashcards[currentCardIndex].id}
@@ -177,14 +167,10 @@ const SimpleDisplay = () => {
             size={{ width: "1000px", height: "600px" }}
           />
         )}
-        <button onClick={handleNext} className={styles.arrowButton}>
-          {">"}
-        </button>
+        <button onClick={handleNext} className={styles.arrowButton}>{">"}</button>
       </div>
       <div className={styles.bottomSection}>
-        <button onClick={toggleFlipMode} className={styles.toggleButton}>
-          Toggle Flip Mode
-        </button>
+        <button onClick={toggleFlipMode} className={styles.toggleButton}>Toggle Flip Mode</button>
         <button onClick={toggleMode} className={styles.toggleButton}>
           {isRandomMode ? "Ordered Mode" : "Random Mode"}
         </button>

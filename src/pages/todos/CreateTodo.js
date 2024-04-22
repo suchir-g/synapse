@@ -3,8 +3,6 @@ import { db, auth } from "../../config/firebase";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 
-import styles from "./CreateTodoList.module.css";
-
 const CreateTodoList = ({ isAuth }) => {
   const navigate = useNavigate();
 
@@ -55,44 +53,31 @@ const CreateTodoList = ({ isAuth }) => {
   };
 
   return (
-    <div className={styles.mainContainer}>
-      <div className={styles.postFlashcardsContainer}>
-        <h1 className={styles.postFlashcards}>Create Todo List</h1>
-      </div>
-
-      <form onSubmit={handleCreateList} className={styles.mainContent}>
+    <div>
+      <form onSubmit={handleCreateList}>
         <input
           type="text"
           value={listName}
           onChange={(e) => setListName(e.target.value)}
           placeholder="List Name"
-          className={styles.titleInput}
         />
+        <input
+          type="text"
+          value={todoText}
+          onChange={(e) => setTodoText(e.target.value)}
+          placeholder="Add Todo"
+        />
+        <button type="button" onClick={addTodo}>
+          Add Todo
+        </button>
+
         <ul>
           {todos.map((todo, index) => (
-            <li key={index} className={styles.todo}>{todo.text}</li>
+            <li key={index}>{todo.text}</li>
           ))}
         </ul>
 
-        <span className={styles.pair}>
-          <input
-            type="text"
-            value={todoText}
-            onChange={(e) => setTodoText(e.target.value)}
-            placeholder="Add Todo"
-            className={styles.addTodoInput}
-          />
-          <button type="button" className={styles.addButton} onClick={addTodo}>
-            Add Todo
-          </button>
-        </span>
-
-        <button
-          type="submit"
-          className={`${styles.button} ${styles.createTodoList}`}
-        >
-          Create Todo List
-        </button>
+        <button type="submit">Create Todo List</button>
       </form>
     </div>
   );

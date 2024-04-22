@@ -26,13 +26,3 @@
   flex-grow: 1;
   font-weight: 500;
 }
-.empty {
-  display: flex;
-  align-items: center;
-  padding-top: 40px;
-}
-
-.nothing {
-  font-size: 24px;
-  font-weight: 600;
-}

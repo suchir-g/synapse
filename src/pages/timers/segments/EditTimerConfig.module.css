@@ -5,7 +5,6 @@
     justify-content: center;
     align-items: center;
     padding: 30px;
-    min-height: 95vh;
 }
 
 .flashcard {
@@ -14,7 +13,6 @@
     border-radius: 5px;
     padding: 30px;
     width: 80%;
-    box-shadow: var(--shadow);
 }
 
 .mainText {
@@ -60,7 +58,8 @@
 }
 
 .addSectionButton {
-    background-color: var(--secondary);
+    color: white;
+    background-color: var(--success);
 }
 
 .deleteSectionButton {
@@ -85,46 +84,4 @@
     background-color: var(--danger);
     color: white;
     margin-top: 10px;
-}
-
-@media (max-width: 768px) {
-    .title {
-        width: 100%;
-    }
-
-    .mainContainer {
-        padding: 10px;
-    }
-
-    .flashcard {
-        width: 90%;
-        margin: 0;
-    }
-
-    .sectionTab {
-        display: flex;
-        flex-direction: column;
-        background-color: white;
-        border-radius: 5px;
-        border: none;
-        box-shadow: var(--lesser-shadow);
-        margin-top: 10px;
-        padding: 10px;
-        gap: 10px;
-    }
-
-    .addSection {
-        display: flex;
-        flex-direction: column;
-        width: 100%;
-    }
-
-    .addSection > span> input {
-        width: 100%;
-    }
-
-    .addSection > button {
-        width: 100%;
-        margin: 10px 0px;
-    }
 }

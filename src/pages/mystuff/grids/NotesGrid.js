@@ -47,7 +47,7 @@ const NotesGrid = ({ currentUserID }) => {
   }
 
   return (
-    <section className={`${styles.cards_grid} ${allNotes.length == 0 && styles.empty}`}>
+    <section className={styles.cards_grid}>
       {allNotes.length > 0 ? (
         allNotes.map((note, index) => (
           <Link
@@ -67,7 +67,7 @@ const NotesGrid = ({ currentUserID }) => {
           </Link>
         ))
       ) : (
-        <p className={styles.nothing}>No notes found.</p>
+        <p>No notes found.</p>
       )}
     </section>
   );

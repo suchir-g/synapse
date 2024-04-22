@@ -32,8 +32,7 @@
     width: 100%;
     box-shadow: var(--lesser-shadow);
     margin: 10px;
-    padding: 20px;
-    border-radius: 5px;
+    padding: 10px 15px;
 }
 
 .questionPart {
