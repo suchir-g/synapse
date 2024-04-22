@@ -13,6 +13,8 @@ import {
 import Select from "react-select";
 import { useNavigate } from "react-router-dom";
 
+import styles from "./AddTag.module.css"
+
 const AddTag = ({ parentTagID }) => {
   const navigate = useNavigate();
   const tagsRef = collection(db, "tags");
@@ -127,7 +129,7 @@ const AddTag = ({ parentTagID }) => {
         })
       );
 
-      navigate("/mystuff");
+      navigate("/tags");
     } catch (error) {
       console.error(
         "Error creating new tag or updating flashcards/notes: ",
@@ -137,7 +139,7 @@ const AddTag = ({ parentTagID }) => {
   };
 
   return (
-    <div>
+    <div className={styles.mainContainer}>
       <form onSubmit={handleSubmit}>
         <input
           type="text"

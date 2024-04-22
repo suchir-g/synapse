@@ -144,7 +144,7 @@ const SimpleDisplay = () => {
         <button onClick={handlePrev} className={styles.arrowButton}>
           {"<"}
         </button>
-        <div className={styles.flashcard}>
+        <div className={`${styles.flashcard} ${styles.finished}`}>
           <div>Well done! You've reached the end of the set.</div>
           <span>
             <button onClick={restartFlashcards} className={styles.endButton}>

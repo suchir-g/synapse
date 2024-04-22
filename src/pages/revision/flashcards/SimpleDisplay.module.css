@@ -4,7 +4,7 @@
     justify-content: center;
     align-items: center;
     min-height: 95vh;
-    padding: 20px 0ppx;
+    padding: 20px 0px;
 }
 
 .endContainer {
@@ -81,4 +81,10 @@
     &:hover {
         background-color: var(--muted-hover);
     }
+}
+
+.finished {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
