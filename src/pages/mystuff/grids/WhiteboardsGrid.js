@@ -4,7 +4,7 @@ import { collection, query, getDocs, where } from "firebase/firestore";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth, db } from "../../../config/firebase";
 import styles from "./WhiteboardsGrid.module.css";
-import MyStuffLoadingComponent from "../MyStuffLoadingComponent"
+import MyStuffLoadingComponent from "../MyStuffLoadingComponent";
 const WhiteboardsGrid = () => {
   const [whiteboards, setWhiteboards] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -48,7 +48,7 @@ const WhiteboardsGrid = () => {
   }
 
   return (
-    <section className={styles.whiteboards_grid_container}>
+    <section className={`${styles.whiteboards_grid_container} ${whiteboards.length == 0 && styles.empty}`}>
       {whiteboards.length > 0 ? (
         <div className={styles.whiteboards_grid}>
           {whiteboards.map((whiteboard) => (
@@ -63,7 +63,7 @@ const WhiteboardsGrid = () => {
                   <img
                     src={whiteboard.downloadURL}
                     alt="Preview"
-                    style={{ width: "100%", height: "auto" }} 
+                    style={{ width: "100%", height: "auto" }}
                     className={styles.whiteboard_preview_image}
                   />
                 )}
@@ -72,14 +72,8 @@ const WhiteboardsGrid = () => {
           ))}
         </div>
       ) : (
-        <p>No whiteboards found.</p>
+        <p className={styles.nothing}>No whiteboards found.</p>
       )}
-      <button
-        onClick={() => navigate("/whiteboards/post")}
-        className={styles.createWhiteboardButton}
-      >
-        Create Whiteboard
-      </button>
     </section>
   );
 };

@@ -1,6 +1,6 @@
 .mainContainer {
     width: 100%;
-    height: min(100vh, auto);
+    min-height: 95vh;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -71,4 +71,35 @@
 
 .examConfigs {
     margin-bottom: 30px;
+}
+
+@media (max-width: 768px) {
+    .buttonContainer {
+        height: 100%;
+    }
+
+    .extraButtons {
+        display: inline-block;
+    }
+
+    .setTimer {
+        display: none;
+    }
+
+    .timerName {
+        height: fit-content;
+        margin: 2px 0px;
+    }
+
+    .flashcard {
+        margin: 10px;
+        width: 90%;
+        height: fit-content;
+    }
+
+    .timerButton {
+        font-size: 14px;
+        background-color: var(--muted);
+        color: white;
+    }
 }

@@ -6,8 +6,7 @@
 .whiteboards_grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 20px;
-  min-height: 75vh;
+  gap: 10px;
 }
 
 .whiteboard_card {
@@ -37,4 +36,16 @@
   border: transparent;
   border-radius: 5px;
   margin-top: 20px;
+}
+
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 20px;
+}
+
+.nothing {
+  font-size: 24px;
+  font-weight: 600;
 }

@@ -7,7 +7,7 @@
 .cards_grid {
   display: flex;
   flex-direction: column;
-  min-height: 75vw;
+  min-height: 75vh;
 }
 
 .card {
@@ -25,4 +25,15 @@
   margin-bottom: 5px;
   flex-grow: 1;
   font-weight: 500;
+}
+
+.empty {
+  display: flex;
+  align-items: center;
+  padding-top: 40px;
+}
+
+.nothing {
+  font-size: 24px;
+  font-weight: 600;
 }

@@ -75,15 +75,7 @@ body {
     -webkit-user-drag: none;
 }
 
-@media (max-width: 768px) {
-    .navbar-links li {
-        margin-right: 0.5rem;
-    }
 
-    .navbar_logo img {
-        height: 30px;
-    }
-}
 
 .navbar_logo img {
     margin-right: 0.5rem;
@@ -131,4 +123,17 @@ body {
 
 .registerButton:hover {
     background-color: var(--primary-variant-hover);
+}
+
+@media (max-width: 768px) {
+    .navbar-links li {
+        margin-right: 0.5rem;
+    }
+
+    .navbar_logo img {
+        height: 30px;
+    }
+    .navbar img {
+        display: none;
+    }
 }

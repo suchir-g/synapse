@@ -22,6 +22,7 @@ import { Text } from "react-konva";
 import LoadingComponent from "LoadingComponent";
 
 import styles from "./Whiteboard.module.css";
+import WebOnly from "pages/WebOnly";
 
 const Whiteboard = ({ whiteboardID }) => {
   const [isLoading, setIsLoading] = useState(true);
@@ -86,7 +87,7 @@ const Whiteboard = ({ whiteboardID }) => {
         setTitle(""); // No title for a new/empty whiteboard
         setBackgroundImage(null); // No background image
         setIsLoading(false);
-        return
+        return;
       }
 
       const docRef = doc(db, "whiteboards", whiteboardID);
@@ -94,14 +95,14 @@ const Whiteboard = ({ whiteboardID }) => {
 
       if (docSnap.exists()) {
         const whiteboardData = docSnap.data();
-
+        console.log(whiteboardData);
         setTitle(whiteboardData.title);
         setBackgroundImage(whiteboardData.downloadURL);
         setIsLoading(false);
       }
     };
 
-    loadWhiteboard();
+    loadWhiteboard(whiteboardID);
   }, [whiteboardID]);
 
   useEffect(() => {
@@ -301,205 +302,227 @@ const Whiteboard = ({ whiteboardID }) => {
   }
 
   return (
-    <div style={{ display: "flex" }}>
-      <div style={{ marginRight: "10px" }}>
-        <input
-          type="text"
-          placeholder="Enter drawing title"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)} // update title state when input changes
-        />
-        <div>
-          {/* background selection UI */}
-          <button
-            className={`${styles.button}`}
-            onClick={() => setBackgroundType("plain")}
+    <div>
+      <WebOnly />
+      <div className={styles.mainContainer}>
+        <div className={styles.topbar}>
+          <span className={styles.titleField}>
+            <button
+              onClick={deleteDrawing}
+              className={`${styles.red} ${styles.button}`}
+            >
+              Delete Drawing
+            </button>
+            <input
+              type="text"
+              placeholder="Untitled"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              className={`${styles.writtenInput} ${styles.titleInput}`}
+            />
+            <button
+              onClick={saveDrawing}
+              className={`${styles.floatButtons} ${styles.button} ${styles.green}`}
+            >
+              Save Drawing
+            </button>
+          </span>
+
+          <div
+            style={{ marginRight: "10px" }}
+            className={styles.buttonSelectMenu}
           >
-            Plain Background
-          </button>
-          <button
-            className={`${styles.button}`}
-            onClick={() => setBackgroundType("lined")}
-          >
-            Lined Background
-          </button>
-          <button
-            className={`${styles.button}`}
-            onClick={() => setBackgroundType("squared")}
-          >
-            Squared Background
-          </button>
-        </div>
-        <button className={`${styles.button}`} onClick={() => setTool("pen")}>
-          Pen
-        </button>
-        <button
-          className={`${styles.button}`}
-          onClick={() => setTool("pencil")}
-        >
-          Pencil
-        </button>
-        <button
-          className={`${styles.button}`}
-          onClick={() => setTool("eraser")}
-        >
-          Eraser
-        </button>
-        <button className={`${styles.button}`} onClick={addTextBox}>
-          Add Text Box
-        </button>
-        <br />
-        <button onClick={resetDrawing}>Reset</button> <br />
-        <input
-          type="color"
-          value={color}
-          onChange={(e) => setColor(e.target.value)}
-        />
-        <br />
-        <input
-          type="range"
-          min="1"
-          max="30"
-          value={penSize}
-          onChange={(e) => setPenSize(parseInt(e.target.value))}
-        />
-        <br />
-        <input
-          type="range"
-          min="0"
-          max="1"
-          step="0.1"
-          value={opacity}
-          onChange={(e) => setOpacity(parseFloat(e.target.value))}
-        />
-        <br />
-        {isEditing && (
-          <input
-            type="text"
-            value={editText}
-            onChange={(e) => setEditText(e.target.value)}
-            onKeyPress={(e) => {
-              if (e.key === "Enter") {
-                // update the text of the selected textbox and close the editor
-                const updatedTextBoxes = textBoxes.map((box) =>
-                  box.id === selectedTextBoxId
-                    ? { ...box, text: editText }
-                    : box
-                );
-                setTextBoxes(updatedTextBoxes);
-                setIsEditing(false);
-                setSelectedTextBoxId(null);
-              }
-            }}
-          />
-        )}
-      </div>
-      <div
-        style={{
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          width: window.innerWidth - 100,
-          height: window.innerHeight,
-        }}
-      >
-        <Stage
-          width={window.innerWidth - 100}
-          height={window.innerHeight} //
-          onMouseDown={handleMouseDown}
-          onMousemove={handleMouseMove}
-          onMouseup={handleMouseUp}
-          ref={stageRef}
-        >
-          <Layer>
-            {backgroundShapes.map((shape, i) => {
-              if (shape.type === "Line") {
-                return (
-                  <Line
-                    key={i}
-                    points={[0, shape.y, stageWidth, shape.y]}
-                    strokeWidth={1}
-                  />
-                );
-              } else if (shape.type === "Rect") {
-                return (
-                  <Rect
-                    key={i}
-                    x={shape.x}
-                    y={shape.y}
-                    width={lineSpacing}
-                    height={lineSpacing}
-                    stroke="#ddd"
-                    strokeWidth={1}
-                  />
-                );
-              }
-              return null;
-            })}
-          </Layer>
-          <Layer>
-            {image && (
-              <KonvaImage
-                image={image}
-                width={window.innerWidth - 100}
-                height={window.innerHeight}
+            <div>
+              {/* background selection UI */}
+              <button
+                className={`${styles.button}`}
+                onClick={() => setBackgroundType("plain")}
+              >
+                Plain Background
+              </button>
+              <button
+                className={`${styles.button}`}
+                onClick={() => setBackgroundType("lined")}
+              >
+                Lined Background
+              </button>
+              <button
+                className={`${styles.button}`}
+                onClick={() => setBackgroundType("squared")}
+              >
+                Squared Background
+              </button>
+            </div>
+            <button
+              className={`${styles.button}`}
+              onClick={() => setTool("pen")}
+            >
+              Pen
+            </button>
+            <button
+              className={`${styles.button}`}
+              onClick={() => setTool("pencil")}
+            >
+              Pencil
+            </button>
+            <button
+              className={`${styles.button}`}
+              onClick={() => setTool("eraser")}
+            >
+              Eraser
+            </button>
+            <button className={`${styles.button}`} onClick={addTextBox}>
+              Add Text Box
+            </button>
+            <br />
+            <button onClick={resetDrawing} className={`${styles.button}`}>
+              Reset
+            </button>{" "}
+            <br />
+            {isEditing && (
+              <input
+                type="text"
+                className={styles.writtenInput}
+                value={editText}
+                onChange={(e) => setEditText(e.target.value)}
+                onKeyPress={(e) => {
+                  if (e.key === "Enter") {
+                    // update the text of the selected textbox and close the editor
+                    const updatedTextBoxes = textBoxes.map((box) =>
+                      box.id === selectedTextBoxId
+                        ? { ...box, text: editText }
+                        : box
+                    );
+                    setTextBoxes(updatedTextBoxes);
+                    setIsEditing(false);
+                    setSelectedTextBoxId(null);
+                  }
+                }}
               />
             )}
-            {lines.map((line, i) => (
-              <Line
-                key={i}
-                points={line.points}
-                stroke={line.color}
-                strokeWidth={line.penSize}
-                globalCompositeOperation={
-                  line.tool === "eraser" ? "destination-out" : "source-over"
+          </div>
+          <div>
+            <input
+              type="color"
+              value={color}
+              onChange={(e) => setColor(e.target.value)}
+              className={`${styles.colorPicker} ${styles.gapBit}`}
+            />
+            <input
+              type="range"
+              min="1"
+              max="30"
+              value={penSize}
+              onChange={(e) => setPenSize(parseInt(e.target.value))}
+              className={styles.gapBit}
+            />
+            <input
+              type="range"
+              min="0"
+              max="1"
+              step="0.1"
+              value={opacity}
+              onChange={(e) => setOpacity(parseFloat(e.target.value))}
+              className={styles.gapBit}
+            />
+          </div>
+        </div>
+        <div
+          style={{
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            width: window.innerWidth - 100,
+            height: window.innerHeight,
+          }}
+          className={styles.whiteboard}
+        >
+          <Stage
+            width={window.innerWidth - 100}
+            height={window.innerHeight} //
+            onMouseDown={handleMouseDown}
+            onMousemove={handleMouseMove}
+            onMouseup={handleMouseUp}
+            ref={stageRef}
+          >
+            <Layer>
+              {backgroundShapes.map((shape, i) => {
+                if (shape.type === "Line") {
+                  return (
+                    <Line
+                      key={i}
+                      points={[0, shape.y, stageWidth, shape.y]}
+                      strokeWidth={1}
+                    />
+                  );
+                } else if (shape.type === "Rect") {
+                  return (
+                    <Rect
+                      key={i}
+                      x={shape.x}
+                      y={shape.y}
+                      width={lineSpacing}
+                      height={lineSpacing}
+                      stroke="#ddd"
+                      strokeWidth={1}
+                    />
+                  );
                 }
-                tension={0.5}
-                lineCap="round"
-                opacity={line.opacity}
-              />
-            ))}
+                return null;
+              })}
+            </Layer>
+            <Layer>
+              {image && (
+                <KonvaImage
+                  image={image}
+                  width={window.innerWidth - 100}
+                  height={window.innerHeight}
+                />
+              )}
+              {lines.map((line, i) => (
+                <Line
+                  key={i}
+                  points={line.points}
+                  stroke={line.color}
+                  strokeWidth={line.penSize}
+                  globalCompositeOperation={
+                    line.tool === "eraser" ? "destination-out" : "source-over"
+                  }
+                  tension={0.5}
+                  lineCap="round"
+                  opacity={line.opacity}
+                />
+              ))}
 
-            {textBoxes.map((box, i) => (
-              <Text
-                key={i}
-                x={box.x}
-                y={box.y}
-                text={box.text}
-                fontSize={box.fontSize}
-                fill={box.color}
-                draggable
-                onDragEnd={(e) => {
-                  // update position in the state
-                  const updatedTextBoxes = textBoxes.slice();
-                  updatedTextBoxes[i] = {
-                    ...box,
-                    x: e.target.x(),
-                    y: e.target.y(),
-                  };
-                  setTextBoxes(updatedTextBoxes);
-                }}
-                onDblClick={() => {
-                  setSelectedTextBoxId(box.id);
-                  setEditText(box.text);
-                  setIsEditing(true);
-                }}
-              />
-            ))}
-          </Layer>
-        </Stage>
+              {textBoxes.map((box, i) => (
+                <Text
+                  key={i}
+                  x={box.x}
+                  y={box.y}
+                  text={box.text}
+                  fontSize={box.fontSize}
+                  fill={box.color}
+                  draggable
+                  onDragEnd={(e) => {
+                    // update position in the state
+                    const updatedTextBoxes = textBoxes.slice();
+                    updatedTextBoxes[i] = {
+                      ...box,
+                      x: e.target.x(),
+                      y: e.target.y(),
+                    };
+                    setTextBoxes(updatedTextBoxes);
+                  }}
+                  onDblClick={() => {
+                    setSelectedTextBoxId(box.id);
+                    setEditText(box.text);
+                    setIsEditing(true);
+                  }}
+                />
+              ))}
+            </Layer>
+          </Stage>
+        </div>
       </div>
-      <button
-        onClick={saveDrawing}
-        style={{ position: "absolute", right: 20, top: 10 }}
-      >
-        Save Drawing
-      </button>
-      <button
-        onClick={deleteDrawing}
-        style={{ position: "absolute", right: 20, top: 35 }}
-      >
-        Delete Drawing
-      </button>
     </div>
   );
 };

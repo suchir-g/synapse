@@ -150,7 +150,7 @@ const CreateFlashcards = ({ isAuth }) => {
         <h1 className={styles.postFlashcards}>
           Post Flashcards
         </h1>
-        <p className={styles.mutedText}>Go to <Link className={styles.learnLink} to="/learn/revise">this page </Link>to learn how to effectively revise material.</p>
+        <p className={styles.mutedText}>Go to <Link className={styles.learnLink} to="/toptips">this page </Link>to learn how to effectively revise material.</p>
 
       </div>
 

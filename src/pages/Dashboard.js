@@ -32,7 +32,9 @@ const Dashboard = ({ isAuth }) => {
   const [hasRevisedToday, setHasRevisedToday] = useState(false);
   const [mainTodoListId, setMainTodoListId] = useState(null);
   const [setsToReviseToday, setSetsToReviseToday] = useState([]);
-  const [greetingMessage, setGreetingMessage] = useState("Nice to have you back.")
+  const [greetingMessage, setGreetingMessage] = useState(
+    "Nice to have you back."
+  );
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(async (user) => {
       if (user) {
@@ -40,7 +42,7 @@ const Dashboard = ({ isAuth }) => {
         checkAndResetStreak(user.uid);
         fetchRevisionSchedules(user.uid);
       } else {
-        navigate("/login");
+        navigate("/");
       }
     });
 
@@ -51,16 +53,18 @@ const Dashboard = ({ isAuth }) => {
     const date = new Date();
     const hours = date.getHours();
 
-    let timeOfDay = 2
+    let timeOfDay = 2;
     if (hours < 12) {
-      timeOfDay = 'morning';
+      timeOfDay = "morning";
     } else if (hours >= 12 && hours < 17) {
-      timeOfDay = 'afternoon';
+      timeOfDay = "afternoon";
+    } else if (hours >= 17 && hours < 22) {
+      timeOfDay = "evening";
     } else {
-      timeOfDay = 'night';
+      timeOfDay = "night";
     }
-    setGreetingMessage(`Good ${timeOfDay}`)
-  })
+    setGreetingMessage(`Good ${timeOfDay}`);
+  });
 
   const fetchRevisionSchedules = async (currentUserID) => {
     const todayStr = new Date().toISOString().split("T")[0]; // format today's date as YYYY-MM-DD
@@ -188,24 +192,41 @@ const Dashboard = ({ isAuth }) => {
   return (
     <div className={`${styles.dashboardContainer} container text-center`}>
       <div className="row justify-content-md-center py-5 mx-0">
-        <div className={`${styles.mainContent} col-9`}>
+        <div className={`${styles.mainContent} col`}>
           <div className={styles.mainSection}>
             <div className={styles.greetingSection}>
               <h1 className={styles.welcomeText}>
                 {greetingMessage}, {userData ? userData.firstName : "there"}
               </h1>
-              <h3 className={styles.welcomeTextSubtitle}>
-                Welcome back!
-              </h3>
+              <h3 className={styles.welcomeTextSubtitle}>Welcome back!</h3>
             </div>
             <section className={styles.contentSection}>
-
-              {(setsToReviseToday.length == 0 && latestSets.length == 0 && latestNotes.length == 0) && <section className={styles.nothingSection}>
-                <h1 className={styles.nothingText}>Welcome To Synapse!</h1>
-                It looks like your dashboard is currently empty. To get started, you can create a new post by clicking on the 'New Post' button or explore our existing content by navigating through the menu.
-                <Link to="/howtouse"><div className={styles.tourContainer}><div className={styles.tourButton}>Take a tour</div></div>
-                </Link>
-              </section>}
+              {setsToReviseToday.length == 0 &&
+                latestSets.length == 0 &&
+                latestNotes.length == 0 && (
+                  <section className={styles.nothingSection}>
+                    <h1 className={styles.nothingText}>Welcome To Synapse!</h1>
+                    <span className={styles.info}>
+                      It looks like your dashboard is currently empty. To get
+                      started, you can create a new post by clicking on the 'New
+                      Post' button or explore our existing content by navigating
+                      through the menu.
+                      <br />
+                      <br />
+                      Synapse is a website that's been designed to help you with
+                      your studies - we have done a lot of research into how the
+                      brain works to hand-craft modes of revision that help the
+                      most. If you want to learn more about how Synapse works,
+                      you can take a tour by clicking on the button below or
+                      jump straight into it by posting a piece of content.
+                    </span>
+                    <Link to="/howtouse">
+                      <div className={styles.tourContainer}>
+                        <div className={styles.tourButton}>Take a tour</div>
+                      </div>
+                    </Link>
+                  </section>
+                )}
 
               {setsToReviseToday.length > 0 && (
                 <div className={styles.flashcardsToReviseToday}>
@@ -256,43 +277,59 @@ const Dashboard = ({ isAuth }) => {
                       </Link>
                     ))}
                     <Link to="/mystuff/flashcards">
-                      <FontAwesomeIcon icon={faChevronRight} color="grey" />
+                      <FontAwesomeIcon
+                        icon={faChevronRight}
+                        color="grey"
+                        className={styles.myStuffLinkArrow}
+                      />
                     </Link>
                   </div>
                 </div>
               ) : (
-                <div>Post</div>
+                <div></div>
               )}
 
-              {latestNotes.length > 0 ? <div className={styles.latestNotes}>
-                <h2 className={styles.latestText}>Latest Notes</h2>
-                <div className={styles.gridContainer}>
-                  {latestNotes.map((note) => (
-                    <Link to={`/notes/${note.id}`}>
-                      <div key={note.id} className={styles.card}>
-                        <div className={styles.cardBody}>
-                          <h3 className={styles.cardLink}>{note.title}</h3>
-                          <div
-                            className={`${styles.cardContent}`}
-                            dangerouslySetInnerHTML={{
-                              __html: sanitizeAndTruncateHtml(note.content, 20),
-                            }}
-                          />
+              {latestNotes.length > 0 ? (
+                <div className={styles.latestNotes}>
+                  <h2 className={styles.latestText}>Latest Notes</h2>
+                  <div className={styles.gridContainer}>
+                    {latestNotes.map((note) => (
+                      <Link to={`/notes/${note.id}`}>
+                        <div key={note.id} className={styles.card}>
+                          <div className={styles.cardBody}>
+                            <h3 className={styles.cardLink}>{note.title}</h3>
+                            <div
+                              className={`${styles.cardContent}`}
+                              dangerouslySetInnerHTML={{
+                                __html: sanitizeAndTruncateHtml(
+                                  note.content,
+                                  20
+                                ),
+                              }}
+                            />
+                          </div>
+                          <div className={styles.cardFooter}>
+                            <span className={styles.lastRevised}>
+                              Last revised: {note.viewed}
+                            </span>
+                          </div>
                         </div>
-                        <div className={styles.cardFooter}>
-                          <span className={styles.lastRevised}>
-                            Last revised: {note.viewed}
-                          </span>
-                        </div>
-                      </div>
+                      </Link>
+                    ))}
+                    <Link to="/mystuff/notes">
+                      <FontAwesomeIcon
+                        icon={faChevronRight}
+                        color="grey"
+                        className={styles.myStuffLinkArrow}
+                      />
                     </Link>
-                  ))}
-                  <Link to="/mystuff/notes">
-                    <FontAwesomeIcon icon={faChevronRight} color="grey" />
-                  </Link>
+                  </div>
                 </div>
-              </div> : <div>
-                post</div>}
+              ) : (
+                <div>
+                  <br></br>
+                </div>
+              )}
             </section>
             <Link className={styles.myStuffLink} to="/mystuff">
               My stuff

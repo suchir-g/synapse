@@ -20,6 +20,8 @@
     flex-direction: column;
     gap: 10px;
     height: 40vh;
+    text-wrap: wrap;
+    height: fit-content;
 }
 
 .postFlashcards {
@@ -52,6 +54,7 @@
     border-radius: 5px;
     color: white;
     margin-right: 20px;
+    margin-bottom: 10px;
 }
 
 .username {
@@ -61,6 +64,10 @@
 
 .firstLastName {
     color: var(--text-muted-color);
+    width: 100%;
+    text-wrap: wrap;
+    overflow: scroll;
+    height: fit-content;
 }
 
 .updatePassword {
@@ -70,4 +77,5 @@
 .buttonGroup {
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
 }

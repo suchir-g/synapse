@@ -64,3 +64,26 @@ padding: 30px
     align-items: center;
     margin-top: 10px;
 }
+
+@media (max-width: 768px) {
+    .input {
+        width: 100%;
+    }
+
+    .sectionSection, .pair {
+        display: flex;
+        flex-direction: column;
+    }
+    .pair {
+        padding-top: 20px;
+    }
+
+    .flashcard {
+        width: 90%;
+    }
+
+    .createExamConfigButton {
+        width: 100%;
+    }
+
+}

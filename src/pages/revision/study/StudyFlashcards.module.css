@@ -1,6 +1,6 @@
 .mainContainer {
     width: 100vw;
-    height: 100vh;
+    min-height: 95vh;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -12,5 +12,11 @@
     box-shadow: var(--shadow);
     background-color: white;
     padding: 50px;
+    margin: 0px 5px;
+}
 
+@media (max-width: 768px) {
+    .flashcard {
+        background: none;
+    }
 }

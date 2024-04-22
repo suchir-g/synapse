@@ -140,3 +140,11 @@
     padding: 20px;
     box-shadow: var(--lesser-shadow);
 }
+
+@media (max-width: 768px) {
+    .titleTagSection {
+        display: flex;
+        flex-direction: column;
+        gap: 0px;
+    }
+}

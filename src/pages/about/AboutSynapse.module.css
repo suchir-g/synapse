@@ -10,6 +10,11 @@
 .leftSection {
     width: 100%;
     height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 10px;
 }
 
 .rightSection {
@@ -29,4 +34,15 @@
 
 .learnLink {
     color: var(--primary);
+}
+
+.image {
+    width: auto;
+    height: 80%;
+}
+
+@media (max-width: 768px) {
+    .leftSection {
+        display: none;
+    }
 }

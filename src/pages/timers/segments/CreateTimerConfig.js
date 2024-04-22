@@ -16,7 +16,9 @@ const CreateTimerConfig = () => {
   // handle change in section information
   const addSection = () => {
     if (!sectionTitle || !duration || duration == 0) {
-      alert("Please fill in all fields with a non-zero value to add a section.");
+      alert(
+        "Please fill in all fields with a non-zero value to add a section."
+      );
       return;
     }
     const newSection = {
@@ -53,7 +55,7 @@ const CreateTimerConfig = () => {
       alert("Exam configuration created successfully!");
       setExamName("");
       setSections([]);
-      navigate(-1) // for now, make it navigate to the config timer page afterwards
+      navigate(-1); // for now, make it navigate to the config timer page afterwards
     } catch (error) {
       console.error("Error creating exam configuration: ", error);
       alert("Failed to create exam configuration.");
@@ -79,34 +81,43 @@ const CreateTimerConfig = () => {
             {sections.map((section, index) => (
               <div key={index} className={styles.pair}>
                 <p>{`${section.title}: ${section.duration} minutes`}</p>
-                <button type="button" onClick={() => deleteSection(index)}>
+                <button type="button" className={styles.button} onClick={() => deleteSection(index)}>
                   Delete Section
                 </button>
               </div>
             ))}
             <div className={styles.sectionSection}>
               <span>
-              <input
-                type="text"
-                value={sectionTitle}
-                onChange={(e) => setSectionTitle(e.target.value)}
-                placeholder="Section Title"
-                className={`${styles.input}`}
-              />
-              <input
-                type="number"
-                value={duration}
-                onChange={(e) => setDuration(e.target.value)}
-                placeholder="Duration (minutes)"
-                className={`${styles.input}`}
-              />
+                <input
+                  type="text"
+                  value={sectionTitle}
+                  onChange={(e) => setSectionTitle(e.target.value)}
+                  placeholder="Section Title"
+                  className={`${styles.input}`}
+                />
+                <input
+                  type="number"
+                  value={duration}
+                  onChange={(e) => setDuration(e.target.value)}
+                  placeholder="Duration (minutes)"
+                  className={`${styles.input}`}
+                />
               </span>
-              <button type="button" onClick={addSection} className={`${styles.button} ${styles.addSection}`}>
+              <button
+                type="button"
+                onClick={addSection}
+                className={`${styles.button} ${styles.addSection}`}
+              >
                 Add Section
               </button>
             </div>
           </div>
-          <button type="submit" className={`${styles.button} ${styles.createExamConfigButton}`}>Create Exam Config</button>
+          <button
+            type="submit"
+            className={`${styles.button} ${styles.createExamConfigButton}`}
+          >
+            Create Exam Config
+          </button>
         </form>
       </div>
     </div>

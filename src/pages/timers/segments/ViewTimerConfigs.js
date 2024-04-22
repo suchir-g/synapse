@@ -60,8 +60,8 @@ const ViewTimerConfigs = () => {
           <ul>
             {examConfigs.map((config) => (
               <li key={config.id} className={styles.timerSlot}>
-                <h2 className={styles.timerName}>{config.name}</h2>
-                <span>
+                <Link to="/timers/config"><h2 className={styles.timerName}>{config.name}</h2></Link>
+                <span className={styles.buttonContainer}>
                   <Link to={`/timers/config/edit/${config.id}`} className={styles.extraButtons}>Edit</Link>
                   <Link to="/timers/config" className={`${styles.extraButtons} ${styles.setTimer}`}>Set timer</Link>
                 </span>

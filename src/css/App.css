@@ -58,10 +58,15 @@
 
 .mainContainer {
     background-color: var(--background-color);
-    background-image: radial-gradient(var(--dots-color) 1px, transparent 0);
+    
     background-size: 40px 40px;
     color: var(--text-color);
     height: fit-content;
     width: 100vw;
     font-family: var(--font);
 }
+
+@media (min-width: 768px) {.mainContainer {
+    background-image: radial-gradient(var(--dots-color) 1px, transparent 0);
+}}
+

@@ -22,7 +22,7 @@ const ViewTodo = () => {
 
       if (docSnap.exists()) {
         const data = docSnap.data();
-        setTodoTitle(data.title);
+        setTodoTitle(data.name);
         const todos = data.todos || [];
         setCompletedTodos(todos.filter((todo) => todo.completed));
         setUncompletedTodos(todos.filter((todo) => !todo.completed));
@@ -91,66 +91,74 @@ const ViewTodo = () => {
   if (!todoTitle) return <LoadingComponent />;
 
   return (
-    <div className={styles.mainContainer}>
-      <div className={styles.postFlashcardsContainer}>
-        <h1 className={styles.postFlashcards}>{todoTitle}</h1>
-        <p className={styles.mutedText}>
-          Go to <Link className={styles.learnLink} to="/learn/revise">this page</Link> to learn how to effectively organise material.
-        </p>
-      </div>
-      <div className={styles.mainContent}>
-        <h3>Uncompleted Todos</h3>
-        <ul>
-          {uncompletedTodos.map((todo, index) => (
-            <TodoItem
-              key={index}
-              todo={todo}
-              isEditing={isEditing === todo}
-              index={index}
-              toggleTodoCompletion={() => toggleTodoCompletion(todo, false)}
-              startEditing={() => startEditing(todo)}
-              saveTodoEdit={() => saveTodoEdit(todo, false)}
-              cancelEditing={cancelEditing}
-              setEditText={setEditText}
-              editText={editText}
-              deleteTodo={() => deleteTodo(todo)}
-            />
-          ))}
-        </ul>
-        <div className={styles.addTodoSection}>
-          <input
-            type="text"
-            value={newTodoText}
-            onChange={(e) => setNewTodoText(e.target.value)}
-            placeholder="Todo text"
-            className={styles.input}
-          />
-          <button onClick={addTodo} className={styles.addTodoButton}>
-            Add Todo
-          </button>
+    <div>
+      <div className={styles.mainContainer}>
+        <Link to="/todos"><div className={styles.allTodos}>All todo lists</div></Link>
+        <div className={styles.postFlashcardsContainer}>
+          <h1 className={styles.postFlashcards}>{todoTitle}</h1>
+          <p className={styles.mutedText}>
+            Go to{" "}
+            <Link className={styles.learnLink} to="/learn/revise">
+              this page
+            </Link>{" "}
+            to learn how to effectively organise material.
+          </p>
         </div>
-        <h3>Completed Todos</h3>
-        <ul>
-          {completedTodos.map((todo, index) => (
-            <TodoItem
-              key={index}
-              todo={todo}
-              isEditing={isEditing === todo}
-              index={index}
-              toggleTodoCompletion={() => toggleTodoCompletion(todo, true)}
-              startEditing={() => startEditing(todo)}
-              saveTodoEdit={() => saveTodoEdit(todo, true)}
-              cancelEditing={cancelEditing}
-              setEditText={setEditText}
-              editText={editText}
-              deleteTodo={() => deleteTodo(todo)}
+        <div className={styles.mainContent}>
+          <h3>Uncompleted Todos</h3>
+          <ul>
+            {uncompletedTodos.map((todo, index) => (
+              <TodoItem
+                key={index}
+                todo={todo}
+                isEditing={isEditing === todo}
+                index={index}
+                toggleTodoCompletion={() => toggleTodoCompletion(todo, false)}
+                startEditing={() => startEditing(todo)}
+                saveTodoEdit={() => saveTodoEdit(todo, false)}
+                cancelEditing={cancelEditing}
+                setEditText={setEditText}
+                editText={editText}
+                deleteTodo={() => deleteTodo(todo)}
+                isCompleted={false}
+              />
+            ))}
+          </ul>
+          <div className={styles.addTodoSection}>
+            <input
+              type="text"
+              value={newTodoText}
+              onChange={(e) => setNewTodoText(e.target.value)}
+              placeholder="Todo text"
+              className={styles.input}
             />
-          ))}
-        </ul>
+            <button onClick={addTodo} className={styles.addTodoButton}>
+              Add Todo
+            </button>
+          </div>
+          <h3>Completed Todos</h3>
+          <ul>
+            {completedTodos.map((todo, index) => (
+              <TodoItem
+                key={index}
+                todo={todo}
+                isEditing={isEditing === todo}
+                index={index}
+                toggleTodoCompletion={() => toggleTodoCompletion(todo, true)}
+                startEditing={() => startEditing(todo)}
+                saveTodoEdit={() => saveTodoEdit(todo, true)}
+                cancelEditing={cancelEditing}
+                setEditText={setEditText}
+                editText={editText}
+                deleteTodo={() => deleteTodo(todo)}
+                isCompleted={true}
+              />
+            ))}
+          </ul>
+        </div>
       </div>
     </div>
   );
-  
 };
 
 export default ViewTodo;

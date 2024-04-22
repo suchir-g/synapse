@@ -75,3 +75,9 @@
 .learnLink {
     color: var(--primary);
 }
+
+@media (max-width:768px) {
+    .mainContainer {
+        display: none;
+    }
+}
