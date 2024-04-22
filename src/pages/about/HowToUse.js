@@ -9,7 +9,7 @@ const HowToUse = () => {
     const toggleExpand = (index) => {
         setExpandedIndex(expandedIndex === index ? null : index);
     };
-
+        //HELLO
     const questions = [
         {
             question: 'How do I get started?',
