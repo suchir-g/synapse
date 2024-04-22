@@ -100,7 +100,7 @@ const SpacedRepetition = () => {
             key={cards[0].id}
             flashcard={cards[0]}
             isQuestionFirst={true}
-            size={{ width: "40vw", height: "24.72vw" }}
+            size={{ width: "max(300px, 40vw)", height: "max(400px, 24.72vw)" }}
           />
           <div className={styles.confidenceLevel}>
             <p>How confident are you with this card?</p>

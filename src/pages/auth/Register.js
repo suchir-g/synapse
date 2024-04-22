@@ -108,7 +108,7 @@ const Register = ({ setIsAuth }) => {
         <hr></hr>
         <input
           type="text"
-          placeholder="Username..."
+          placeholder="Username"
           onChange={(e) => setUsername(e.target.value)}
           className={`${styles.input}`}
         />
@@ -127,7 +127,7 @@ const Register = ({ setIsAuth }) => {
           />
         </span>
         <input
-          type="text"
+          type="number"
           placeholder="Year Group"
           onChange={(e) => setYearGroup(e.target.value)}
           className={`${styles.input}`}

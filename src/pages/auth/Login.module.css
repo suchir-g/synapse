@@ -1,6 +1,6 @@
 .mainContainer {
     width: 100vw;
-    height: 95vh;
+    min-height: 95vh;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -86,4 +86,12 @@
 .errorMessage {
     color: var(--danger);
     font-weight: 500;
+}
+/* helo */
+
+@media (max-width: 768px) {
+    .button {
+        margin-bottom: 20px;
+        width: 100%;
+    }
 }

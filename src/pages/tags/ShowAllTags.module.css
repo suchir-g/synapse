@@ -3,7 +3,7 @@
     justify-content: center;
     align-items: center;
     width: 100vw;
-    margin: 30px;
+    min-height: 95vh;
 }
 
 .mainContent {
@@ -63,4 +63,27 @@
     box-shadow: var(--lesser-shadow);
     width: fit-content;
     color: white;
+}
+
+@media (max-width: 768px) {
+    .mainContent {
+        margin: 20px 0px;
+    }
+    .button {
+        width: 50%;
+        font-size: 16px;
+    }
+
+    .buttonContainer {
+        display: flex;
+        margin-top: 5px;
+    }
+
+    .tagName {
+        font-size: 19px;
+    }
+
+    .tag {
+        flex-direction: column;
+    }
 }

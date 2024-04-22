@@ -138,3 +138,44 @@
   height: 36px;
   margin-left: 10px
 }
+
+@media (max-width: 768px) {
+  .container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 20px;
+    padding: 20px;
+  }
+
+  .flashcardCarousel {
+    display: none;
+  }
+
+  .flashcard {
+    width: 100%;
+  }
+  .flashcard > p, .flashcard > h3 {
+    width: 100%;
+    word-wrap:break-word;
+  }
+
+  .tagSection {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .tabButton {
+    width: 100% ;
+  }
+
+  .linksContainerSecondary {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    margin: 10px 0px 10px 0px
+  }
+
+}

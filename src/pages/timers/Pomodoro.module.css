@@ -4,7 +4,7 @@
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    margin: 30px;
+    margin: 30px 0px;
 }
 
 .mainContent {
@@ -34,10 +34,18 @@
 .mainText {
     font-weight: 600;
     font-size: 22px;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .timeLeft {
     font-weight: 700;
     font-size: 48px;
     margin: 20px auto;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }

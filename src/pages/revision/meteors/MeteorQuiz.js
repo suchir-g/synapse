@@ -6,6 +6,7 @@ import { db } from "../../../config/firebase";
 import { sanitizeAndTruncateHtml } from "../../../utilities";
 
 import styles from "./MeteorQuiz.module.css";
+import WebOnly from "pages/WebOnly";
 
 class MyScene extends Phaser.Scene {
   constructor() {
@@ -266,56 +267,65 @@ const MeteorQuiz = () => {
 
   if (gameOver) {
     return (
-      <div className={styles.mainContainer}>
-        <span className={styles.flashcard}>
-          <h1 className={styles.finishedText}>It's over</h1>
-          <p className={styles.mutedText}>
-            Thanks for playing - if you want more info on how this game works
-            visit <Link className={styles.learnLink}>this page</Link>
-          </p>
-          <p>Score: {score}</p>
-          <div>
-            <button
-              className={`${styles.restartButton} ${styles.afterButton}`}
-              onClick={() => {
-                navigate(0);
-              }}
-            >
-              {" "}
-              Restart
-            </button>
-            <button
-              className={`${styles.backButton} ${styles.afterButton}`}
-              onClick={() => navigate(-1)}
-            >
-              Back
-            </button>
-          </div>
-        </span>
+      <div>
+        <WebOnly />
+        <div className={styles.mainContainer}>
+          <span className={styles.flashcard}>
+            <h1 className={styles.finishedText}>It's over</h1>
+            <p className={styles.mutedText}>
+              Thanks for playing - if you want more info on how this game works
+              visit <Link className={styles.learnLink}>this page</Link>
+            </p>
+            <p>Score: {score}</p>
+            <div>
+              <button
+                className={`${styles.restartButton} ${styles.afterButton}`}
+                onClick={() => {
+                  navigate(0);
+                }}
+              >
+                {" "}
+                Restart
+              </button>
+              <button
+                className={`${styles.backButton} ${styles.afterButton}`}
+                onClick={() => navigate(-1)}
+              >
+                Back
+              </button>
+            </div>
+          </span>
+        </div>
       </div>
     );
   } else {
     return (
-      <div
-        style={{
-          backgroundColor: flashRed ? "#ffaaaa" : "transparent",
-          transition: "background-color 500ms",
-        }}
-        className={styles.mainContainer}
-      >
-        <div id="phaser-game" style={{ width: "800px", height: "600px" }}></div>
-        <input
-          type="text"
-          value={userAnswer}
-          onChange={handleAnswerChange}
-          onKeyDown={handleKeyDown}
-          className={styles.answerInput}
-          placeholder="Answer"
-        />
-        <button onClick={handleAnswerSubmit} className={styles.submitButton}>
-          Submit Answer
-        </button>
-        <div>Lives: {lives}</div>
+      <div>
+        <WebOnly />
+        <div
+          style={{
+            backgroundColor: flashRed ? "#ffaaaa" : "transparent",
+            transition: "background-color 500ms",
+          }}
+          className={styles.mainContainer}
+        >
+          <div
+            id="phaser-game"
+            style={{ width: "800px", height: "600px" }}
+          ></div>
+          <input
+            type="text"
+            value={userAnswer}
+            onChange={handleAnswerChange}
+            onKeyDown={handleKeyDown}
+            className={styles.answerInput}
+            placeholder="Answer"
+          />
+          <button onClick={handleAnswerSubmit} className={styles.submitButton}>
+            Submit Answer
+          </button>
+          <div>Lives: {lives}</div>
+        </div>
       </div>
     );
   }

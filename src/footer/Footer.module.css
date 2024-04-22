@@ -17,3 +17,12 @@
     color: white;
     margin: 10px 0px 20px 0px;
 }
+
+@media (max-width: 768px) {
+    .mainContainer {
+        padding: 20px;
+    }
+    .item {
+        font-size: 0.75em;
+    }
+}

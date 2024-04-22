@@ -1,3 +1,106 @@
+.whiteboard {
+    background-color: white;
+    border: 1px solid black;
+    border-radius: 5px;
+    box-shadow: var(--shadow);
+    margin: 10px 0px;
+}
+
+.mainContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.buttonSelectMenu {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .button {
-    
+    background-color: var(--muted);
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    height: fit-content;
+    width: fit-content;
+    box-shadow: var(--lesser-shadow);
+    margin-left: 5px;
+}
+
+.writtenInput {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    box-shadow: var(--lesser-shadow);
+}
+
+.topbar {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.titleInput {
+    width: 50%;
+    height: 50px;
+    font-size: 32px;
+    font-weight: 600;
+}
+
+.colorPicker {
+    border-radius: 50%;
+    inline-size: 30px;
+    block-size: 30px;
+    padding: 3px;
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgb(153, 153, 153);
+}
+
+input[type="color" i]::-webkit-color-swatch-wrapper {
+    padding: 1px;
+}
+
+input[type="color" i]::-webkit-color-swatch {
+    border-radius: 50%;
+}
+
+input[type="color" i]::-moz-color-swatch {
+    border-radius: 50%;
+}
+
+.gapBit {
+    margin-right: 5px;
+}
+
+.writtenInput {
+    margin: 0px 20px;
+}
+
+.green {
+    background-color: var(--success);
+}
+
+.red {
+    background-color: var(--danger);
+}
+
+.titleField {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+@media (max-width: 768px) {
+    .mainContainer {
+        display: none;
+    }
+
 }

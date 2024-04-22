@@ -1,0 +1,78 @@
+.mainContainer {
+    width: 100%;
+    min-height: 95vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.mainContent {
+    background-color: white;
+    width: 60%;
+    background-color: white;
+    padding: 30px;
+    box-shadow: var(--shadow);
+    border: none;
+    border-radius: 5px;
+}
+
+.tagName {
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.labelText {
+    font-size: 14px;
+    color: var(--muted);
+    margin: 10px 0px 5px 0px;
+}
+.card {
+    background-color: white;
+    box-shadow: var(--lesser-shadow);
+    margin-bottom: 10px;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+}
+
+.title {
+    font-weight: 500;
+    font-size: 19px;
+    margin-bottom: 5px;
+}
+
+.addNewTag {
+    background-color: var(--muted);
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    box-shadow: var(--lesser-shadow);
+    margin: 10px 0px;
+    margin-right: 10px;
+}
+
+.edit {
+    background-color: var(--primary);
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    box-shadow: var(--lesser-shadow);
+    margin: 10px 0px;
+}
+
+@media (max-width: 768px) {
+    .mainContainer {
+        margin: 20px 0px;
+    }
+
+    .mainContent {
+        width: 80%;
+    }
+
+    .cutoff {
+        width: 100%;
+        overflow:scroll;
+    }
+}

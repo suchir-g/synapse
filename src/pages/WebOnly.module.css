@@ -1,0 +1,19 @@
+.mainContainer {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .mainContainer {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+    }
+
+    .mainText {
+        width: 100%;
+        text-align: center;
+        font-weight: 600;
+        font-size: 20px;
+    }
+}

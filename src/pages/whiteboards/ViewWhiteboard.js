@@ -7,7 +7,6 @@ const ViewWhiteboard = () => {
   const { whiteboardID } = useParams(); 
   return (
     <div>
-        <h1>View Whiteboard</h1>
         <Whiteboard whiteboardID={whiteboardID}/>
     </div>
   )

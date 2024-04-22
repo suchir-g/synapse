@@ -131,3 +131,11 @@
 .learnLink {
     color: var(--primary);
 }
+
+@media (max-width: 768px) {
+    .titleTagSection {
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+    }
+}
