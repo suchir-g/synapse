@@ -9,4 +9,4 @@ const LearnFlashcards = () => {
     )
 }
 
-export default PageNotFound
+export default LearnFlashcards

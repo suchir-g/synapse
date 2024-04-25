@@ -12,6 +12,7 @@ import {
 } from "firebase/firestore";
 import Select from "react-select";
 import { useNavigate } from "react-router-dom";
+import styles from "./AddTag.module.css";
 
 const AddTag = ({ parentTagID }) => {
   const navigate = useNavigate();
@@ -50,10 +51,7 @@ const AddTag = ({ parentTagID }) => {
       const currentUserUid = auth.currentUser.uid;
 
       // Fetch tags owned by the current user
-      const tagsQuery = query(
-        tagsRef,
-        where("owner", "==", currentUserUid)
-      );
+      const tagsQuery = query(tagsRef, where("owner", "==", currentUserUid));
       const tagsSnapshot = await getDocs(tagsQuery);
       const tagsOptions = tagsSnapshot.docs.map((doc) => ({
         value: doc.id,
@@ -75,7 +73,10 @@ const AddTag = ({ parentTagID }) => {
       setAvailableFlashcards(flashcardsOptions);
 
       // Fetch notes owned by the current user
-      const notesQuery = query(notesRef, where("owners", "array-contains", currentUserUid));
+      const notesQuery = query(
+        notesRef,
+        where("owners", "array-contains", currentUserUid)
+      );
       const notesSnapshot = await getDocs(notesQuery);
       const notesOptions = notesSnapshot.docs.map((doc) => ({
         value: doc.id,
@@ -127,7 +128,7 @@ const AddTag = ({ parentTagID }) => {
         })
       );
 
-      navigate("/mystuff");
+      navigate("/tags");
     } catch (error) {
       console.error(
         "Error creating new tag or updating flashcards/notes: ",
@@ -137,14 +138,18 @@ const AddTag = ({ parentTagID }) => {
   };
 
   return (
-    <div>
-      <form onSubmit={handleSubmit}>
+    <div className={styles.mainContainer}>
+      <div className={styles.postFlashcardsContainer}>
+        <h1 className={styles.postFlashcards}>Add Tag</h1>
+      </div>
+      <form className={styles.mainContent} onSubmit={handleSubmit}>
         <input
           type="text"
           value={tagName}
           onChange={(e) => setTagName(e.target.value)}
           placeholder="Tag Name"
           required
+          className={`${styles.input} ${styles.title}`}
         />
 
         <input
@@ -152,6 +157,7 @@ const AddTag = ({ parentTagID }) => {
           value={tagDescription}
           onChange={(e) => setTagDescription(e.target.value)}
           placeholder="Description"
+          className={styles.input}
         />
 
         <Select
@@ -159,6 +165,7 @@ const AddTag = ({ parentTagID }) => {
           onChange={setSelectedParentTag}
           value={selectedParentTag}
           placeholder="Select Parent Tag"
+          className={styles.selectMenu}
         />
 
         <Select
@@ -167,6 +174,7 @@ const AddTag = ({ parentTagID }) => {
           onChange={setSelectedFlashcards}
           value={selectedFlashcards}
           placeholder="Select Flashcards"
+          className={styles.selectMenu}
         />
 
         <Select
@@ -175,9 +183,10 @@ const AddTag = ({ parentTagID }) => {
           onChange={setSelectedNotes}
           value={selectedNotes}
           placeholder="Select Notes"
+          className={styles.selectMenu}
         />
 
-        <button type="submit">Create Tag</button>
+        <button type="submit" className={styles.button}>Create Tag</button>
       </form>
     </div>
   );

@@ -141,21 +141,37 @@ const SimpleDisplay = () => {
   if (isCompleted) {
     return (
       <div className={styles.endContainer}>
-        <button onClick={handlePrev} className={styles.arrowButton}>
-          {"<"}
-        </button>
-        <div className={styles.flashcard}>
-          <div>Well done! You've reached the end of the set.</div>
-          <span>
-            <button onClick={restartFlashcards} className={styles.endButton}>
-              Start Again
-            </button>
-            <button onClick={navigateToSet} className={styles.endButton}>
-              Back to set
-            </button>
-          </span>
+        <div className={styles.endText}>Finished!</div>
+        <div className={styles.finished}>
+          <button
+            onClick={handlePrev}
+            className={`${styles.arrowButton} ${styles.backEnd}`}
+          >
+            {"<"}
+          </button>
+          <div className={styles.flashcard}>
+            <div className={styles.wellDone}>
+              Well done! You've reached the end of the set.
+            </div>
+            <span>
+              <button onClick={restartFlashcards} className={`${styles.endButton} ${styles.restartFlashcards}`}>
+                Start Again
+              </button>
+              <button onClick={navigateToSet} className={styles.endButton}>
+                Back to set
+              </button>
+            </span>
+          </div>
+          <div className={styles.dummy}></div>
         </div>
-        <div className={styles.dummy}></div>
+        <div className={styles.bottomSection}>
+          <button onClick={toggleFlipMode} className={styles.toggleButton}>
+            Toggle Flip Mode
+          </button>
+          <button onClick={toggleMode} className={styles.toggleButton}>
+            {isRandomMode ? "Ordered Mode" : "Random Mode"}
+          </button>
+        </div>
       </div>
     );
   }
@@ -174,7 +190,7 @@ const SimpleDisplay = () => {
             key={flashcards[currentCardIndex].id}
             flashcard={flashcards[currentCardIndex]}
             isQuestionFirst={isQuestionFirst}
-            size={{ width: "1000px", height: "600px" }}
+            size={{ width: "1000px", height: "60vh" }}
           />
         )}
         <button onClick={handleNext} className={styles.arrowButton}>

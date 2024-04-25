@@ -28,7 +28,7 @@ const AboutSynapse = () => {
                      <br />
                     <br />
 
-                    If you want to see all the research we have done (and the ways we have incorporated it into the website), check <Link to="/research" className={styles.learnLink}>this link</Link>
+                    If you want to see all the research we have done (and the ways we have incorporated it into the website), check <Link to="https://1drv.ms/w/s!AnzR4qFMVVLAgi0dSj3CM9SVI8Vn?e=IQF5PK" className={styles.learnLink}>this link</Link>
                     <br />
                     <br />
                     Synapse was built by me (a solo project) as part of an EPQ (extended project qualification) over the course of 4 months.

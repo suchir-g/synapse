@@ -211,7 +211,6 @@ const FlashcardSet = ({ isAuth }) => {
               <Link to={`/tags/${tag.id}`} className={styles.tagLink}>
                 {tag.name}
               </Link>
-              {index < tags.length - 1 ? ", " : ""}
             </span>
           ))}
         </div>

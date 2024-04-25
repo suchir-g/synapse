@@ -9,7 +9,7 @@ const OtherWebsites = () => {
         <h1 className={styles.mainText}>Other tools and websites</h1>
         <p>
           <Link to="https://www.khanacademy.org/">
-            <h1 className={styles.link}>Khan Academy</h1>
+            <h3 className={styles.link}>Khan Academy</h3>
           </Link>
           - Offers comprehensive lessons on a wide range of subjects including
           maths, science, and economics. It provides practice exercises and
@@ -17,7 +17,7 @@ const OtherWebsites = () => {
         </p>
         <p>
           <Link to="https://www.physicsandmathstutor.com/">
-            <h1 className={styles.link}>Physics and Maths Tutor</h1>
+            <h3 className={styles.link}>Physics and Maths Tutor</h3>
           </Link>
           - A specialized resource for students studying physics and
           mathematics. It includes revision notes, practice questions, and
@@ -25,7 +25,7 @@ const OtherWebsites = () => {
         </p>
         <p>
           <Link to="https://www.wolframalpha.com/">
-            <h1 className={styles.link}>Wolfram Alpha</h1>
+            <h3 className={styles.link}>Wolfram Alpha</h3>
           </Link>
           - Known as a computational knowledge engine, it provides answers to
           math problems, generates plots, and even solves equations. It’s an
@@ -33,7 +33,7 @@ const OtherWebsites = () => {
         </p>
         <p>
           <Link to="https://tutorial.math.lamar.edu/">
-            <h1 className={styles.link}>Paul's Online Math Notes</h1>
+            <h3 className={styles.link}>Paul's Online Math Notes</h3>
           </Link>
           - Provides detailed notes and tutorials on mathematical topics,
           particularly useful for college-level students. It covers algebra,
@@ -41,7 +41,7 @@ const OtherWebsites = () => {
         </p>
         <p>
           <Link to="https://www.coursera.org/">
-            <h1 className={styles.link}>Coursera</h1>
+            <h3 className={styles.link}>Coursera</h3>
           </Link>
           - While it offers a wide range of courses, you can find specific
           university-level courses in physics, mathematics, and other subjects.
@@ -49,7 +49,7 @@ const OtherWebsites = () => {
         </p>
         <p>
           <Link to="https://www.bbc.co.uk/bitesize">
-            <h1 className={styles.link}>BBC Bitesize</h1>
+            <h3 className={styles.link}>BBC Bitesize</h3>
           </Link>
           - A useful resource for UK students, offering study guides, videos,
           and quizzes across a range of subjects including GCSE and A-Level
@@ -57,7 +57,7 @@ const OtherWebsites = () => {
         </p>
         <p>
           <Link to="https://projecteuler.net/">
-            <h1 className={styles.link}>Project Euler</h1>
+            <h3 className={styles.link}>Project Euler</h3>
           </Link>
           - A series of challenging mathematical/computer programming problems
           that require more than just mathematical insights to solve. Great for
@@ -65,7 +65,7 @@ const OtherWebsites = () => {
         </p>
         <p>
           <Link to="https://brilliant.org/">
-            <h1 className={styles.link}>Brilliant.org</h1>
+            <h3 className={styles.link}>Brilliant.org</h3>
           </Link>
           - Focuses on problem-solving and critical thinking with courses in
           math, science, and computer science. It’s designed to help build
@@ -73,7 +73,7 @@ const OtherWebsites = () => {
         </p>
         <p>
           <Link to="https://openstax.org/">
-            <h1 className={styles.link}>OpenStax</h1>
+            <h3 className={styles.link}>OpenStax</h3>
           </Link>
           - Provides free, peer-reviewed, openly licensed textbooks, which are
           available in a digital format. The site covers subjects such as
@@ -81,7 +81,7 @@ const OtherWebsites = () => {
         </p>
         <p>
           <Link to="https://ocw.mit.edu/">
-            <h1 className={styles.link}>MIT OpenCourseWare</h1>
+            <h3 className={styles.link}>MIT OpenCourseWare</h3>
           </Link>
           - Offers a vast range of free course materials from a wide variety of
           courses taught at MIT, perfect for advanced learners looking to deepen
@@ -89,7 +89,7 @@ const OtherWebsites = () => {
         </p>
         <p>
           <Link to="https://www.edx.org/">
-            <h1 className={styles.link}>edX</h1>
+            <h3 className={styles.link}>edX</h3>
           </Link>
           - Provides university-level courses in a wide range of disciplines
           from institutions around the world. Useful for students looking for
@@ -97,7 +97,7 @@ const OtherWebsites = () => {
         </p>
         <p>
           <Link to="https://www.codecademy.com/">
-            <h1 className={styles.link}>Codecademy</h1>
+            <h3 className={styles.link}>Codecademy</h3>
           </Link>
           - A platform that offers free coding classes in 12 different
           programming languages including Python, Java, JavaScript, Ruby, SQL,
@@ -106,7 +106,7 @@ const OtherWebsites = () => {
         </p>
         <p>
           <Link to="http://hyperphysics.phy-astr.gsu.edu/hbase/index.html">
-            <h1 className={styles.link}>HyperPhysics</h1>
+            <h3 className={styles.link}>HyperPhysics</h3>
           </Link>
           - A comprehensive educational resource for physics topics, hosted by
           Georgia State University. It offers concept maps and easy-to-navigate

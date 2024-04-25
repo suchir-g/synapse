@@ -1,0 +1,89 @@
+.mainContainer {
+    width: 100vw;
+    min-height: 95vh;
+    margin: 30px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.mainContent {
+    width: 80%;
+    padding: 20px 15px;
+    border: none;
+    border-radius: 5px;
+    background-color: white;
+    box-shadow: var(--shadow);
+}
+
+.postFlashcards {
+    font-size: 32px;
+    margin: 30px 0px 20px 0px;
+    font-weight: 500;
+}
+
+.postFlashcardsContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.input {
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    box-shadow: var(--lesser-shadow);
+    width: 100%;
+    margin: 10px 0px;
+    margin-top: 2px;
+}
+
+.title {
+    font-weight: 600;
+    font-size: 24px;
+}
+
+.selectMenu {
+    margin: 0;
+    border: none;
+    background-color: white;
+}
+
+.button {
+    background-color: var(--primary);
+    padding: 10px 15px;
+    color: white;
+    border: none;
+    border-radius: 5px; 
+    font-weight: 500;
+    transition: var(--transition025);
+
+    &:hover {
+        background-color: var(--primary-hover);
+    }
+}
+
+.mutedLabel {
+    font-size: 15px;
+    color: var(--text-muted-color);
+    margin-bottom: 2px;
+    margin-left: 2px;
+}
+.thing {
+    margin: 20px 0px;
+}
+
+.endButton {
+    padding: 10px 15px;
+    background-color: var(--primary);
+    color: white;
+    font-weight: 500;
+    border: none;
+    border-radius: 5px;
+    transition: var(--transition025);
+    &:hover {
+        background-color: var(--primary-hover);
+    }
+}

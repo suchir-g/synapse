@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { db, auth } from "../../config/firebase";
-import { collection, addDoc, getDocs } from "firebase/firestore";
+import { collection, addDoc, getDocs, query, where } from "firebase/firestore";
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css'; // Add quill styles
 import { useNavigate } from 'react-router-dom';
@@ -26,12 +26,20 @@ const CreateNotes = ({ isAuth }) => {
     // like the other files, this just populates the tags field with the actual tags so that we can query by them later 
 
     const fetchTags = async () => {
-      const querySnapshot = await getDocs(tagsRef);
-      const fetchedTags = querySnapshot.docs.map(doc => ({
+      const tagsQuery = query(
+        collection(db, "tags"),
+        where("owner", "==", auth.currentUser.uid)
+      );
+      const querySnapshot = await getDocs(tagsQuery);
+
+      // this maps each doc into the only things we need - value and tagName
+      // the value and tagName will be used when linking tags to the dropdown
+      const options = querySnapshot.docs.map((doc) => ({
         value: doc.id,
-        label: doc.data().tagName
+        label: doc.data().tagName,
       }));
-      setTags(fetchedTags);
+      
+      setTags(options);
     };
 
     fetchTags();

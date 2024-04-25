@@ -14,6 +14,7 @@ import {
   collection,
   query,
   where,
+  serverTimestamp,
 } from "firebase/firestore";
 
 import { flashcardsFromSet } from "../../utilities";
@@ -26,7 +27,7 @@ import ReactQuill from "react-quill";
 import "react-quill/dist/quill.bubble.css";
 
 import { flashcardModule } from "../../config/quill";
-import styles from "./CreateFlashcards.module.css"
+import styles from "./CreateFlashcards.module.css";
 
 const EditFlashcards = ({ isAuth }) => {
   const { id } = useParams();
@@ -124,45 +125,39 @@ const EditFlashcards = ({ isAuth }) => {
     try {
       const tagIds = selectedTags.map((tag) => tag.value);
       await updateDoc(setDocRef, {
-        // sets the title and description to the current state
         title: setTitle,
         description: setDescription,
         tags: tagIds,
       });
 
-      // updating each flashcard now
-
       const flashcardRef = collection(db, "flashcardSets", id, "flashcards");
 
-      const flashcardPromises = flashcards.map((flashcard) => {
-        // first check if we have to delete it
+      // Iterate over each flashcard and update it individually
+      for (const flashcard of flashcards) {
+        if (flashcard.deleted) continue;
 
-        if (flashcard.deleted) return null;
-
-        // what we are doing here is saying that those who exist have an id so should be edited
-        // if the flashcard dosen't have an id, it's new and should be added
         if (flashcard.id) {
           const flashcardDocRef = doc(flashcardRef, flashcard.id);
-
-          return updateDoc(flashcardDocRef, {
+          await updateDoc(flashcardDocRef, {
             question: flashcard.question,
             answer: flashcard.answer,
+            created: flashcard.created || serverTimestamp(), // Use existing created field or server timestamp
           });
         } else {
-          // now here we don't have to update anything, we just add.
-          return addDoc(flashcardRef, {
+          await addDoc(flashcardRef, {
             question: flashcard.question,
             answer: flashcard.answer,
+            created: flashcard.created || serverTimestamp(), // Use existing created field or server timestamp
           });
         }
-      });
-
-      // waits until everything is resolved
-      await Promise.all(flashcardPromises);
+      }
 
       await deleteMarkedFlashcards();
+      console.log("updated!");
+      navigate("/mystuff/flashcards")
     } catch (err) {
       console.error("Error updating. Try again");
+      console.log(err);
     }
   };
 
@@ -173,7 +168,13 @@ const EditFlashcards = ({ isAuth }) => {
   };
 
   const addFlashcard = () => {
-    setFlashcards([...flashcards, { question: "", answer: "" }]);
+    const newFlashcard = {
+      question: "",
+      answer: "",
+      created: serverTimestamp(), // Adding created field with server timestamp
+    };
+    setFlashcards([...flashcards, newFlashcard]);
+    console.log(flashcards);
   };
 
   useEffect(() => {
@@ -247,16 +248,22 @@ const EditFlashcards = ({ isAuth }) => {
   return (
     <div className={styles.mainContainer}>
       <div className={styles.postFlashcardsContainer}>
-        <h1 className={styles.postFlashcards}>
-          Edit Flashcards
-        </h1>
-        <p className={styles.mutedText}>Go to <Link className={styles.learnLink} to="/learn/revise">this page </Link>to learn how to effectively revise material.</p>
+        <h1 className={styles.postFlashcards}>Edit Flashcards</h1>
+        <p className={styles.mutedText}>
+          Go to{" "}
+          <Link className={styles.learnLink} to="/learn/revise">
+            this page{" "}
+          </Link>
+          to learn how to effectively revise material.
+        </p>
       </div>
       <div className={styles.mainContent}>
         <form onSubmit={handleUpdateSet}>
           <div className={styles.titleTagSection}>
             <div className={styles.formGroup}>
-              <label htmlFor="setTitle" className={styles.mutedText}>Set Title</label>
+              <label htmlFor="setTitle" className={styles.mutedText}>
+                Set Title
+              </label>
               <input
                 type="text"
                 id="setTitle"
@@ -282,7 +289,9 @@ const EditFlashcards = ({ isAuth }) => {
           </div>
 
           <div className={styles.formGroup}>
-            <label htmlFor="setDescription" className={styles.mutedText}>Set Description</label>
+            <label htmlFor="setDescription" className={styles.mutedText}>
+              Set Description
+            </label>
             <textarea
               id="setDescription"
               value={setDescription}
@@ -313,23 +322,40 @@ const EditFlashcards = ({ isAuth }) => {
                 theme="bubble"
                 modules={flashcardModule}
               />
-              <button  className={styles.removeCard} type="button" onClick={() => removeFlashcard(index)}>
+              <button
+                className={styles.removeCard}
+                type="button"
+                onClick={() => removeFlashcard(index)}
+              >
                 Remove
               </button>
             </div>
           ))}
 
-          <button type="button" onClick={addFlashcard} className={styles.bottomButton}>
-            Add Flashcard 
+          <button
+            type="button"
+            onClick={addFlashcard}
+            className={styles.bottomButton}
+          >
+            Add Flashcard
           </button>
 
-          <button type="submit" className={`${styles.bottomButton} ${styles.createButton}`} >Update Set</button>
-          <button type="button" onClick={deleteSet} className={`${styles.bottomButton} ${styles.deleteButton}`}>
+          <button
+            type="submit"
+            className={`${styles.bottomButton} ${styles.createButton}`}
+          >
+            Update Set
+          </button>
+          <button
+            type="button"
+            onClick={deleteSet}
+            className={`${styles.bottomButton} ${styles.deleteButton}`}
+          >
             Delete Set
           </button>
         </form>
       </div>
-    </div >
+    </div>
   );
 };
 

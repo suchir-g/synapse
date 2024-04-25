@@ -203,6 +203,7 @@ const Whiteboard = ({ whiteboardID }) => {
       }
 
       console.log("Drawing saved with ID: ", docRef.id);
+      navigate("/mystuff/whiteboards")
     } else {
       console.log("User is not authenticated");
     }
@@ -528,3 +529,5 @@ const Whiteboard = ({ whiteboardID }) => {
 };
 
 export default Whiteboard;
+
+

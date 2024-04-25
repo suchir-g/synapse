@@ -1,19 +1,27 @@
 import React, { useState, useEffect } from "react";
 import { db, auth } from "../../config/firebase";
-import { doc, getDoc, updateDoc, deleteDoc, getDocs, collection, query, where } from "firebase/firestore";
+import {
+  doc,
+  getDoc,
+  updateDoc,
+  deleteDoc,
+  getDocs,
+  collection,
+  query,
+  where,
+} from "firebase/firestore";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css"; // add quill styles
 import { useNavigate, useParams } from "react-router-dom";
-import Select from 'react-select';
-import { noteModule } from '../../config/quill';
+import Select from "react-select";
+import { noteModule } from "../../config/quill";
 
-import styles from "./EditNotes.module.css"
+import styles from "./EditNotes.module.css";
 import LoadingComponent from "LoadingComponent";
 
 const EditNotes = ({ isAuth }) => {
   const navigate = useNavigate();
   const params = useParams();
-  console.log(params);
 
   const noteID = params.noteID;
 
@@ -23,7 +31,6 @@ const EditNotes = ({ isAuth }) => {
 
   const [tagsOptions, setTagsOptions] = useState([]); // all available tags
   const [selectedTags, setSelectedTags] = useState([]); // selected tags for the note
-
 
   if (!isAuth) {
     navigate("/");
@@ -51,16 +58,21 @@ const EditNotes = ({ isAuth }) => {
       }
 
       // only getting tags that we own
-      const tagsQuery = query(collection(db, "tags"), where("owner", "==", auth.currentUser.uid));
+      const tagsQuery = query(
+        collection(db, "tags"),
+        where("owner", "==", auth.currentUser.uid)
+      );
       const tagsSnapshot = await getDocs(tagsQuery);
-      const fetchedTags = tagsSnapshot.docs.map(doc => ({
+      const fetchedTags = tagsSnapshot.docs.map((doc) => ({
         value: doc.id,
         label: doc.data().tagName,
       }));
       setTagsOptions(fetchedTags);
 
       // set selected tags
-      const noteTags = fetchedTags.filter(tag => noteData.tags?.includes(tag.value));
+      const noteTags = fetchedTags.filter((tag) =>
+        noteData.tags?.includes(tag.value)
+      );
       setSelectedTags(noteTags);
 
       setIsLoading(false);
@@ -70,6 +82,7 @@ const EditNotes = ({ isAuth }) => {
   }, [noteID, navigate]);
 
   const handleUpdateNote = async (e) => {
+    console.log("hois");
     e.preventDefault();
 
     if (!noteTitle.trim() || !noteContent.trim()) {
@@ -77,7 +90,7 @@ const EditNotes = ({ isAuth }) => {
       return;
     }
 
-    const updatedTagIds = selectedTags.map(tag => tag.value);
+    const updatedTagIds = selectedTags.map((tag) => tag.value);
 
     try {
       const noteDocRef = doc(db, "notes", noteID);
@@ -90,6 +103,7 @@ const EditNotes = ({ isAuth }) => {
       });
 
       console.log("note updated with ID:", noteID);
+      navigate("/mystuff/notes")
     } catch (error) {
       console.error("error: ", error);
     }
@@ -119,34 +133,41 @@ const EditNotes = ({ isAuth }) => {
   return (
     <div className={styles.mainContainer}>
       <div className={styles.flashcard}>
-      <form onSubmit={handleUpdateNote}>
-        <input
-          type="text"
-          value={noteTitle}
-          onChange={(e) => setNoteTitle(e.target.value)}
-          placeholder="Note Title"
-          required
-          className={styles.title}
-        />
-        <div className={styles.tagsSection}>
-          <label className={styles.tagsSelectText}>Select Tags:</label>
-          <Select
-            options={tagsOptions}
-            isMulti
-            onChange={handleTagChange}
-            value={selectedTags}
+        <form onSubmit={handleUpdateNote}>
+          <input
+            type="text"
+            value={noteTitle}
+            onChange={(e) => setNoteTitle(e.target.value)}
+            placeholder="Note Title"
+            required
+            className={styles.title}
           />
-        </div>
-        <ReactQuill
-          value={noteContent}
-          onChange={setNoteContent}
-          placeholder="Edit your note"
-          modules={noteModule}
-          required
-        />
-      </form>
-        <button type="submit" className={styles.editButton}>Update Note</button>
-      <button onClick={handleDeleteNote} className={`${styles.editButton} ${styles.deleteButton}`}>Delete Note</button>
+          <div className={styles.tagsSection}>
+            <label className={styles.tagsSelectText}>Select Tags:</label>
+            <Select
+              options={tagsOptions}
+              isMulti
+              onChange={handleTagChange}
+              value={selectedTags}
+            />
+          </div>
+          <ReactQuill
+            value={noteContent}
+            onChange={setNoteContent}
+            placeholder="Edit your note"
+            modules={noteModule}
+            required
+          />
+          <button type="submit" className={styles.editButton}>
+            Update Note
+          </button>
+        </form>
+        <button
+          onClick={handleDeleteNote}
+          className={`${styles.editButton} ${styles.deleteButton}`}
+        >
+          Delete Note
+        </button>
       </div>
     </div>
   );

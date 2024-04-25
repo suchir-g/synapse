@@ -1,11 +1,13 @@
 /* Base layout styles */
 .container {
-  max-width: 90%;
+  max-width: 80%;
   margin: 20px auto;
   padding: 20px;
   padding-right: 50px;
   background-color: #ffffff; 
   box-shadow: var(--lesser-shadow);
+  border: none;
+  border-radius: 5px;
 }
 
 .tag {
@@ -13,6 +15,7 @@
   padding: 5px 10px;
   border: transparent;
   border-radius: 5px;
+  margin-right: 2px;
 }
 
 .title, .description, .owner, .tag, .link {

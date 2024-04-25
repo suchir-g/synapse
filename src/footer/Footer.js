@@ -38,7 +38,6 @@ export function Footer() {
           <li className={styles.item}>Other tools</li>
         </Link>
       </ul>
-
     </div>
   );
 }
