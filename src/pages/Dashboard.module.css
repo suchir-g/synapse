@@ -51,7 +51,6 @@
 
 .dashboardContainer {
   width: 100%;
-  min-height: 95vh;
 }
 
 .card:hover {
@@ -153,47 +152,11 @@
 .tourButton {
   width: fit-content;
   font-weight: 500;
-  background-color: var(--success);
+  background-color: var(--notes-color);
   border: none;
   border-radius: 5px;
   padding: 10px 15px;
   color: white;
   font-weight: 600;
   box-shadow: var(--lesser-shadow);
-}
-
-.info {
-  color: var(--text-muted-color);
-  margin: 20px 0px;
-}
-@media screen and (max-width: 768px) {
-  .sidebar {
-    display: none;
-  }
-  .mainContent {
-    align-items: center;
-  }
-
-  .gridContainer, .greetingSection, .welcomeText, .latestText {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-  }
-
-  .welcomeText {
-    font-size: 28px;
-  }
-
-  .card {
-    margin-bottom: 5px;
-  }
-  .gridContainer {
-    gap: 10px;
-  }
-
-  .myStuffLinkArrow {
-    display: none;
-  }
 }

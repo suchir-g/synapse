@@ -64,9 +64,3 @@
     background-color: var(--primary);
     color: white;
 }
-
-@media (max-width: 768px) {
-    .finishedFlashcard {
-        margin: 0px 20px;
-    }    
-}

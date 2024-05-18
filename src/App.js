@@ -70,6 +70,8 @@ function App() {
   const [isAuth, setIsAuth] = useState(localStorage.getItem("isAuth"));
   // this will act as a sitewise marker which tells us if we are logged in or not
 
+  console.log("helo");
+
   return (
     <div className="mainContainer">
       <Router>

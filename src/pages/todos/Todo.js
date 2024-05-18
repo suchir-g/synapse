@@ -17,14 +17,13 @@ const TodoItem = ({
   setEditText,
   editText,
   deleteTodo,
-  isCompleted
 }) => {
   const handleCheckboxChange = () => {
     toggleTodoCompletion(todo, !todo.completed);
   };
 
   return (
-    <li className={`${styles.todoItem} ${isCompleted ? styles.completedInput : styles.notCompletedInput}`}>
+    <li className={styles.todoItem}>
       {isEditing === todo ? (
         <>
           <input
@@ -49,9 +48,9 @@ const TodoItem = ({
             type="checkbox"
             checked={todo.completed}
             onChange={handleCheckboxChange}
-            className={`${styles.CheckboxInput} `}
+            className={styles.CheckboxInput}
           />
-          <p className={`${styles.todoText} ${isCompleted ? styles.completed : styles.notCompleted}`}>{todo.text}</p>
+          <p className={styles.todoText}>{todo.text}</p>
           <span className={styles.buttons}>
             {editText && <button
               onClick={() => startEditing(todo)}

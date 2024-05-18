@@ -46,7 +46,7 @@ export const FlashcardGrid = ({ currentUserID }) => {
   }
 
   return (
-    <section className={`${styles.cards_grid} ${allSets.length == 0 && styles.empty}`}>
+    <section className={styles.cards_grid}>
       {allSets.length > 0 ? (
         allSets.map((set, index) => (
           <Link to={`/sets/${set.id}`} key={index} className={styles.card_link}>
@@ -57,7 +57,7 @@ export const FlashcardGrid = ({ currentUserID }) => {
           </Link>
         ))
       ) : (
-        <p className={styles.nothing}>No flashcard sets found.</p>
+        <p>No flashcard sets found.</p>
       )}
     </section>
   );

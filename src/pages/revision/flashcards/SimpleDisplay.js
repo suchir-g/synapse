@@ -13,7 +13,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { updateRevisionDates } from "../interleaving/updateFlashcards";
 import { updateStreak } from "../../../UpdateStreak";
 
-import styles from "./SimpleDisplay.module.css";
+import styles from "./SimpleDisplay.module.css"
 
 const SimpleDisplay = () => {
   const history = useNavigate();
@@ -178,13 +178,9 @@ const SimpleDisplay = () => {
 
   return (
     <div className={styles.mainContainer}>
-      <div className={styles.progressText}>
-        Progress: {progress.toFixed(0)}%
-      </div>
+      <div className={styles.progressText}>Progress: {progress.toFixed(0)}%</div>
       <div className={styles.mainSection}>
-        <button onClick={handlePrev} className={styles.arrowButton}>
-          {"<"}
-        </button>
+        <button onClick={handlePrev} className={styles.arrowButton}>{"<"}</button>
         {flashcards.length > 0 && (
           <Flashcard
             key={flashcards[currentCardIndex].id}
@@ -193,14 +189,10 @@ const SimpleDisplay = () => {
             size={{ width: "1000px", height: "60vh" }}
           />
         )}
-        <button onClick={handleNext} className={styles.arrowButton}>
-          {">"}
-        </button>
+        <button onClick={handleNext} className={styles.arrowButton}>{">"}</button>
       </div>
       <div className={styles.bottomSection}>
-        <button onClick={toggleFlipMode} className={styles.toggleButton}>
-          Toggle Flip Mode
-        </button>
+        <button onClick={toggleFlipMode} className={styles.toggleButton}>Toggle Flip Mode</button>
         <button onClick={toggleMode} className={styles.toggleButton}>
           {isRandomMode ? "Ordered Mode" : "Random Mode"}
         </button>

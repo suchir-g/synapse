@@ -2,33 +2,12 @@ import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import styles from "./Navbar.module.css";
 import React from "react";
-import { query, collection, where, limit, getDocs } from "firebase/firestore";
-import { auth, db } from "config/firebase";
+
 function Navbar({ isAuth, setIsAuth }) {
   const navigate = useNavigate();
   const [showDropdown, setShowDropdown] = useState(false);
-  const [mainTodoListId, setMainTodoListId] = useState("");
   let timeoutId;
 
-  useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged(async (user) => {
-      if (user) {
-        const todoListsQuery = query(
-          collection(db, "todoLists"),
-          where("owner", "==", user.uid),
-          where("main", "==", true),
-        );
-        const todoListsSnapshot = await getDocs(todoListsQuery);
-        if (!todoListsSnapshot.empty) {
-          setMainTodoListId(todoListsSnapshot.docs[0].id);
-        }
-      } else {
-        navigate("/");
-      }
-    });
-
-    return () => unsubscribe();
-  }, []);
   useEffect(() => {
     const handleAuthChange = () => {
       setIsAuth(localStorage.getItem("isAuth") === "true");
@@ -118,7 +97,7 @@ function Navbar({ isAuth, setIsAuth }) {
                       </Link>
                     </li>
                     <li className={styles.dropdownTab}>
-                      <Link className={styles.dropdownItem} to={`/todos/${mainTodoListId}`}>
+                      <Link className={styles.dropdownItem} to="/todos">
                         Todos
                       </Link>
                     </li>{" "}

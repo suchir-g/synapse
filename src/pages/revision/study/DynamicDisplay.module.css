@@ -32,11 +32,6 @@
     margin: 10px;
 }
 
-.flashcardContainer {
-    min-height: 100%;
-
-}
-
 .writtenAnswer {
     background-color: var(--tertiary);
     border: none;

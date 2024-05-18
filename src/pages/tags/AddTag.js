@@ -12,9 +12,10 @@ import {
 } from "firebase/firestore";
 import Select from "react-select";
 import { useNavigate } from "react-router-dom";
+
 import styles from "./AddTag.module.css";
 
-const AddTag = ({ parentTagID }) => {
+const AddTag = ({ isAuth, parentTagID }) => {
   const navigate = useNavigate();
   const tagsRef = collection(db, "tags");
   const flashcardsRef = collection(db, "flashcardSets");
@@ -22,35 +23,29 @@ const AddTag = ({ parentTagID }) => {
 
   const [tagName, setTagName] = useState("");
   const [tagDescription, setTagDescription] = useState("");
+
   const [availableTags, setAvailableTags] = useState([]);
   const [availableFlashcards, setAvailableFlashcards] = useState([]);
   const [availableNotes, setAvailableNotes] = useState([]);
+
   const [selectedFlashcards, setSelectedFlashcards] = useState([]);
   const [selectedNotes, setSelectedNotes] = useState([]);
+
   const [selectedParentTag, setSelectedParentTag] = useState(
     parentTagID || null
   );
-  const [isAuth, setIsAuth] = useState(false); // State to track authentication status
 
-  useEffect(() => {
-    // Listen for authentication state changes
-    const unsubscribe = auth.onAuthStateChanged((user) => {
-      if (user) {
-        setIsAuth(true); // Set authentication status to true if user is authenticated
-      } else {
-        setIsAuth(false); // Set authentication status to false if user is not authenticated
-        navigate("/"); // Redirect to home page if not authenticated
-      }
-    });
-
-    return () => unsubscribe(); // Clean up the subscription when component unmounts
-  }, [navigate]);
+  if (!isAuth) {
+    navigate("/");
+  }
 
   useEffect(() => {
     const fetchData = async () => {
-      const currentUserUid = auth.currentUser.uid;
+      const currentUserUid = auth.currentUser.uid; // Get the current user's UID
 
       // Fetch tags owned by the current user
+      const tagsQuery = query(tagsRef, where("owner", "==", currentUserUid));
+      // fetch tags owned by the current user
       const tagsQuery = query(tagsRef, where("owner", "==", currentUserUid));
       const tagsSnapshot = await getDocs(tagsQuery);
       const tagsOptions = tagsSnapshot.docs.map((doc) => ({
@@ -59,12 +54,11 @@ const AddTag = ({ parentTagID }) => {
       }));
       setAvailableTags(tagsOptions);
 
-      // Fetch flashcards owned by the current user
+      // fetch flashcards owned by the current user
       const flashcardsQuery = query(
         flashcardsRef,
-        where("owners", "array-contains", currentUserUid)
+        where("owner", "==", currentUserUid)
       );
-
       const flashcardsSnapshot = await getDocs(flashcardsQuery);
       const flashcardsOptions = flashcardsSnapshot.docs.map((doc) => ({
         value: doc.id,
@@ -72,11 +66,8 @@ const AddTag = ({ parentTagID }) => {
       }));
       setAvailableFlashcards(flashcardsOptions);
 
-      // Fetch notes owned by the current user
-      const notesQuery = query(
-        notesRef,
-        where("owners", "array-contains", currentUserUid)
-      );
+      // fetch notes owned by the current user
+      const notesQuery = query(notesRef, where("owner", "==", currentUserUid));
       const notesSnapshot = await getDocs(notesQuery);
       const notesOptions = notesSnapshot.docs.map((doc) => ({
         value: doc.id,
@@ -85,45 +76,49 @@ const AddTag = ({ parentTagID }) => {
       setAvailableNotes(notesOptions);
     };
 
-    if (isAuth) {
-      fetchData();
-    }
-  }, [isAuth, tagsRef, flashcardsRef, notesRef]);
+    fetchData();
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      // add new tag document
       const newTagData = {
         tagName,
         description: tagDescription,
         owner: auth.currentUser.uid,
       };
       if (selectedParentTag) {
-        newTagData.parentTag = selectedParentTag.value;
+        newTagData.parentTag = selectedParentTag.value; // add parent tag reference so we can have a tree
       }
       const newTagRef = await addDoc(tagsRef, newTagData);
 
+      console.log("New tag created with ID:", newTagRef.id);
+
+      // if there is a selected parent tag, update its childTags field
       if (selectedParentTag) {
         const parentTagRef = doc(db, "tags", selectedParentTag.value);
         await updateDoc(parentTagRef, {
-          childTags: arrayUnion(newTagRef.id),
+          childTags: arrayUnion(newTagRef.id), // adds the new tag ID to the parent tag's childTags using arrayUnion
         });
       }
 
+      // update selected flashcards with the new tag
       await Promise.all(
         selectedFlashcards.map(async (flashcard) => {
           const flashcardRef = doc(db, "flashcardSets", flashcard.value);
           await updateDoc(flashcardRef, {
-            tags: arrayUnion(newTagRef.id),
+            tags: arrayUnion(newTagRef.id), // this updates the "tags" in every note
           });
         })
       );
 
+      // update selected notes with the new tag
       await Promise.all(
         selectedNotes.map(async (note) => {
           const noteRef = doc(db, "notes", note.value);
           await updateDoc(noteRef, {
-            tags: arrayUnion(newTagRef.id),
+            tags: arrayUnion(newTagRef.id), // this updates the "tags" in every note
           });
         })
       );
@@ -139,10 +134,7 @@ const AddTag = ({ parentTagID }) => {
 
   return (
     <div className={styles.mainContainer}>
-      <div className={styles.postFlashcardsContainer}>
-        <h1 className={styles.postFlashcards}>Add Tag</h1>
-      </div>
-      <form className={styles.mainContent} onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit}>
         <input
           type="text"
           value={tagName}
@@ -160,6 +152,7 @@ const AddTag = ({ parentTagID }) => {
           className={styles.input}
         />
 
+        {/* dropdown to select parent tag */}
         <Select
           options={availableTags}
           onChange={setSelectedParentTag}
@@ -168,6 +161,7 @@ const AddTag = ({ parentTagID }) => {
           className={styles.selectMenu}
         />
 
+        {/* dropdowns to select flashcards and notes */}
         <Select
           options={availableFlashcards}
           isMulti

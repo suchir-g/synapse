@@ -3,7 +3,6 @@ import { db, auth } from "../../config/firebase";
 import { collection, query, where, getDocs } from "firebase/firestore";
 import { onAuthStateChanged } from "firebase/auth";
 import { Link } from "react-router-dom";
-import styles from "./ShowTodos.module.css";
 
 const ShowTodos = () => {
   const [todoLists, setTodoLists] = useState([]);
@@ -39,24 +38,18 @@ const ShowTodos = () => {
   }, []);
 
   return (
-    <div className={styles.mainContainer}>
-      <div className={styles.postFlashcardsContainer}>
-        <h1 className={styles.postFlashcards}>My Todo Lists</h1>
-        <p className={styles.mutedText}>Try use different todo lists for different projects to keep organised.</p>
-
-      </div>
-      <div className={styles.mainContent}>
-        <ul>
-          {todoLists.map((list, index) => (
+    <div>
+      <h2>My Todo Lists</h2>
+      <ul>
+        {todoLists.map((list, index) => (
+          <li key={index}>
+            {/* link to the detailed view of the todo list */}
             <Link to={`/todos/${list.id}`}>
-              <li key={index} className={styles.todoList}>
-                {list.name || "Untitled List"}
-              </li>
+              {list.title || "Untitled List"}
             </Link>
-          ))}
-        </ul>
-          <Link to="/todos/post"><div className={styles.postButton}>Create new todo list</div></Link>
-      </div>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 };
