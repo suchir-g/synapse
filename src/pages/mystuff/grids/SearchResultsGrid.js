@@ -98,9 +98,9 @@ const SearchResultsGrid = ({ searchQuery, currentUserID }) => {
     return <> </>;
   }
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <div style={{"min-height": "95vh"}}>Loading...</div>;
   if (!Object.values(results).some((category) => category.length))
-    return <div>No results found for "{searchQuery}"</div>;
+    return <div style={{"min-height": "95vh"}}>No results found for "{searchQuery}"</div>;
 
   return (
     <div>

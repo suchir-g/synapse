@@ -45,8 +45,6 @@ const AddTag = ({ isAuth, parentTagID }) => {
 
       // Fetch tags owned by the current user
       const tagsQuery = query(tagsRef, where("owner", "==", currentUserUid));
-      // fetch tags owned by the current user
-      const tagsQuery = query(tagsRef, where("owner", "==", currentUserUid));
       const tagsSnapshot = await getDocs(tagsQuery);
       const tagsOptions = tagsSnapshot.docs.map((doc) => ({
         value: doc.id,

@@ -2,7 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFire } from "@fortawesome/free-solid-svg-icons";
-import styles from "./StreakDisplay.module.css"; // Assuming this imports your updated CSS
+import styles from "./StreakDisplay.module.css"; 
 import streakFire from "../assets/snobg2.gif";
 
 const StreakDisplay = ({ userData, hasRevisedToday }) => {

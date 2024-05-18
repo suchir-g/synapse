@@ -14,7 +14,7 @@ import { updateRevisionDates } from "../interleaving/updateFlashcards";
 
 import Fuse from "fuse.js";
 import styles from "./Quiz.module.css";
-
+import { sanitizeHTML } from "utilities";
 const Quiz = () => {
   const navigate = useNavigate();
   const { setID } = useParams();
@@ -78,7 +78,7 @@ const Quiz = () => {
       };
       const fuse = new Fuse([correctAnswer], options);
       const result = fuse.search(userAnswer);
-      return result.length > 0 && result[0].score < 0.6; // relaxed checking
+      return result.length > 0 && result[0].score < 0.1; // relaxed checking
     }
   };
 
@@ -181,9 +181,7 @@ const Quiz = () => {
       >
         {flashcards.length > 0 && (
           <div className={styles.quizSection}>
-            <p className={styles.currentQuestion}>
-              {flashcards[currentCardIndex].question}
-            </p>
+            <div className={styles.currentQuestion} dangerouslySetInnerHTML={sanitizeHTML(flashcards[currentCardIndex].question)}></div>
             <input
               type="text"
               value={userAnswer}

@@ -20,20 +20,26 @@ const CreateNotes = ({ isAuth }) => {
   const [tags, setTags] = useState([]); // Options for react-select
   const [selectedTags, setSelectedTags] = useState([]); // Selected tags
 
-  if (!isAuth) {
-    navigate("/");
-  }
+  if (!isAuth) { navigate("/") }
 
   useEffect(() => {
-    // like the other files, this just populates the tags field with the actual tags so that we can query by them later
+    // like the other files, this just populates the tags field with the actual tags so that we can query by them later 
 
     const fetchTags = async () => {
-      const querySnapshot = await getDocs(tagsRef);
-      const fetchedTags = querySnapshot.docs.map(doc => ({
+      const tagsQuery = query(
+        collection(db, "tags"),
+        where("owner", "==", auth.currentUser.uid)
+      );
+      const querySnapshot = await getDocs(tagsQuery);
+
+      // this maps each doc into the only things we need - value and tagName
+      // the value and tagName will be used when linking tags to the dropdown
+      const options = querySnapshot.docs.map((doc) => ({
         value: doc.id,
-        label: doc.data().tagName
+        label: doc.data().tagName,
       }));
-      setTags(fetchedTags);
+      
+      setTags(options);
     };
 
     fetchTags();
@@ -48,7 +54,7 @@ const CreateNotes = ({ isAuth }) => {
       return;
     }
 
-    const tagIds = selectedTags.map((tag) => tag.value);
+    const tagIds = selectedTags.map(tag => tag.value);
 
     try {
       const noteDocRef = await addDoc(notesRef, {
@@ -56,15 +62,16 @@ const CreateNotes = ({ isAuth }) => {
         content: noteContent,
         owners: [auth.currentUser.uid],
         tags: tagIds,
-        viewed: new Date(), // this is a DateTime object which allows us to sort by time. I will probably do this with flashcards too.
+        viewed: new Date() // this is a DateTime object which allows us to sort by time. I will probably do this with flashcards too.
       });
 
-      console.log("note created with ID:", noteDocRef.id);
+      console.log('note created with ID:', noteDocRef.id);
 
       // afterward we set it to blanks and navigate back to my stuff
-      setNoteTitle("");
-      setNoteContent("");
-      navigate("/mystuff");
+      setNoteTitle('');
+      setNoteContent('');
+      navigate("/mystuff")
+
     } catch (err) {
       console.error("error: ", err);
     }
@@ -101,9 +108,7 @@ const CreateNotes = ({ isAuth }) => {
             required
             modules={noteModule}
           />
-          <button type="submit" className={styles.editButton}>
-            Save Note
-          </button>
+          <button type="submit" className={styles.editButton}>Save Note</button>
         </form>
       </div>
     </div>
